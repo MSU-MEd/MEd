@@ -17,12 +17,12 @@
 <body class="bg-[#f8fafc] text-slate-800 antialiased min-h-screen">
 
   <script>
-    const API_URL = "https://script.google.com/macros/s/AKfycbzx21Os-1SH6Lt2UM4rI8CV-oKOUpDN6RUVEzxJyoWuzil1lbDc0GXesB6GyYZBanwPVw/exec"; 
+    const API_URL = "https://script.google.com/macros/s/AKfycbzcvg8BpzpBL2FWsLEkq0ouYV6lN6y_AE1imDeVkvcCPpVI-w4uFlCvKZHZNzIYBaVxYA/exec"; 
     const IMGBB_KEY = "0046726cd8e124ae20c8dd7ea9bcebf5"; 
-    // ⚠️ แก้ไขตรงนี้: ใส่ Client ID ที่ได้จาก Google Cloud Console
     const GOOGLE_CLIENT_ID = "708135767632-mu0rfu25t1p8c4upjihn58q4rio865ea.apps.googleusercontent.com"; 
   </script>
 
+  <!-- ส่วนหัวเว็บ HEADER -->
   <header class="bg-white/80 backdrop-blur-md border-b border-amber-200 shadow-xs sticky top-0 z-50 transition-all">
     <div class="max-w-7xl mx-auto px-4 py-3.5 flex flex-col sm:flex-row items-center justify-between gap-4">
       <div class="flex items-center gap-4">
@@ -46,8 +46,10 @@
     </div>
   </header>
 
+  <!-- เนื้อหาหลัก MAIN CONTENTS -->
   <main class="max-w-7xl mx-auto px-4 py-8 space-y-8">
     
+    <!-- ปุ่มควบคุมการคัดกรองข้อมูล ทำเนียบ -->
     <section class="bg-white p-5 rounded-2xl shadow-xs border border-slate-200/60 flex flex-col lg:flex-row lg:items-center justify-between gap-5">
       <div class="space-y-2">
         <span class="text-xs font-bold text-slate-400 uppercase tracking-wider block"><i class="fa-solid fa-graduation-cap mr-1"></i> ระดับชั้นปี (Year)</span>
@@ -69,8 +71,10 @@
       </div>
     </section>
 
+    <!-- พื้นที่แสดงรายชื่อนิสิต -->
     <section id="students-container" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"></section>
 
+    <!-- พื้นที่ระบบหลังบ้านแอดมิน -->
     <section id="admin-panel" class="bg-white p-6 rounded-2xl shadow-xs border border-rose-100 hidden space-y-5">
       <div class="border-b border-slate-100 pb-4 flex flex-col sm:flex-row items-center justify-between gap-3">
         <h2 class="text-base font-bold text-rose-600 flex items-center gap-2">
@@ -94,16 +98,18 @@
     </section>
   </main>
 
+  <!-- 📥 MODAL 1: ระบบเข้าสู่ระบบ / สมัครสมาชิก -->
   <div id="auth-modal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center z-50 p-4 transition-all">
     <div class="bg-white rounded-3xl max-w-sm w-full p-6 shadow-2xl relative border border-slate-100">
       <button onclick="closeModal('auth-modal')" class="absolute top-5 right-5 text-slate-400 hover:text-slate-600 transition p-1 rounded-lg hover:bg-slate-50">
         <i class="fa-solid fa-xmark text-lg"></i>
       </button>
-      <div class="flex border-b border-slate-100 mb-5 text-sm font-bold">
+      <div id="auth-tab-bar" class="flex border-b border-slate-100 mb-5 text-sm font-bold">
         <button onclick="toggleAuthTab('login')" id="tab-login" class="w-1/2 pb-3 text-center text-amber-500 border-b-2 border-amber-500 transition-all">เข้าสู่ระบบ</button>
         <button onclick="toggleAuthTab('register')" id="tab-register" class="w-1/2 pb-3 text-center text-slate-400 transition-all">สมัครสมาชิก</button>
       </div>
       
+      <!-- 1.1 ฟอร์มล็อกอินปกติ -->
       <form id="form-login" onsubmit="handleLogin(event)" class="space-y-4">
         <div>
           <label class="block text-xs font-bold text-slate-500 mb-1.5">รหัสนิสิต</label>
@@ -129,6 +135,7 @@
         <div class="flex justify-center" id="googleBtn"></div>
       </form>
       
+      <!-- 1.2 ฟอร์มสมัครสมาชิกปกติ -->
       <form id="form-register" onsubmit="handleRegister(event)" class="space-y-4 hidden">
         <div>
           <label class="block text-xs font-bold text-slate-500 mb-1.5">รหัสนิสิต</label>
@@ -162,9 +169,41 @@
         </div>
         <button type="submit" id="btn-reg-submit" class="w-full bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 font-bold py-3 rounded-xl text-xs transition mt-2">ลงทะเบียนสมาชิก</button>
       </form>
+
+      <!-- 🌟 1.3 ฟอร์มตรวจสอบข้อมูลแรกเข้าสำหรับ Google Login -->
+      <form id="form-google-firsttime" onsubmit="handleGoogleSetupSubmit(event)" class="space-y-4 hidden">
+        <div class="bg-amber-50 border border-amber-200 text-amber-900 p-3 rounded-xl text-xs space-y-1">
+          <p class="font-bold"><i class="fa-solid fa-circle-info mr-1"></i> ตรวจสอบข้อมูลก่อนเข้าใช้งานครั้งแรก</p>
+          <p class="text-slate-600">กรุณาเลือกชั้นปีและกลุ่มเรียนให้ถูกต้อง ระบบจะตั้งรหัสผ่านเริ่มต้นเป็น password+รหัสนิสิต ให้คุณอัตโนมัติ</p>
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-500 mb-1.5">รหัสนิสิต</label>
+          <input type="text" id="g-setup-id" disabled class="w-full bg-slate-100 border border-slate-200 rounded-xl p-2.5 text-xs text-slate-500 cursor-not-allowed">
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-500 mb-1.5">ชื่อ-นามสกุล (จากระบบ Google)</label>
+          <input type="text" id="g-setup-name" required class="w-full border border-slate-200 rounded-xl p-2.5 text-xs focus:outline-none focus:border-amber-500 transition-all">
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-bold text-slate-500 mb-1.5">เลือกชั้นปีจริง</label>
+            <select id="g-setup-year" class="w-full border border-slate-200 rounded-xl p-2.5 text-xs bg-white focus:outline-none focus:border-amber-500 transition-all">
+              <option value="1">ปี 1</option><option value="2">ปี 2</option><option value="3">ปี 3</option><option value="4">ปี 4</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-500 mb-1.5">เลือกกลุ่มเรียน (Sec)</label>
+            <select id="g-setup-sec" class="w-full border border-slate-200 rounded-xl p-2.5 text-xs bg-white focus:outline-none focus:border-amber-500 transition-all">
+              <option value="1">Sec 1</option><option value="2">Sec 2</option><option value="3">Sec 3</option>
+            </select>
+          </div>
+        </div>
+        <button type="submit" id="btn-g-setup-submit" class="w-full bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 font-bold py-3 rounded-xl text-xs transition mt-2">ยืนยันข้อมูลและบันทึกเข้าทำเนียบ</button>
+      </form>
     </div>
   </div>
 
+  <!-- 👤 MODAL 2: ระบบแสดง/แก้ไขโปรไฟล์ -->
   <div id="profile-modal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center z-50 p-4 transition-all">
     <div class="bg-white rounded-3xl max-w-sm w-full overflow-hidden shadow-2xl relative border border-slate-100">
       <button onclick="closeModal('profile-modal')" class="absolute top-4 right-4 text-white/70 hover:text-white bg-black/20 hover:bg-black/40 p-1.5 rounded-full z-10 transition">
@@ -192,6 +231,7 @@
           </div>
         </div>
         
+        <!-- ฟอร์มแก้ไขโปรไฟล์ -->
         <form id="p-edit-mode" onsubmit="handleUpdateProfile(event)" class="hidden space-y-4">
           <div>
             <label class="block text-xs font-bold text-slate-500 mb-1">ชื่อ-นามสกุล</label>
@@ -221,6 +261,7 @@
           </div>
         </form>
 
+        <!-- ฟอร์มเปลี่ยนรหัสผ่าน -->
         <form id="p-password-mode" onsubmit="handleStudentChangePassword(event)" class="hidden space-y-4">
           <div>
             <label class="block text-xs font-bold text-slate-500 mb-1">รหัสผ่านเดิม</label>
@@ -243,8 +284,10 @@
     </div>
   </div>
 
+  <!-- 💻 ส่วนควบคุมระบบหลังบ้าน JavaScript -->
   <script>
     let currentYear = 1, currentSec = 1, loggedInUser = null, loadedStudents = [], activeTargetId = null;
+    let googleTempData = null; // พักข้อมูลล็อกอินแรกเข้าชั่วคราว
 
     window.onload = () => { loadStudents(); };
 
@@ -301,7 +344,7 @@
       }
     }
 
-    // วิธีเดิม: ล็อกอินด้วยรหัสนิสิต + รหัสผ่าน
+    // ล็อกอินระบบเว็บปกติ
     async function handleLogin(e) {
       e.preventDefault();
       const submitBtn = document.getElementById("btn-login-submit");
@@ -336,6 +379,7 @@
       }
     }
 
+    // ลงทะเบียนระบบเว็บปกติ
     async function handleRegister(e) {
       e.preventDefault();
       const submitBtn = document.getElementById("btn-reg-submit");
@@ -360,7 +404,7 @@
       if(res && res.success) { alert(res.message); toggleAuthTab('login'); } else { alert(res.message); }
     }
 
-    // วิธีใหม่: เริ่มต้นปุ่มล็อกอิน Google
+    // เปิดการตั้งค่าปุ่มล็อกอิน Google
     function initGoogleLogin() {
       google.accounts.id.initialize({
         client_id: GOOGLE_CLIENT_ID,
@@ -373,7 +417,7 @@
       );
     }
 
-    // ดักรับสัญญานเมื่อล็อกอินผ่าน Google สำเร็จ
+    // เมื่อเข้าสู่ระบบผ่าน Google สำเร็จ
     async function handleGoogleCredentialResponse(response) {
       closeModal('auth-modal');
       const container = document.getElementById("students-container");
@@ -382,22 +426,83 @@
           <div class="inline-block p-4 bg-white rounded-2xl border border-slate-100 shadow-xs mb-3">
             <i class="fa-solid fa-circle-notch animate-spin text-2xl text-amber-500"></i>
           </div>
-          <p class="text-xs font-medium tracking-wide">กำลังเข้าสู่ระบบผ่าน Google มหาวิทยาลัย...</p>
+          <p class="text-xs font-medium tracking-wide">กำลังยืนยันบัญชี Google มหาวิทยาลัย...</p>
         </div>`;
 
       const res = await callAPI({ action: "googleLogin", idToken: response.credential });
       if(res && res.success) {
-        loggedInUser = res.user;
-        updateAuthUI();
-        loadAdminPanel();
-        loadStudents();
-        alert("เข้าสู่ระบบสำเร็จ! ยินดีต้อนรับคุณ " + res.user.name);
+        
+        // ✨ กรณีล็อกอินครั้งแรก: เปิดฟอร์มให้คัดกรองข้อมูลเพิ่มเติม
+        if(res.isFirstTime) {
+          loadStudents(); 
+          googleTempData = {
+            email: res.email,
+            studentId: res.studentId,
+            name: res.name,
+            imageUrl: res.imageUrl
+          };
+          
+          openModal('auth-modal');
+          document.getElementById("form-login").classList.add('hidden');
+          document.getElementById("form-register").classList.add('hidden');
+          document.getElementById("auth-tab-bar").classList.add('hidden'); // ซ่อนแท็บเลือกโหมด
+          
+          document.getElementById("form-google-firsttime").classList.remove('hidden');
+          document.getElementById("g-setup-id").value = res.studentId;
+          document.getElementById("g-setup-name").value = res.name;
+        } 
+        // 🚀 กรณีมีประวัติอยู่แล้ว: ล็อกอินทันที
+        else {
+          loggedInUser = res.user;
+          updateAuthUI();
+          loadAdminPanel();
+          loadStudents();
+          alert("เข้าสู่ระบบสำเร็จ! ยินดีต้อนรับคุณ " + res.user.name);
+        }
       } else {
         alert(res ? res.message : "ล็อกอินล้มเหลว");
         loadStudents();
       }
     }
 
+    // กดยืนยันเซฟลงฐานข้อมูลของระบบ Google แรกเข้า
+    async function handleGoogleSetupSubmit(e) {
+      e.preventDefault();
+      if(!googleTempData) return;
+
+      const submitBtn = document.getElementById("btn-g-setup-submit");
+      submitBtn.innerHTML = `<i class="fa-solid fa-circle-notch animate-spin mr-1"></i> กำลังบันทึกข้อมูล...`;
+      submitBtn.disabled = true;
+
+      const finalStudentData = {
+        ...googleTempData,
+        name: document.getElementById("g-setup-name").value,
+        year: document.getElementById("g-setup-year").value,
+        section: document.getElementById("g-setup-sec").value
+      };
+
+      const res = await callAPI({ action: "registerFirstTimeGoogle", studentData: finalStudentData });
+      submitBtn.innerText = "ยืนยันข้อมูลและบันทึกเข้าทำเนียบ";
+      submitBtn.disabled = false;
+
+      if(res && res.success) {
+        loggedInUser = res.user;
+        updateAuthUI();
+        loadAdminPanel();
+        closeModal('auth-modal');
+        
+        // โหลดข้อมูลตามที่นิสิตเลือกตั้งค่าใหม่ทันที
+        changeYear(parseInt(finalStudentData.year));
+        changeSec(parseInt(finalStudentData.section));
+        
+        alert("สร้างโปรไฟล์และเข้าสู่ระบบสำเร็จ!");
+        googleTempData = null;
+      } else {
+        alert(res ? res.message : "เกิดข้อผิดพลาดในการบันทึก");
+      }
+    }
+
+    // แก้ไขข้อมูลส่วนตัว
     async function handleUpdateProfile(e) {
       e.preventDefault();
       const submitBtn = document.getElementById("btn-edit-submit");
@@ -418,6 +523,7 @@
       if(res && res.success) { alert(res.message); closeModal('profile-modal'); loadStudents(); } else { alert(res.message); }
     }
 
+    // เปลี่ยนรหัสผ่านจากหน้าเว็บ
     async function handleStudentChangePassword(e) {
       e.preventDefault();
       const oldPassword = document.getElementById("p-pwd-old").value;
@@ -433,6 +539,7 @@
       if (res && res.success) { alert(res.message); closeModal('profile-modal'); } else { alert(res.message); }
     }
 
+    // โหลดตารางสิทธิ์ผู้ดูแลระบบ
     async function loadAdminPanel() {
       const panel = document.getElementById("admin-panel");
       if(!loggedInUser || loggedInUser.role !== 'admin') { panel.classList.add('hidden'); return; }
@@ -483,8 +590,19 @@
       document.getElementById(id).classList.remove('hidden'); 
       if(id === 'auth-modal') { initGoogleLogin(); }
     }
-    function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
+    
+    function closeModal(id) { 
+      document.getElementById(id).classList.add('hidden'); 
+      if(id === 'auth-modal') {
+        // คืนค่าหน้าตากล่องล็อกอินให้กลับมาแสดงปกติ
+        document.getElementById("form-google-firsttime").classList.add('hidden');
+        document.getElementById("auth-tab-bar").classList.remove('hidden');
+        toggleAuthTab('login');
+      }
+    }
+    
     function toggleAuthTab(mode) {
+      document.getElementById("form-google-firsttime").classList.add('hidden');
       document.getElementById("form-login").classList.toggle('hidden', mode==='register');
       document.getElementById("form-register").classList.toggle('hidden', mode==='login');
       document.getElementById("tab-login").className = mode==='login' ? "w-1/2 pb-3 text-center text-amber-500 border-b-2 border-amber-500 transition-all" : "w-1/2 pb-3 text-center text-slate-400 transition-all";
@@ -507,9 +625,8 @@
         document.getElementById("p-edit-year").value = target.year; 
         document.getElementById("p-edit-sec").value = target.section;
         
-        // 🛡️ ซ่อนปุ่มเปลี่ยนรหัสผ่านหากล็อกอินด้วย Google (เพราะไม่มีรหัสผ่านเว็บ)
-        if(loggedInUser.isGoogleUser) { pwdBtn.classList.add('hidden'); } 
-        else { pwdBtn.classList.remove('hidden'); }
+        // ยินยอมให้บัญชี Google สามารถสลับหน้าต่างมาตั้งรหัสผ่านใหม่เพื่อล็อกอินแบบทั่วไปได้ด้วย
+        pwdBtn.classList.remove('hidden');
       } else { 
         ownerZone.classList.add('hidden'); 
       }
