@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ระบบทำเนียบสมาชิกคณิตศาสตร์ มมส</title>
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <style>
+    body { font-family: 'Sarabun', sans-serif; }
+  </style>
+</head>
+<body class="bg-[#f8fafc] text-slate-800 antialiased min-h-screen">
+
+  <script>
+    const API_URL = "https://script.google.com/macros/s/AKfycbzndu4axGtZZfeDzeq4-eq0nkigCUqUILWAq4x5pdEmr6cfEnM8wd4-YBB-ZxvPUOuimQ/exec"; 
+    const IMGBB_KEY = "0046726cd8e124ae20c8dd7ea9bcebf5"; 
+    // ⚠️ แก้ไขตรงนี้: ใส่ Client ID ที่ได้จาก Google Cloud Console
+    const GOOGLE_CLIENT_ID = "708135767632-mu0rfu25t1p8c4upjihn58q4rio865ea.apps.googleusercontent.com"; 
+  </script>
+
+  <header class="bg-white/80 backdrop-blur-md border-b border-amber-200 shadow-xs sticky top-0 z-50 transition-all">
+    <div class="max-w-7xl mx-auto px-4 py-3.5 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div class="flex items-center gap-4">
+        <div class="flex gap-2.5 bg-slate-50 p-2 rounded-2xl border border-slate-100">
+          <img src="https://i.ibb.co/C3jFYvJc/642768993-1941877609748834-2263063250765183521-n.jpg" class="w-11 h-11 rounded-full object-cover border border-amber-200 shadow-xs bg-white" alt="โลโก้ 1">
+          <img src="https://i.ibb.co/v62KCQL5/663053337-1971148600155068-3543915145222936824-n.jpg" class="w-11 h-11 rounded-full object-cover border border-amber-200 shadow-xs bg-white" alt="โลโก้ 2">
+          <img src="https://i.ibb.co/x8DgPZyK/642355807-1941877579748837-136105529239050778-n.jpg" class="w-11 h-11 rounded-full object-cover border border-amber-200 shadow-xs bg-white" alt="โลโก้ 3">
+        </div>
+        <div class="text-center sm:text-left">
+          <h1 class="text-lg font-bold text-slate-900 tracking-tight flex items-center justify-center sm:justify-start gap-2">
+            ระบบทำเนียบสมาชิกนิสิต
+          </h1>
+          <p class="text-xs font-medium text-amber-600/90 mt-0.5">สาขาวิชาคณิตศาสตร์ คณะศึกษาศาสตร์ มหาวิทยาลัยมหาสารคาม</p>
+        </div>
+      </div>
+      <div id="auth-status-zone" class="w-full sm:w-auto text-center">
+        <button onclick="openModal('auth-modal')" class="w-full sm:w-auto bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-slate-950 text-xs font-bold px-5 py-2.5 rounded-xl transition-all duration-200 transform hover:-translate-y-0.5 shadow-md shadow-amber-500/10 active:translate-y-0 flex items-center justify-center gap-2 mx-auto">
+          <i class="fa-solid fa-right-to-bracket text-sm"></i> เข้าสู่ระบบ / สมัครสมาชิก
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-7xl mx-auto px-4 py-8 space-y-8">
+    
+    <section class="bg-white p-5 rounded-2xl shadow-xs border border-slate-200/60 flex flex-col lg:flex-row lg:items-center justify-between gap-5">
+      <div class="space-y-2">
+        <span class="text-xs font-bold text-slate-400 uppercase tracking-wider block"><i class="fa-solid fa-graduation-cap mr-1"></i> ระดับชั้นปี (Year)</span>
+        <div class="flex flex-wrap gap-2 p-1.5 bg-slate-100 rounded-xl w-full sm:w-fit">
+          <button onclick="changeYear(1)" id="btn-y-1" class="year-btn flex-1 sm:flex-none text-center px-5 py-2 rounded-lg font-bold text-xs bg-white text-amber-600 shadow-xs transition-all">ปี 1</button>
+          <button onclick="changeYear(2)" id="btn-y-2" class="year-btn flex-1 sm:flex-none text-center px-5 py-2 rounded-lg font-medium text-xs text-slate-600 hover:bg-slate-50 transition-all">ปี 2</button>
+          <button onclick="changeYear(3)" id="btn-y-3" class="year-btn flex-1 sm:flex-none text-center px-5 py-2 rounded-lg font-medium text-xs text-slate-600 hover:bg-slate-50 transition-all">ปี 3</button>
+          <button onclick="changeYear(4)" id="btn-y-4" class="year-btn flex-1 sm:flex-none text-center px-5 py-2 rounded-lg font-medium text-xs text-slate-600 hover:bg-slate-50 transition-all">ปี 4</button>
+        </div>
+      </div>
+      
+      <div class="space-y-2">
+        <span class="text-xs font-bold text-slate-400 uppercase tracking-wider block"><i class="fa-solid fa-layer-group mr-1"></i> กลุ่มเรียน (Section)</span>
+        <div class="flex items-center gap-3 p-1.5 bg-slate-100 rounded-xl w-full sm:w-fit">
+          <button onclick="changeSec(1)" id="btn-s-1" class="sec-btn w-9 h-9 rounded-lg font-bold text-xs bg-gradient-to-br from-amber-500 to-amber-600 text-white shadow-xs transition-all">1</button>
+          <button onclick="changeSec(2)" id="btn-s-2" class="sec-btn w-9 h-9 rounded-lg font-medium text-xs bg-white text-slate-600 hover:bg-slate-50 border border-slate-200/40 shadow-xs transition-all">2</button>
+          <button onclick="changeSec(3)" id="btn-s-3" class="sec-btn w-9 h-9 rounded-lg font-medium text-xs bg-white text-slate-600 hover:bg-slate-50 border border-slate-200/40 shadow-xs transition-all">3</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="students-container" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"></section>
+
+    <section id="admin-panel" class="bg-white p-6 rounded-2xl shadow-xs border border-rose-100 hidden space-y-5">
+      <div class="border-b border-slate-100 pb-4 flex flex-col sm:flex-row items-center justify-between gap-3">
+        <h2 class="text-base font-bold text-rose-600 flex items-center gap-2">
+          <span class="p-2 bg-rose-50 rounded-xl"><i class="fa-solid fa-shield-halved"></i></span> 
+          ระบบหลังบ้านผู้ดูแลระบบ
+        </h2>
+      </div>
+      <div class="overflow-x-auto rounded-xl border border-slate-100">
+        <table class="w-full text-left text-xs text-slate-600 border-collapse">
+          <thead class="bg-slate-50 text-[11px] font-bold text-slate-500 uppercase tracking-wider border-b border-slate-100">
+            <tr>
+              <th class="p-4">ชื่อแอดมิน / ผู้รับผิดชอบ</th>
+              <th class="p-4 text-center">สิทธิ์แก้ไขข้อมูล</th>
+              <th class="p-4 text-center">สิทธิ์รีเซ็ทรหัส</th>
+              <th class="p-4 text-center">สิทธิ์จัดการแอดมิน</th>
+            </tr>
+          </thead>
+          <tbody id="admin-list-table" class="divide-y divide-slate-100"></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <div id="auth-modal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center z-50 p-4 transition-all">
+    <div class="bg-white rounded-3xl max-w-sm w-full p-6 shadow-2xl relative border border-slate-100">
+      <button onclick="closeModal('auth-modal')" class="absolute top-5 right-5 text-slate-400 hover:text-slate-600 transition p-1 rounded-lg hover:bg-slate-50">
+        <i class="fa-solid fa-xmark text-lg"></i>
+      </button>
+      <div class="flex border-b border-slate-100 mb-5 text-sm font-bold">
+        <button onclick="toggleAuthTab('login')" id="tab-login" class="w-1/2 pb-3 text-center text-amber-500 border-b-2 border-amber-500 transition-all">เข้าสู่ระบบ</button>
+        <button onclick="toggleAuthTab('register')" id="tab-register" class="w-1/2 pb-3 text-center text-slate-400 transition-all">สมัครสมาชิก</button>
+      </div>
+      
+      <form id="form-login" onsubmit="handleLogin(event)" class="space-y-4">
+        <div>
+          <label class="block text-xs font-bold text-slate-500 mb-1.5">รหัสนิสิต</label>
+          <div class="relative">
+            <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400"><i class="fa-regular fa-user"></i></span>
+            <input type="text" id="login-user" required class="w-full border border-slate-200 rounded-xl pl-9 pr-3 py-2.5 text-xs focus:outline-none focus:border-amber-500 transition-all">
+          </div>
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-500 mb-1.5">รหัสผ่าน</label>
+          <div class="relative">
+            <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400"><i class="fa-solid fa-lock"></i></span>
+            <input type="password" id="login-pass" required class="w-full border border-slate-200 rounded-xl pl-9 pr-3 py-2.5 text-xs focus:outline-none focus:border-amber-500 transition-all">
+          </div>
+        </div>
+        <button type="submit" id="btn-login-submit" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-3 rounded-xl text-xs transition shadow-xs mt-2">เข้าสู่ระบบด้วยบัญชีเว็บ</button>
+        
+        <div class="relative flex py-2 items-center">
+          <div class="flex-grow border-t border-slate-200"></div>
+          <span class="flex-shrink mx-4 text-[10px] text-slate-400 font-bold uppercase">หรือ</span>
+          <div class="flex-grow border-t border-slate-200"></div>
+        </div>
+        <div class="flex justify-center" id="googleBtn"></div>
+      </form>
+      
+      <form id="form-register" onsubmit="handleRegister(event)" class="space-y-4 hidden">
+        <div>
+          <label class="block text-xs font-bold text-slate-500 mb-1.5">รหัสนิสิต</label>
+          <input type="text" id="reg-id" required class="w-full border border-slate-200 rounded-xl p-2.5 text-xs focus:outline-none focus:border-amber-500 transition-all">
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-500 mb-1.5">ชื่อ-นามสกุล</label>
+          <input type="text" id="reg-name" required class="w-full border border-slate-200 rounded-xl p-2.5 text-xs focus:outline-none focus:border-amber-500 transition-all">
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-bold text-slate-500 mb-1.5">ชั้นปี</label>
+            <select id="reg-year" class="w-full border border-slate-200 rounded-xl p-2.5 text-xs bg-white focus:outline-none focus:border-amber-500 transition-all">
+              <option value="1">ปี 1</option><option value="2">ปี 2</option><option value="3">ปี 3</option><option value="4">ปี 4</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-500 mb-1.5">Section</label>
+            <select id="reg-sec" class="w-full border border-slate-200 rounded-xl p-2.5 text-xs bg-white focus:outline-none focus:border-amber-500 transition-all">
+              <option value="1">Sec 1</option><option value="2">Sec 2</option><option value="3">Sec 3</option>
+            </select>
+          </div>
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-500 mb-1.5">รูปโปรไฟล์</label>
+          <input type="file" id="reg-imgfile" accept="image/*" required class="w-full border border-slate-200 rounded-xl text-xs bg-slate-50 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-amber-50 file:text-amber-700 transition-all">
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-500 mb-1.5">ตั้งรหัสผ่าน</label>
+          <input type="password" id="reg-pass" required class="w-full border border-slate-200 rounded-xl p-2.5 text-xs focus:outline-none focus:border-amber-500 transition-all">
+        </div>
+        <button type="submit" id="btn-reg-submit" class="w-full bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 font-bold py-3 rounded-xl text-xs transition mt-2">ลงทะเบียนสมาชิก</button>
+      </form>
+    </div>
+  </div>
+
+  <div id="profile-modal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center z-50 p-4 transition-all">
+    <div class="bg-white rounded-3xl max-w-sm w-full overflow-hidden shadow-2xl relative border border-slate-100">
+      <button onclick="closeModal('profile-modal')" class="absolute top-4 right-4 text-white/70 hover:text-white bg-black/20 hover:bg-black/40 p-1.5 rounded-full z-10 transition">
+        <i class="fa-solid fa-xmark text-base"></i>
+      </button>
+      
+      <div class="bg-gradient-to-b from-slate-900 to-slate-800 text-white p-6 pt-8 text-center relative">
+        <div class="absolute inset-0 bg-[radial-gradient(#ffffff10_1px,transparent_1px)] [background-size:16px_16px] opacity-30"></div>
+        <img id="p-view-img" src="" class="w-24 h-24 rounded-full object-cover mx-auto border-4 border-amber-400 shadow-xl mb-3 relative z-10">
+        <h3 id="p-view-name" class="font-bold text-lg tracking-tight relative z-10"></h3>
+        <p id="p-view-id" class="text-xs text-slate-400 font-medium mt-0.5 relative z-10"></p>
+      </div>
+      
+      <div class="p-6 space-y-4">
+        <div id="p-display-mode" class="text-center space-y-4">
+          <div id="p-view-tag" class="inline-flex bg-amber-50 text-amber-800 border border-amber-200/60 text-xs px-4 py-1.5 rounded-full font-bold shadow-xs"></div>
+          
+          <div id="p-owner-btn-zone" class="hidden pt-3 border-t border-slate-100 grid grid-cols-2 gap-2">
+            <button onclick="switchProfileMode('edit')" class="bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold py-2.5 rounded-xl transition flex items-center justify-center gap-1">
+              <i class="fa-solid fa-user-gear"></i> แก้ไขข้อมูล
+            </button>
+            <button onclick="switchProfileMode('password')" id="btn-p-switch-pwd" class="bg-amber-50 hover:bg-amber-100 text-amber-700 text-xs font-bold py-2.5 rounded-xl transition flex items-center justify-center gap-1 border border-amber-200">
+              <i class="fa-solid fa-key"></i> เปลี่ยนรหัส
+            </button>
+          </div>
+        </div>
+        
+        <form id="p-edit-mode" onsubmit="handleUpdateProfile(event)" class="hidden space-y-4">
+          <div>
+            <label class="block text-xs font-bold text-slate-500 mb-1">ชื่อ-นามสกุล</label>
+            <input type="text" id="p-edit-name" required class="w-full border border-slate-200 rounded-xl p-2.5 text-xs focus:outline-none focus:border-amber-500 transition-all">
+          </div>
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label class="block text-xs font-bold text-slate-500 mb-1">ชั้นปี</label>
+              <select id="p-edit-year" class="w-full border border-slate-200 rounded-xl p-2.5 text-xs bg-white focus:outline-none focus:border-amber-500 transition-all">
+                <option value="1">ปี 1</option><option value="2">ปี 2</option><option value="3">ปี 3</option><option value="4">ปี 4</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-slate-500 mb-1">กลุ่มเรียน (Section)</label>
+              <select id="p-edit-sec" class="w-full border border-slate-200 rounded-xl p-2.5 text-xs bg-white focus:outline-none focus:border-amber-500 transition-all">
+                <option value="1">Section 1</option><option value="2">Section 2</option><option value="3">Section 3</option>
+              </select>
+            </div>
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-500 mb-1">รูปโปรไฟล์ใหม่ <span class="text-slate-400 font-normal">(ถ้ามี)</span></label>
+            <input type="file" id="p-edit-imgfile" accept="image/*" class="w-full border border-slate-200 rounded-xl text-xs bg-slate-50 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:bg-amber-50 file:text-amber-700 transition-all">
+          </div>
+          <div class="flex gap-2.5 pt-2">
+            <button type="button" onclick="switchProfileMode('display')" class="w-1/2 bg-slate-100 hover:bg-slate-200 text-slate-600 py-2.5 rounded-xl text-xs font-bold transition">ยกเลิก</button>
+            <button type="submit" id="btn-edit-submit" class="w-1/2 bg-emerald-500 hover:bg-emerald-600 text-white py-2.5 rounded-xl text-xs font-bold transition">บันทึกข้อมูล</button>
+          </div>
+        </form>
+
+        <form id="p-password-mode" onsubmit="handleStudentChangePassword(event)" class="hidden space-y-4">
+          <div>
+            <label class="block text-xs font-bold text-slate-500 mb-1">รหัสผ่านเดิม</label>
+            <input type="password" id="p-pwd-old" required class="w-full border border-slate-200 rounded-xl p-2.5 text-xs focus:outline-none focus:border-amber-500 transition-all">
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-500 mb-1">รหัสผ่านใหม่</label>
+            <input type="password" id="p-pwd-new" required class="w-full border border-slate-200 rounded-xl p-2.5 text-xs focus:outline-none focus:border-amber-500 transition-all">
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-500 mb-1">ยืนยันรหัสผ่านใหม่</label>
+            <input type="password" id="p-pwd-confirm" required class="w-full border border-slate-200 rounded-xl p-2.5 text-xs focus:outline-none focus:border-amber-500 transition-all">
+          </div>
+          <div class="flex gap-2.5 pt-2">
+            <button type="button" onclick="switchProfileMode('display')" class="w-1/2 bg-slate-100 hover:bg-slate-200 text-slate-600 py-2.5 rounded-xl text-xs font-bold transition">ยกเลิก</button>
+            <button type="submit" id="btn-pwd-submit" class="w-1/2 bg-amber-500 hover:bg-amber-600 text-slate-950 py-2.5 rounded-xl text-xs font-bold transition">อัปเดตรหัสผ่าน</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let currentYear = 1, currentSec = 1, loggedInUser = null, loadedStudents = [], activeTargetId = null;
+
+    window.onload = () => { loadStudents(); };
+
+    async function callAPI(payload) {
+      try {
+        const response = await fetch(API_URL, { method: "POST", body: JSON.stringify(payload) });
+        return await response.json();
+      } catch (error) { alert("ขาดการเชื่อมต่อกับหลังบ้าน"); }
+    }
+
+    async function uploadToImgBB(file) {
+      if (!file) return null;
+      const formData = new FormData();
+      formData.append("image", file);
+      try {
+        const response = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_KEY}`, { method: "POST", body: formData });
+        const result = await response.json();
+        return result.success ? result.data.url : null;
+      } catch (error) { console.error("ImgBB Upload Error:", error); return null; }
+    }
+
+    async function loadStudents() {
+      const container = document.getElementById("students-container");
+      container.innerHTML = `
+        <div class="col-span-full text-center py-16 text-slate-400">
+          <div class="inline-block p-4 bg-white rounded-2xl border border-slate-100 shadow-xs mb-3">
+            <i class="fa-solid fa-circle-notch animate-spin text-2xl text-amber-500"></i>
+          </div>
+          <p class="text-xs font-medium tracking-wide">กำลังโหลดทำเนียบนิสิตสาขาคณิตศาสตร์...</p>
+        </div>`;
+      
+      const res = await callAPI({ action: "getStudents", year: currentYear, section: currentSec });
+      if (res && res.success) {
+        loadedStudents = res.data;
+        if(loadedStudents.length === 0) { 
+          container.innerHTML = `
+            <div class="col-span-full text-center py-16 text-slate-400 bg-white rounded-2xl border border-slate-200/50">
+              <i class="fa-regular fa-folder-open text-3xl mb-2 text-slate-300"></i>
+              <p class="text-xs font-medium">ไม่พบข้อมูลนิสิตในกลุ่มเรียนหรือชั้นปีนี้</p>
+            </div>`; 
+          return; 
+        }
+        container.innerHTML = loadedStudents.map(std => `
+          <div class="bg-white rounded-2xl p-5 border border-slate-200/60 hover:border-amber-300 hover:shadow-xl transition-all duration-300 flex flex-col items-center text-center group relative overflow-hidden">
+            <div class="absolute top-0 inset-x-0 h-1.5 bg-gradient-to-r from-amber-400 to-amber-500 opacity-0 group-hover:opacity-100 transition-all"></div>
+            <div class="relative mb-4">
+              <img src="${std.imageUrl}" class="w-20 h-20 rounded-full object-cover border-2 border-slate-100 group-hover:border-amber-400 shadow-sm">
+            </div>
+            <h3 class="font-bold text-slate-900 text-sm group-hover:text-amber-600 transition-colors">${std.name}</h3>
+            <p class="text-[11px] font-medium text-slate-400 mt-0.5 mb-5">รหัสนิสิต: ${std.studentId}</p>
+            <button onclick="openProfileModal('${std.id}')" class="mt-auto w-full bg-slate-900 hover:bg-slate-800 text-white text-[11px] font-bold py-2.5 rounded-xl transition-all flex items-center justify-center gap-1.5 shadow-sm"><i class="fa-solid fa-address-card opacity-70"></i> ดูข้อมูลประวัติ</button>
+          </div>
+        `).join('');
+      }
+    }
+
+    // วิธีเดิม: ล็อกอินด้วยรหัสนิสิต + รหัสผ่าน
+    async function handleLogin(e) {
+      e.preventDefault();
+      const submitBtn = document.getElementById("btn-login-submit");
+      const originalText = submitBtn.innerText;
+      
+      submitBtn.innerHTML = `<i class="fa-solid fa-circle-notch animate-spin mr-1"></i> กรุณารอสักครู่...`;
+      submitBtn.disabled = true;
+
+      try {
+        const res = await callAPI({ 
+          action: "login", 
+          username: document.getElementById("login-user").value, 
+          password: document.getElementById("login-pass").value 
+        });
+        
+        if (res && res.success) { 
+          loggedInUser = res.user; 
+          updateAuthUI(); 
+          closeModal('auth-modal'); 
+          loadAdminPanel(); 
+          loadStudents();
+          document.getElementById("login-user").value = "";
+          document.getElementById("login-pass").value = "";
+        } else { 
+          alert(res && res.message ? res.message : "รหัสนิสิตหรือรหัสผ่านไม่ถูกต้อง"); 
+        }
+      } catch (error) {
+        alert("ระบบหลังบ้านขัดข้อง กรุณาลองใหม่อีกครั้ง");
+      } finally {
+        submitBtn.innerText = originalText;
+        submitBtn.disabled = false;
+      }
+    }
+
+    async function handleRegister(e) {
+      e.preventDefault();
+      const submitBtn = document.getElementById("btn-reg-submit");
+      submitBtn.innerText = "กำลังอัปโหลดรูปภาพ..."; submitBtn.disabled = true;
+
+      const file = document.getElementById("reg-imgfile").files[0];
+      const uploadedImgUrl = await uploadToImgBB(file);
+
+      if(!uploadedImgUrl) { alert("อัปโหลดรูปภาพล้มเหลว"); submitBtn.innerText = "ลงทะเบียน"; submitBtn.disabled = false; return; }
+
+      const studentData = {
+        studentId: document.getElementById("reg-id").value,
+        name: document.getElementById("reg-name").value,
+        year: document.getElementById("reg-year").value,
+        section: document.getElementById("reg-sec").value,
+        password: document.getElementById("reg-pass").value,
+        imageUrl: uploadedImgUrl
+      };
+
+      const res = await callAPI({ action: "register", studentData });
+      submitBtn.innerText = "ลงทะเบียนสมาชิก"; submitBtn.disabled = false;
+      if(res && res.success) { alert(res.message); toggleAuthTab('login'); } else { alert(res.message); }
+    }
+
+    // วิธีใหม่: เริ่มต้นปุ่มล็อกอิน Google
+    function initGoogleLogin() {
+      google.accounts.id.initialize({
+        client_id: GOOGLE_CLIENT_ID,
+        callback: handleGoogleCredentialResponse,
+        hosted_domain: "msu.ac.th" 
+      });
+      google.accounts.id.renderButton(
+        document.getElementById("googleBtn"),
+        { theme: "outline", size: "large", text: "signin_with", width: "240" }
+      );
+    }
+
+    // ดักรับสัญญานเมื่อล็อกอินผ่าน Google สำเร็จ
+    async function handleGoogleCredentialResponse(response) {
+      closeModal('auth-modal');
+      const container = document.getElementById("students-container");
+      container.innerHTML = `
+        <div class="col-span-full text-center py-16 text-slate-400">
+          <div class="inline-block p-4 bg-white rounded-2xl border border-slate-100 shadow-xs mb-3">
+            <i class="fa-solid fa-circle-notch animate-spin text-2xl text-amber-500"></i>
+          </div>
+          <p class="text-xs font-medium tracking-wide">กำลังเข้าสู่ระบบผ่าน Google มหาวิทยาลัย...</p>
+        </div>`;
+
+      const res = await callAPI({ action: "googleLogin", idToken: response.credential });
+      if(res && res.success) {
+        loggedInUser = res.user;
+        updateAuthUI();
+        loadAdminPanel();
+        loadStudents();
+        alert("เข้าสู่ระบบสำเร็จ! ยินดีต้อนรับคุณ " + res.user.name);
+      } else {
+        alert(res ? res.message : "ล็อกอินล้มเหลว");
+        loadStudents();
+      }
+    }
+
+    async function handleUpdateProfile(e) {
+      e.preventDefault();
+      const submitBtn = document.getElementById("btn-edit-submit");
+      submitBtn.innerText = "กำลังอัปเดต..."; submitBtn.disabled = true;
+
+      const file = document.getElementById("p-edit-imgfile").files[0];
+      const uploadedImgUrl = file ? await uploadToImgBB(file) : null;
+
+      const updatedData = {
+        name: document.getElementById("p-edit-name").value,
+        year: document.getElementById("p-edit-year").value,
+        section: document.getElementById("p-edit-sec").value,
+        imageUrl: uploadedImgUrl
+      };
+
+      const res = await callAPI({ action: "updateProfile", currentUser: loggedInUser, targetId: activeTargetId, updatedData });
+      submitBtn.innerText = "บันทึกข้อมูล"; submitBtn.disabled = false;
+      if(res && res.success) { alert(res.message); closeModal('profile-modal'); loadStudents(); } else { alert(res.message); }
+    }
+
+    async function handleStudentChangePassword(e) {
+      e.preventDefault();
+      const oldPassword = document.getElementById("p-pwd-old").value;
+      const newPassword = document.getElementById("p-pwd-new").value;
+      const confirmPassword = document.getElementById("p-pwd-confirm").value;
+      
+      if (newPassword !== confirmPassword) { alert("รหัสผ่านใหม่ไม่ตรงกัน"); return; }
+      const submitBtn = document.getElementById("btn-pwd-submit");
+      submitBtn.innerText = "กำลังอัปเดต..."; submitBtn.disabled = true;
+      
+      const res = await callAPI({ action: "studentResetPassword", currentUser: loggedInUser, oldPassword, newPassword });
+      submitBtn.innerText = "อัปเดตรหัสผ่าน"; submitBtn.disabled = false;
+      if (res && res.success) { alert(res.message); closeModal('profile-modal'); } else { alert(res.message); }
+    }
+
+    async function loadAdminPanel() {
+      const panel = document.getElementById("admin-panel");
+      if(!loggedInUser || loggedInUser.role !== 'admin') { panel.classList.add('hidden'); return; }
+      panel.classList.remove('hidden');
+      const res = await callAPI({ action: "getAdminList", currentUser: loggedInUser });
+      if(res && res.success) {
+        document.getElementById("admin-list-table").innerHTML = res.data.map(adm => `
+          <tr class="hover:bg-slate-50/80 transition-colors">
+            <td class="p-4 font-semibold text-slate-800">${adm.name} <span class="text-slate-400 font-normal block text-[11px] mt-0.5">ID: ${adm.studentId}</span></td>
+            <td class="p-4 text-center"><input type="checkbox" ${adm.canEdit?'checked':''} onclick="syncPermission('${adm.id}', this)" class="w-4 h-4 text-amber-500 border-slate-300 rounded-sm"></td>
+            <td class="p-4 text-center"><input type="checkbox" ${adm.canPass?'checked':''} onclick="syncPermission('${adm.id}', this)" class="w-4 h-4 text-amber-500 border-slate-300 rounded-sm"></td>
+            <td class="p-4 text-center"><input type="checkbox" ${adm.canManageAdmin?'checked':''} onclick="syncPermission('${adm.id}', this)" class="w-4 h-4 text-amber-500 border-slate-300 rounded-sm"></td>
+          </tr>
+        `).join('');
+      }
+    }
+
+    async function syncPermission(adminId, element) {
+      const currentRow = element.closest('tr');
+      const checks = currentRow.querySelectorAll('input[type="checkbox"]');
+      const permissions = { canEdit: checks[0].checked, canPass: checks[1].checked, canManageAdmin: checks[2].checked };
+      const res = await callAPI({ action: "updateAdminPermission", currentUser: loggedInUser, targetAdminId: adminId, permissions });
+      if(!res.success) { alert(res.message); loadAdminPanel(); }
+    }
+
+    function updateAuthUI() {
+      const zone = document.getElementById("auth-status-zone");
+      if(loggedInUser) {
+        zone.innerHTML = `
+          <div class="inline-flex items-center gap-3 bg-slate-100 p-1.5 pr-4 rounded-xl border border-slate-200 text-left shadow-xs">
+            <img src="${loggedInUser.imageUrl}" class="w-8 h-8 rounded-full object-cover border border-amber-400">
+            <div>
+              <p class="text-xs font-bold text-slate-800 leading-none">${loggedInUser.name}</p>
+              <span class="text-[10px] text-slate-400 font-bold mt-1 block">${loggedInUser.role === 'admin' ? '🛡️ ผู้ดูแลระบบ' : '🎓 นิสิต'}</span>
+            </div>
+            <button onclick="logout()" class="text-slate-400 hover:text-rose-500 ml-3 transition p-1 rounded-lg hover:bg-white text-xs" title="ออกจากระบบ"><i class="fa-solid fa-power-off"></i></button>
+          </div>`;
+      } else { 
+        zone.innerHTML = `<button onclick="openModal('auth-modal')" class="w-full sm:w-auto bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 text-xs font-bold px-5 py-2.5 rounded-xl transition shadow-xs flex items-center justify-center gap-2 mx-auto"><i class="fa-solid fa-right-to-bracket text-sm"></i> เข้าสู่ระบบ / สมัครสมาชิก</button>`; 
+      }
+    }
+
+    function logout() { loggedInUser = null; updateAuthUI(); loadStudents(); document.getElementById("admin-panel").classList.add('hidden'); alert("ออกจากระบบแล้ว"); }
+    function changeYear(y) { currentYear = y; document.querySelectorAll('.year-btn').forEach((b, i) => b.className = (i+1===y) ? "year-btn flex-1 sm:flex-none text-center px-5 py-2 rounded-lg font-bold text-xs bg-white text-amber-600 shadow-xs transition-all" : "year-btn flex-1 sm:flex-none text-center px-5 py-2 rounded-lg font-medium text-xs text-slate-600 hover:bg-slate-50 transition-all"); loadStudents(); }
+    function changeSec(s) { currentSec = s; document.querySelectorAll('.sec-btn').forEach((b, i) => b.className = (i+1===s) ? "sec-btn w-9 h-9 rounded-lg font-bold text-xs bg-gradient-to-br from-amber-500 to-amber-600 text-white shadow-xs transition-all" : "sec-btn w-9 h-9 rounded-lg font-medium text-xs bg-white text-slate-600 hover:bg-slate-50 border border-slate-200/40 shadow-xs transition-all"); loadStudents(); }
+    
+    function openModal(id) { 
+      document.getElementById(id).classList.remove('hidden'); 
+      if(id === 'auth-modal') { initGoogleLogin(); }
+    }
+    function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
+    function toggleAuthTab(mode) {
+      document.getElementById("form-login").classList.toggle('hidden', mode==='register');
+      document.getElementById("form-register").classList.toggle('hidden', mode==='login');
+      document.getElementById("tab-login").className = mode==='login' ? "w-1/2 pb-3 text-center text-amber-500 border-b-2 border-amber-500 transition-all" : "w-1/2 pb-3 text-center text-slate-400 transition-all";
+      document.getElementById("tab-register").className = mode==='register' ? "w-1/2 pb-3 text-center text-amber-500 border-b-2 border-amber-500 transition-all" : "w-1/2 pb-3 text-center text-slate-400 transition-all";
+    }
+    
+    function openProfileModal(id) {
+      const target = loadedStudents.find(std => std.id === id); if(!target) return; activeTargetId = id;
+      document.getElementById("p-view-img").src = target.imageUrl;
+      document.getElementById("p-view-name").innerText = target.name;
+      document.getElementById("p-view-id").innerText = `รหัสนิสิต: ${target.studentId}`;
+      document.getElementById("p-view-tag").innerText = `ชั้นปี ${target.year} | Section ${target.section}`;
+      
+      const ownerZone = document.getElementById("p-owner-btn-zone");
+      const pwdBtn = document.getElementById("btn-p-switch-pwd");
+
+      if (loggedInUser && (loggedInUser.id === id || loggedInUser.role === 'admin')) {
+        ownerZone.classList.remove('hidden'); 
+        document.getElementById("p-edit-name").value = target.name; 
+        document.getElementById("p-edit-year").value = target.year; 
+        document.getElementById("p-edit-sec").value = target.section;
+        
+        // 🛡️ ซ่อนปุ่มเปลี่ยนรหัสผ่านหากล็อกอินด้วย Google (เพราะไม่มีรหัสผ่านเว็บ)
+        if(loggedInUser.isGoogleUser) { pwdBtn.classList.add('hidden'); } 
+        else { pwdBtn.classList.remove('hidden'); }
+      } else { 
+        ownerZone.classList.add('hidden'); 
+      }
+      switchProfileMode('display'); openModal('profile-modal');
+    }
+
+    function switchProfileMode(mode) {
+      document.getElementById("p-display-mode").classList.toggle('hidden', mode !== 'display');
+      document.getElementById("p-edit-mode").classList.toggle('hidden', mode !== 'edit');
+      document.getElementById("p-password-mode").classList.toggle('hidden', mode !== 'password');
+    }
+  </script>
+</body>
+</html>
