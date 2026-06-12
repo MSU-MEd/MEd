@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght=300;400;500;600;700&display=swap" rel="stylesheet">
   <script src="https://accounts.google.com/gsi/client" async defer></script>
   <style>
     body { font-family: 'Sarabun', sans-serif; }
@@ -17,12 +17,11 @@
 <body class="bg-[#f8fafc] text-slate-800 antialiased min-h-screen">
 
   <script>
-    const API_URL = "https://script.google.com/macros/s/AKfycbz2uUN9G7td4uZt9Pgnx-8Kn-0cnGpbVJKl1-rpQpn0yg0QAUyzrVVP-2F78H5PDJPIhw/exec"; 
+    const API_URL = "https://script.google.com/macros/s/AKfycbxwW5pBCVX7-qeITDicziQDCKbV2xSF3nzkVL8K1VP6hFhdCXlrdhcfudl8tgqlHBJE2A/exec"; 
     const IMGBB_KEY = "0046726cd8e124ae20c8dd7ea9bcebf5"; 
     const GOOGLE_CLIENT_ID = "708135767632-mu0rfu25t1p8c4upjihn58q4rio865ea.apps.googleusercontent.com"; 
   </script>
 
-  <!-- ส่วนหัวเว็บ HEADER -->
   <header class="bg-white/80 backdrop-blur-md border-b border-amber-200 shadow-xs sticky top-0 z-50 transition-all">
     <div class="max-w-7xl mx-auto px-4 py-3.5 flex flex-col sm:flex-row items-center justify-between gap-4">
       <div class="flex items-center gap-4">
@@ -39,17 +38,15 @@
         </div>
       </div>
       <div id="auth-status-zone" class="w-full sm:w-auto text-center">
-        <button onclick="openModal('auth-modal')" class="w-full sm:w-auto bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-slate-950 text-xs font-bold px-5 py-2.5 rounded-xl transition-all duration-200 transform hover:-translate-y-0.5 shadow-md shadow-amber-500/10 active:translate-y-0 flex items-center justify-center gap-2 mx-auto">
+        <button onclick="openModal('auth-modal')" class="w-full sm:w-auto bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 text-xs font-bold px-5 py-2.5 rounded-xl transition shadow-xs flex items-center justify-center gap-2 mx-auto">
           <i class="fa-solid fa-right-to-bracket text-sm"></i> เข้าสู่ระบบ / สมัครสมาชิก
         </button>
       </div>
     </div>
   </header>
 
-  <!-- เนื้อหาหลัก MAIN CONTENTS -->
   <main class="max-w-7xl mx-auto px-4 py-8 space-y-8">
     
-    <!-- ปุ่มควบคุมการคัดกรองข้อมูล ทำเนียบ -->
     <section class="bg-white p-5 rounded-2xl shadow-xs border border-slate-200/60 flex flex-col lg:flex-row lg:items-center justify-between gap-5">
       <div class="space-y-2">
         <span class="text-xs font-bold text-slate-400 uppercase tracking-wider block"><i class="fa-solid fa-graduation-cap mr-1"></i> ระดับชั้นปี (Year)</span>
@@ -71,34 +68,53 @@
       </div>
     </section>
 
-    <!-- พื้นที่แสดงรายชื่อนิสิต -->
     <section id="students-container" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"></section>
 
-    <!-- พื้นที่ระบบหลังบ้านแอดมิน -->
-    <section id="admin-panel" class="bg-white p-6 rounded-2xl shadow-xs border border-rose-100 hidden space-y-5">
+    <section id="admin-panel" class="bg-white p-6 rounded-2xl shadow-xs border border-rose-100 hidden space-y-6">
       <div class="border-b border-slate-100 pb-4 flex flex-col sm:flex-row items-center justify-between gap-3">
         <h2 class="text-base font-bold text-rose-600 flex items-center gap-2">
           <span class="p-2 bg-rose-50 rounded-xl"><i class="fa-solid fa-shield-halved"></i></span> 
           ระบบหลังบ้านผู้ดูแลระบบ
         </h2>
       </div>
-      <div class="overflow-x-auto rounded-xl border border-slate-100">
-        <table class="w-full text-left text-xs text-slate-600 border-collapse">
-          <thead class="bg-slate-50 text-[11px] font-bold text-slate-500 uppercase tracking-wider border-b border-slate-100">
-            <tr>
-              <th class="p-4">ชื่อแอดมิน / ผู้รับผิดชอบ</th>
-              <th class="p-4 text-center">สิทธิ์แก้ไขข้อมูล</th>
-              <th class="p-4 text-center">สิทธิ์รีเซ็ทรหัส</th>
-              <th class="p-4 text-center">สิทธิ์จัดการแอดมิน</th>
-            </tr>
-          </thead>
-          <tbody id="admin-list-table" class="divide-y divide-slate-100"></tbody>
-        </table>
+
+      <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-3">
+        <h3 class="text-xs font-bold text-slate-700 flex items-center gap-1.5">
+          <i class="fa-solid fa-bullhorn text-rose-500"></i> จัดการรูปภาพประกาศด่วนประจำสาขา
+        </h3>
+        <div class="flex flex-col sm:flex-row gap-2.5">
+          <input type="url" id="admin-poster-input" placeholder="วางลิงก์ URL รูปภาพโปสเตอร์ประกาศด่วนที่นี่..." class="flex-1 border border-slate-200 rounded-xl p-2.5 text-xs bg-white focus:outline-none focus:border-rose-500 transition-all">
+          <div class="flex gap-2">
+            <button onclick="updateUrgentPoster()" id="btn-save-poster" class="bg-rose-500 hover:bg-rose-600 text-white font-bold px-4 py-2.5 rounded-xl text-xs transition whitespace-nowrap">
+              <i class="fa-solid fa-floppy-disk mr-1"></i> อัปเดตประกาศ
+            </button>
+            <button onclick="clearUrgentPoster()" id="btn-clear-poster" class="bg-slate-200 hover:bg-slate-300 text-slate-600 font-bold px-3 py-2.5 rounded-xl text-xs transition" title="ล้างรูปภาพประกาศชั่วคราว">
+              ล้างค่า
+            </button>
+          </div>
+        </div>
+        <p class="text-[11px] text-slate-400 leading-normal">ไม่ต้องมาเปลี่ยนในโค้ดแล้วครับ! วางลิงก์รูปภาพ เช่น ลิงก์จาก ImgBB หรือ Unsplash แล้วกดอัปเดต ระบบจะแสดงป๊อปอัพให้ทุกคนเห็นทันทีกรณีที่มีประกาศ (หากไม่ต้องการแสดง ให้กดปุ่ม "ล้างค่า" หรือปล่อยว่างไว้แล้วกดอัปเดต)</p>
+      </div>
+
+      <div class="space-y-2">
+        <h3 class="text-xs font-bold text-slate-500 uppercase tracking-wider"><i class="fa-solid fa-user-shield mr-1"></i> จัดการสิทธิ์การเข้าถึงของแอดมิน</h3>
+        <div class="overflow-x-auto rounded-xl border border-slate-100">
+          <table class="w-full text-left text-xs text-slate-600 border-collapse">
+            <thead class="bg-slate-50 text-[11px] font-bold text-slate-500 uppercase tracking-wider border-b border-slate-100">
+              <tr>
+                <th class="p-4">ชื่อแอดมิน / ผู้รับผิดชอบ</th>
+                <th class="p-4 text-center">สิทธิ์แก้ไขข้อมูล</th>
+                <th class="p-4 text-center">สิทธิ์รีเซ็ทรหัส</th>
+                <th class="p-4 text-center">สิทธิ์จัดการแอดมิน</th>
+              </tr>
+            </thead>
+            <tbody id="admin-list-table" class="divide-y divide-slate-100"></tbody>
+          </table>
+        </div>
       </div>
     </section>
   </main>
 
-  <!-- 📥 MODAL 1: ระบบเข้าสู่ระบบ / สมัครสมาชิก -->
   <div id="auth-modal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center z-50 p-4 transition-all">
     <div class="bg-white rounded-3xl max-w-sm w-full p-6 shadow-2xl relative border border-slate-100">
       <button onclick="closeModal('auth-modal')" class="absolute top-5 right-5 text-slate-400 hover:text-slate-600 transition p-1 rounded-lg hover:bg-slate-50">
@@ -109,7 +125,6 @@
         <button onclick="toggleAuthTab('register')" id="tab-register" class="w-1/2 pb-3 text-center text-slate-400 transition-all">สมัครสมาชิก</button>
       </div>
       
-      <!-- 1.1 ฟอร์มล็อกอินปกติ -->
       <form id="form-login" onsubmit="handleLogin(event)" class="space-y-4">
         <div>
           <label class="block text-xs font-bold text-slate-500 mb-1.5">รหัสนิสิต</label>
@@ -135,7 +150,6 @@
         <div class="flex justify-center" id="googleBtn"></div>
       </form>
       
-      <!-- 1.2 ฟอร์มสมัครสมาชิกปกติ -->
       <form id="form-register" onsubmit="handleRegister(event)" class="space-y-4 hidden">
         <div>
           <label class="block text-xs font-bold text-slate-500 mb-1.5">รหัสนิสิต</label>
@@ -170,11 +184,10 @@
         <button type="submit" id="btn-reg-submit" class="w-full bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 font-bold py-3 rounded-xl text-xs transition mt-2">ลงทะเบียนสมาชิก</button>
       </form>
 
-      <!-- 🌟 1.3 ฟอร์มตรวจสอบข้อมูลแรกเข้าสำหรับ Google Login -->
       <form id="form-google-firsttime" onsubmit="handleGoogleSetupSubmit(event)" class="space-y-4 hidden">
         <div class="bg-amber-50 border border-amber-200 text-amber-900 p-3 rounded-xl text-xs space-y-1">
           <p class="font-bold"><i class="fa-solid fa-circle-info mr-1"></i> ตรวจสอบข้อมูลก่อนเข้าใช้งานครั้งแรก</p>
-          <p class="text-slate-600">กรุณาเลือกชั้นปีและกลุ่มเรียนให้ถูกต้อง ระบบจะตั้งรหัสผ่านเริ่มต้นเป็น รหัสนิสิต ให้คุณอัตโนมัติ</p>
+          <p class="text-slate-600">กรุณาเลือกชั้นปีและกลุ่มเรียนให้ถูกต้อง ระบบจะตั้งรหัสผ่านเริ่มต้นเป็น <strong class='text-slate-900'>รหัสนิสิต</strong> ให้คุณอัตโนมัติ</p>
         </div>
         <div>
           <label class="block text-xs font-bold text-slate-500 mb-1.5">รหัสนิสิต</label>
@@ -203,23 +216,27 @@
     </div>
   </div>
 
-  <!-- 👤 MODAL 2: ระบบแสดง/แก้ไขโปรไฟล์ -->
   <div id="profile-modal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center z-50 p-4 transition-all">
-    <div class="bg-white rounded-3xl max-w-sm w-full overflow-hidden shadow-2xl relative border border-slate-100">
+    <div class="bg-white rounded-3xl max-w-sm w-full shadow-2xl relative border border-slate-100 max-h-[calc(100vh-2rem)] overflow-y-auto flex flex-col">
       <button onclick="closeModal('profile-modal')" class="absolute top-4 right-4 text-white/70 hover:text-white bg-black/20 hover:bg-black/40 p-1.5 rounded-full z-10 transition">
         <i class="fa-solid fa-xmark text-base"></i>
       </button>
       
-      <div class="bg-gradient-to-b from-slate-900 to-slate-800 text-white p-6 pt-8 text-center relative">
+      <div class="bg-gradient-to-b from-slate-900 to-slate-800 text-white p-6 pt-8 text-center relative flex-shrink-0">
         <div class="absolute inset-0 bg-[radial-gradient(#ffffff10_1px,transparent_1px)] [background-size:16px_16px] opacity-30"></div>
         <img id="p-view-img" src="" class="w-24 h-24 rounded-full object-cover mx-auto border-4 border-amber-400 shadow-xl mb-3 relative z-10">
         <h3 id="p-view-name" class="font-bold text-lg tracking-tight relative z-10"></h3>
         <p id="p-view-id" class="text-xs text-slate-400 font-medium mt-0.5 relative z-10"></p>
       </div>
       
-      <div class="p-6 space-y-4">
+      <div class="p-6 space-y-4 flex-1">
         <div id="p-display-mode" class="text-center space-y-4">
           <div id="p-view-tag" class="inline-flex bg-amber-50 text-amber-800 border border-amber-200/60 text-xs px-4 py-1.5 rounded-full font-bold shadow-xs"></div>
+          
+          <div class="pt-2">
+            <p class="text-slate-400 text-[11px] font-bold uppercase tracking-wider mb-2.5"><i class="fa-regular fa-comments mr-1"></i> ช่องทางการติดต่อ (Contact)</p>
+            <div class="flex justify-center items-center gap-4" id="p-view-social-box"></div>
+          </div>
           
           <div id="p-owner-btn-zone" class="hidden pt-3 border-t border-slate-100 grid grid-cols-2 gap-2">
             <button onclick="switchProfileMode('edit')" class="bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold py-2.5 rounded-xl transition flex items-center justify-center gap-1">
@@ -231,7 +248,6 @@
           </div>
         </div>
         
-        <!-- ฟอร์มแก้ไขโปรไฟล์ -->
         <form id="p-edit-mode" onsubmit="handleUpdateProfile(event)" class="hidden space-y-4">
           <div>
             <label class="block text-xs font-bold text-slate-500 mb-1">ชื่อ-นามสกุล</label>
@@ -255,13 +271,29 @@
             <label class="block text-xs font-bold text-slate-500 mb-1">รูปโปรไฟล์ใหม่ <span class="text-slate-400 font-normal">(ถ้ามี)</span></label>
             <input type="file" id="p-edit-imgfile" accept="image/*" class="w-full border border-slate-200 rounded-xl text-xs bg-slate-50 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:bg-amber-50 file:text-amber-700 transition-all">
           </div>
+          
+          <div class="border-t border-dashed border-slate-200 pt-3 space-y-3">
+            <span class="block text-slate-500 font-bold text-xs"><i class="fa-solid fa-share-nodes mr-1"></i> ผูกลิงก์ช่องทางติดต่อของคุณ</span>
+            <div>
+              <label class="block text-[11px] text-slate-400 mb-1"><i class="fa-brands fa-facebook text-blue-600 mr-1"></i> ลิงก์โปรไฟล์ Facebook</label>
+              <input type="url" id="p-edit-fb" placeholder="https://facebook.com/username" class="w-full border border-slate-200 rounded-xl p-2.5 text-xs focus:outline-none focus:border-blue-500 transition-all">
+            </div>
+            <div>
+              <label class="block text-[11px] text-slate-400 mb-1"><i class="fa-brands fa-instagram text-pink-600 mr-1"></i> ชื่อผู้ใช้ Instagram (ไม่ต้องใส่ @)</label>
+              <input type="text" id="p-edit-ig" placeholder="ชื่อไอจีของคุณ" class="w-full border border-slate-200 rounded-xl p-2.5 text-xs focus:outline-none focus:border-pink-500 transition-all">
+            </div>
+            <div>
+              <label class="block text-[11px] text-slate-400 mb-1"><i class="fa-brands fa-line text-emerald-500 mr-1"></i> Line ID หรือ ลิงก์คิวอาร์โค้ด</label>
+              <input type="text" id="p-edit-line" placeholder="ไอดีไลน์ของคุณ" class="w-full border border-slate-200 rounded-xl p-2.5 text-xs focus:outline-none focus:border-emerald-500 transition-all">
+            </div>
+          </div>
+
           <div class="flex gap-2.5 pt-2">
             <button type="button" onclick="switchProfileMode('display')" class="w-1/2 bg-slate-100 hover:bg-slate-200 text-slate-600 py-2.5 rounded-xl text-xs font-bold transition">ยกเลิก</button>
             <button type="submit" id="btn-edit-submit" class="w-1/2 bg-emerald-500 hover:bg-emerald-600 text-white py-2.5 rounded-xl text-xs font-bold transition">บันทึกข้อมูล</button>
           </div>
         </form>
 
-        <!-- ฟอร์มเปลี่ยนรหัสผ่าน -->
         <form id="p-password-mode" onsubmit="handleStudentChangePassword(event)" class="hidden space-y-4">
           <div>
             <label class="block text-xs font-bold text-slate-500 mb-1">รหัสผ่านเดิม</label>
@@ -284,12 +316,78 @@
     </div>
   </div>
 
-  <!-- 💻 ส่วนควบคุมระบบหลังบ้าน JavaScript -->
+  <div id="urgent-modal" class="hidden fixed inset-0 bg-slate-900/80 backdrop-blur-md flex items-center justify-center z-999 p-4 transition-all">
+    <div class="bg-white rounded-3xl max-w-md w-full overflow-hidden shadow-2xl relative border-2 border-rose-500 flex flex-col max-h-[calc(100vh-4rem)]">
+      
+      <button onclick="closeUrgentModal()" class="absolute top-3 right-3 text-white bg-black/40 hover:bg-black/60 transition p-2 rounded-full z-50 backdrop-blur-xs shadow-sm" title="ปิดประกาศ">
+        <i class="fa-solid fa-xmark text-base leading-none"></i>
+      </button>
+      
+      <div class="relative w-full bg-slate-100 overflow-y-auto flex-1">
+        <img id="urgent-poster-img" src="" class="w-full h-auto block" alt="รูปภาพประกาศเร่งด่วน">
+      </div>
+      
+      <div class="p-4 bg-slate-50 border-t border-slate-100 flex-shrink-0">
+        <button onclick="closeUrgentModal()" class="w-full bg-gradient-to-r from-rose-500 to-rose-600 hover:from-rose-600 hover:to-rose-700 text-white font-bold py-3 rounded-xl text-xs tracking-wide transition active:translate-y-0.5">
+          <i class="fa-solid fa-check-double mr-1"></i> รับทราบประกาศด่วน
+        </button>
+      </div>
+    </div>
+  </div>
+
   <script>
     let currentYear = 1, currentSec = 1, loggedInUser = null, loadedStudents = [], activeTargetId = null;
-    let googleTempData = null; // พักข้อมูลล็อกอินแรกเข้าชั่วคราว
+    let googleTempData = null; 
 
-    window.onload = () => { loadStudents(); };
+    window.onload = () => { 
+      loadStudents(); 
+      checkUrgentPoster();
+    };
+
+    async function checkUrgentPoster() {
+      const res = await callAPI({ action: "getUrgentPoster" });
+      if (res && res.success && res.url) {
+        document.getElementById("urgent-poster-img").src = res.url;
+        document.getElementById("admin-poster-input").value = res.url;
+        openUrgentModal();
+      } else {
+        closeUrgentModal();
+      }
+    }
+
+    async function updateUrgentPoster() {
+      if (!loggedInUser || loggedInUser.role !== 'admin') { alert("คุณไม่มีสิทธิ์ทำรายการนี้"); return; }
+      const posterUrl = document.getElementById("admin-poster-input").value.trim();
+      const btn = document.getElementById("btn-save-poster");
+      
+      btn.innerHTML = `<i class="fa-solid fa-circle-notch animate-spin mr-1"></i> กำลังบันทึก...`;
+      btn.disabled = true;
+
+      const res = await callAPI({ action: "updateUrgentPoster", currentUser: loggedInUser, posterUrl: posterUrl });
+      btn.innerHTML = `<i class="fa-solid fa-floppy-disk mr-1"></i> อัปเดตประกาศ`;
+      btn.disabled = false;
+
+      if (res && res.success) {
+        alert(res.message);
+        checkUrgentPoster();
+      } else {
+        alert(res ? res.message : "เกิดข้อผิดพลาด");
+      }
+    }
+
+    function clearUrgentPoster() {
+      document.getElementById("admin-poster-input").value = "";
+    }
+
+    function openUrgentModal() {
+      const modal = document.getElementById("urgent-modal");
+      if (modal) modal.classList.remove('hidden');
+    }
+
+    function closeUrgentModal() {
+      const modal = document.getElementById("urgent-modal");
+      if (modal) modal.classList.add('hidden');
+    }
 
     async function callAPI(payload) {
       try {
@@ -330,36 +428,39 @@
             </div>`; 
           return; 
         }
-        container.innerHTML = loadedStudents.map(std => `
-          <div class="bg-white rounded-2xl p-5 border border-slate-200/60 hover:border-amber-300 hover:shadow-xl transition-all duration-300 flex flex-col items-center text-center group relative overflow-hidden">
-            <div class="absolute top-0 inset-x-0 h-1.5 bg-gradient-to-r from-amber-400 to-amber-500 opacity-0 group-hover:opacity-100 transition-all"></div>
-            <div class="relative mb-4">
-              <img src="${std.imageUrl}" class="w-20 h-20 rounded-full object-cover border-2 border-slate-100 group-hover:border-amber-400 shadow-sm">
+        
+        container.innerHTML = loadedStudents.map(std => {
+          const isAdmin = std.role === 'admin';
+          const borderStyle = isAdmin ? 'border-rose-200 hover:border-rose-400 shadow-sm' : 'border-slate-200/60 hover:border-amber-300';
+          const adminBadge = isAdmin ? `<span class="mb-1 text-[10px] bg-rose-100 text-rose-700 font-bold px-2 py-0.5 rounded-md"><i class="fa-solid fa-shield-halved mr-0.5"></i> Admin</span>` : '';
+          
+          return `
+            <div class="bg-white rounded-2xl p-5 border ${borderStyle} hover:shadow-xl transition-all duration-300 flex flex-col items-center text-center group relative overflow-hidden">
+              <div class="absolute top-0 inset-x-0 h-1.5 bg-gradient-to-r ${isAdmin ? 'from-rose-500 to-rose-600' : 'from-amber-400 to-amber-500'} opacity-0 group-hover:opacity-100 transition-all"></div>
+              <div class="relative mb-4">
+                <img src="${std.imageUrl}" class="w-20 h-20 rounded-full object-cover border-2 ${isAdmin ? 'border-rose-100 group-hover:border-rose-400' : 'border-slate-100 group-hover:border-amber-400'} shadow-sm">
+              </div>
+              ${adminBadge}
+              <h3 class="font-bold text-slate-900 text-sm ${isAdmin ? 'group-hover:text-rose-600' : 'group-hover:text-amber-600'} transition-colors">${std.name}</h3>
+              <p class="text-[11px] font-medium text-slate-400 mt-0.5 mb-5">รหัสนิสิต: ${std.studentId}</p>
+              <button onclick="openProfileModal('${std.id}')" class="mt-auto w-full bg-slate-900 hover:bg-slate-800 text-white text-[11px] font-bold py-2.5 rounded-xl transition-all flex items-center justify-center gap-1.5 shadow-sm"><i class="fa-solid fa-address-card opacity-70"></i> ดูข้อมูลประวัติ</button>
             </div>
-            <h3 class="font-bold text-slate-900 text-sm group-hover:text-amber-600 transition-colors">${std.name}</h3>
-            <p class="text-[11px] font-medium text-slate-400 mt-0.5 mb-5">รหัสนิสิต: ${std.studentId}</p>
-            <button onclick="openProfileModal('${std.id}')" class="mt-auto w-full bg-slate-900 hover:bg-slate-800 text-white text-[11px] font-bold py-2.5 rounded-xl transition-all flex items-center justify-center gap-1.5 shadow-sm"><i class="fa-solid fa-address-card opacity-70"></i> ดูข้อมูลประวัติ</button>
-          </div>
-        `).join('');
+          `;
+        }).join('');
       }
     }
 
-    // ล็อกอินระบบเว็บปกติ
     async function handleLogin(e) {
       e.preventDefault();
       const submitBtn = document.getElementById("btn-login-submit");
       const originalText = submitBtn.innerText;
-      
       submitBtn.innerHTML = `<i class="fa-solid fa-circle-notch animate-spin mr-1"></i> กรุณารอสักครู่...`;
       submitBtn.disabled = true;
 
       try {
         const res = await callAPI({ 
-          action: "login", 
-          username: document.getElementById("login-user").value, 
-          password: document.getElementById("login-pass").value 
+          action: "login", username: document.getElementById("login-user").value, password: document.getElementById("login-pass").value 
         });
-        
         if (res && res.success) { 
           loggedInUser = res.user; 
           updateAuthUI(); 
@@ -371,15 +472,12 @@
         } else { 
           alert(res && res.message ? res.message : "รหัสนิสิตหรือรหัสผ่านไม่ถูกต้อง"); 
         }
-      } catch (error) {
-        alert("ระบบหลังบ้านขัดข้อง กรุณาลองใหม่อีกครั้ง");
-      } finally {
+      } catch (error) { alert("ระบบหลังบ้านขัดข้อง กรุณาลองใหม่อีกครั้ง"); } finally {
         submitBtn.innerText = originalText;
         submitBtn.disabled = false;
       }
     }
 
-    // ลงทะเบียนระบบเว็บปกติ
     async function handleRegister(e) {
       e.preventDefault();
       const submitBtn = document.getElementById("btn-reg-submit");
@@ -387,7 +485,6 @@
 
       const file = document.getElementById("reg-imgfile").files[0];
       const uploadedImgUrl = await uploadToImgBB(file);
-
       if(!uploadedImgUrl) { alert("อัปโหลดรูปภาพล้มเหลว"); submitBtn.innerText = "ลงทะเบียน"; submitBtn.disabled = false; return; }
 
       const studentData = {
@@ -404,20 +501,15 @@
       if(res && res.success) { alert(res.message); toggleAuthTab('login'); } else { alert(res.message); }
     }
 
-    // เปิดการตั้งค่าปุ่มล็อกอิน Google
     function initGoogleLogin() {
       google.accounts.id.initialize({
-        client_id: GOOGLE_CLIENT_ID,
-        callback: handleGoogleCredentialResponse,
-        hosted_domain: "msu.ac.th" 
+        client_id: GOOGLE_CLIENT_ID, callback: handleGoogleCredentialResponse, hosted_domain: "msu.ac.th" 
       });
       google.accounts.id.renderButton(
-        document.getElementById("googleBtn"),
-        { theme: "outline", size: "large", text: "signin_with", width: "240" }
+        document.getElementById("googleBtn"), { theme: "outline", size: "large", text: "signin_with", width: "240" }
       );
     }
 
-    // เมื่อเข้าสู่ระบบผ่าน Google สำเร็จ
     async function handleGoogleCredentialResponse(response) {
       closeModal('auth-modal');
       const container = document.getElementById("students-container");
@@ -431,27 +523,25 @@
 
       const res = await callAPI({ action: "googleLogin", idToken: response.credential });
       if(res && res.success) {
-        
-        // ✨ กรณีล็อกอินครั้งแรก: เปิดฟอร์มให้คัดกรองข้อมูลเพิ่มเติม
         if(res.isFirstTime) {
           loadStudents(); 
           googleTempData = {
-            email: res.email,
-            studentId: res.studentId,
-            name: res.name,
-            imageUrl: res.imageUrl
+            email: res.email, studentId: res.studentId, name: res.name, imageUrl: res.imageUrl
           };
-          
           openModal('auth-modal');
           document.getElementById("form-login").classList.add('hidden');
           document.getElementById("form-register").classList.add('hidden');
-          document.getElementById("auth-tab-bar").classList.add('hidden'); // ซ่อนแท็บเลือกโหมด
+          document.getElementById("auth-tab-bar").classList.add('hidden'); 
+          
+          const alertBox = document.querySelector("#form-google-firsttime .bg-amber-50 p.text-slate-600");
+          if (alertBox) {
+            alertBox.innerHTML = "กรุณาเลือกชั้นปีและกลุ่มเรียนให้ถูกต้อง ระบบจะตั้งรหัสผ่านเริ่มต้นเป็น <strong class='text-slate-900'>รหัสนิสิต</strong> ให้คุณอัตโนมัติ";
+          }
           
           document.getElementById("form-google-firsttime").classList.remove('hidden');
           document.getElementById("g-setup-id").value = res.studentId;
           document.getElementById("g-setup-name").value = res.name;
         } 
-        // 🚀 กรณีมีประวัติอยู่แล้ว: ล็อกอินทันที
         else {
           loggedInUser = res.user;
           updateAuthUI();
@@ -465,7 +555,6 @@
       }
     }
 
-    // กดยืนยันเซฟลงฐานข้อมูลของระบบ Google แรกเข้า
     async function handleGoogleSetupSubmit(e) {
       e.preventDefault();
       if(!googleTempData) return;
@@ -490,11 +579,8 @@
         updateAuthUI();
         loadAdminPanel();
         closeModal('auth-modal');
-        
-        // โหลดข้อมูลตามที่นิสิตเลือกตั้งค่าใหม่ทันที
         changeYear(parseInt(finalStudentData.year));
         changeSec(parseInt(finalStudentData.section));
-        
         alert("สร้างโปรไฟล์และเข้าสู่ระบบสำเร็จ!");
         googleTempData = null;
       } else {
@@ -502,7 +588,6 @@
       }
     }
 
-    // แก้ไขข้อมูลส่วนตัว
     async function handleUpdateProfile(e) {
       e.preventDefault();
       const submitBtn = document.getElementById("btn-edit-submit");
@@ -515,15 +600,31 @@
         name: document.getElementById("p-edit-name").value,
         year: document.getElementById("p-edit-year").value,
         section: document.getElementById("p-edit-sec").value,
-        imageUrl: uploadedImgUrl
+        imageUrl: uploadedImgUrl,
+        facebook: document.getElementById("p-edit-fb").value.trim(),
+        instagram: document.getElementById("p-edit-ig").value.trim(),
+        lineId: document.getElementById("p-edit-line").value.trim()
       };
 
       const res = await callAPI({ action: "updateProfile", currentUser: loggedInUser, targetId: activeTargetId, updatedData });
       submitBtn.innerText = "บันทึกข้อมูล"; submitBtn.disabled = false;
-      if(res && res.success) { alert(res.message); closeModal('profile-modal'); loadStudents(); } else { alert(res.message); }
+      if(res && res.success) { 
+        alert(res.message); 
+        closeModal('profile-modal'); 
+        loadStudents(); 
+        if(loggedInUser && loggedInUser.id === activeTargetId) {
+          loggedInUser.name = updatedData.name;
+          loggedInUser.year = updatedData.year;
+          loggedInUser.section = updatedData.section;
+          if(uploadedImgUrl) loggedInUser.imageUrl = uploadedImgUrl;
+          loggedInUser.facebook = updatedData.facebook;
+          loggedInUser.instagram = updatedData.instagram;
+          loggedInUser.lineId = updatedData.lineId;
+          updateAuthUI();
+        }
+      } else { alert(res.message); }
     }
 
-    // เปลี่ยนรหัสผ่านจากหน้าเว็บ
     async function handleStudentChangePassword(e) {
       e.preventDefault();
       const oldPassword = document.getElementById("p-pwd-old").value;
@@ -539,7 +640,6 @@
       if (res && res.success) { alert(res.message); closeModal('profile-modal'); } else { alert(res.message); }
     }
 
-    // โหลดตารางสิทธิ์ผู้ดูแลระบบ
     async function loadAdminPanel() {
       const panel = document.getElementById("admin-panel");
       if(!loggedInUser || loggedInUser.role !== 'admin') { panel.classList.add('hidden'); return; }
@@ -594,7 +694,6 @@
     function closeModal(id) { 
       document.getElementById(id).classList.add('hidden'); 
       if(id === 'auth-modal') {
-        // คืนค่าหน้าตากล่องล็อกอินให้กลับมาแสดงปกติ
         document.getElementById("form-google-firsttime").classList.add('hidden');
         document.getElementById("auth-tab-bar").classList.remove('hidden');
         toggleAuthTab('login');
@@ -614,8 +713,34 @@
       document.getElementById("p-view-img").src = target.imageUrl;
       document.getElementById("p-view-name").innerText = target.name;
       document.getElementById("p-view-id").innerText = `รหัสนิสิต: ${target.studentId}`;
-      document.getElementById("p-view-tag").innerText = `ชั้นปี ${target.year} | Section ${target.section}`;
       
+      const roleText = target.role === 'admin' ? "🛡️ ผู้ดูแลระบบ" : "🎓 นิสิตทั่วไป";
+      document.getElementById("p-view-tag").innerText = `ชั้นปี ${target.year} | Section ${target.section} (${roleText})`;
+      
+      const socialBox = document.getElementById("p-view-social-box");
+      let socialHTML = "";
+      
+      if(target.facebook && target.facebook.startsWith('http')) {
+        socialHTML += `<a href="${target.facebook}" target="_blank" class="w-10 h-10 rounded-full bg-blue-50 text-blue-600 hover:bg-blue-600 hover:text-white transition-all flex items-center justify-center text-lg shadow-xs" title="Facebook"><i class="fa-brands fa-facebook"></i></a>`;
+      } else {
+        socialHTML += `<span class="w-10 h-10 rounded-full bg-slate-100 text-slate-300 cursor-not-allowed flex items-center justify-center text-lg" title="ไม่มีข้อมูล Facebook"><i class="fa-brands fa-facebook"></i></span>`;
+      }
+      
+      if(target.instagram) {
+        socialHTML += `<a href="https://instagram.com/${target.instagram}" target="_blank" class="w-10 h-10 rounded-full bg-pink-50 text-pink-600 hover:bg-pink-600 hover:text-white transition-all flex items-center justify-center text-lg shadow-xs" title="Instagram"><i class="fa-brands fa-instagram"></i></a>`;
+      } else {
+        socialHTML += `<span class="w-10 h-10 rounded-full bg-slate-100 text-slate-300 cursor-not-allowed flex items-center justify-center text-lg" title="ไม่มีข้อมูล Instagram"><i class="fa-brands fa-instagram"></i></span>`;
+      }
+      
+      if(target.lineId) {
+        const lineHref = target.lineId.startsWith('http') ? target.lineId : `https://line.me/ti/p/~${target.lineId}`;
+        socialHTML += `<a href="${lineHref}" target="_blank" class="w-10 h-10 rounded-full bg-emerald-50 text-emerald-600 hover:bg-emerald-600 hover:text-white transition-all flex items-center justify-center text-lg shadow-xs" title="Line"><i class="fa-brands fa-line"></i></a>`;
+      } else {
+        socialHTML += `<span class="w-10 h-10 rounded-full bg-slate-100 text-slate-300 cursor-not-allowed flex items-center justify-center text-lg" title="ไม่มีข้อมูล Line"><i class="fa-brands fa-line"></i></span>`;
+      }
+      
+      socialBox.innerHTML = socialHTML;
+
       const ownerZone = document.getElementById("p-owner-btn-zone");
       const pwdBtn = document.getElementById("btn-p-switch-pwd");
 
@@ -625,7 +750,9 @@
         document.getElementById("p-edit-year").value = target.year; 
         document.getElementById("p-edit-sec").value = target.section;
         
-        // ยินยอมให้บัญชี Google สามารถสลับหน้าต่างมาตั้งรหัสผ่านใหม่เพื่อล็อกอินแบบทั่วไปได้ด้วย
+        document.getElementById("p-edit-fb").value = target.facebook || "";
+        document.getElementById("p-edit-ig").value = target.instagram || "";
+        document.getElementById("p-edit-line").value = target.lineId || "";
         pwdBtn.classList.remove('hidden');
       } else { 
         ownerZone.classList.add('hidden'); 
