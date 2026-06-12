@@ -17,12 +17,14 @@
 <body class="bg-[#f8fafc] text-slate-800 antialiased min-h-screen">
 
   <script>
-    const API_URL = "https://script.google.com/macros/s/AKfycbxwW5pBCVX7-qeITDicziQDCKbV2xSF3nzkVL8K1VP6hFhdCXlrdhcfudl8tgqlHBJE2A/exec"; 
+    const API_URL = "https://script.google.com/macros/s/AKfycbyw4tORz4TV4UaG_L-IQ42y1MpWSsvypNlPyBh1sYCJigM_NG1jJE1W10CD3AAkl393PA/exec"; 
     const IMGBB_KEY = "0046726cd8e124ae20c8dd7ea9bcebf5"; 
     const GOOGLE_CLIENT_ID = "708135767632-mu0rfu25t1p8c4upjihn58q4rio865ea.apps.googleusercontent.com"; 
   </script>
 
-  <header class="bg-white/80 backdrop-blur-md border-b border-amber-200 shadow-xs sticky top-0 z-50 transition-all">
+  <div id="toast-container" class="fixed bottom-5 right-5 z-[9999] space-y-3.5 pointer-events-none max-w-sm w-full px-4 sm:px-0"></div>
+
+  <header class="bg-white/80 backdrop-blur-md border-b border-slate-200/80 shadow-xs sticky top-0 z-50 transition-all">
     <div class="max-w-7xl mx-auto px-4 py-3.5 flex flex-col sm:flex-row items-center justify-between gap-4">
       <div class="flex items-center gap-4">
         <div class="flex gap-2.5 bg-slate-50 p-2 rounded-2xl border border-slate-100">
@@ -38,35 +40,53 @@
         </div>
       </div>
       <div id="auth-status-zone" class="w-full sm:w-auto text-center">
-        <button onclick="openModal('auth-modal')" class="w-full sm:w-auto bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 text-xs font-bold px-5 py-2.5 rounded-xl transition shadow-xs flex items-center justify-center gap-2 mx-auto">
+        <button onclick="openModal('auth-modal')" class="w-full sm:w-auto bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-slate-950 text-xs font-bold px-5 py-2.5 rounded-xl transition shadow-xs flex items-center justify-center gap-2 mx-auto cursor-pointer">
           <i class="fa-solid fa-right-to-bracket text-sm"></i> เข้าสู่ระบบ / สมัครสมาชิก
         </button>
       </div>
     </div>
   </header>
 
-  <main class="max-w-7xl mx-auto px-4 py-8 space-y-8">
+  <main class="max-w-7xl mx-auto px-4 py-8 space-y-6">
     
-    <section class="bg-white p-5 rounded-2xl shadow-xs border border-slate-200/60 flex flex-col lg:flex-row lg:items-center justify-between gap-5">
-      <div class="space-y-2">
-        <span class="text-xs font-bold text-slate-400 uppercase tracking-wider block"><i class="fa-solid fa-graduation-cap mr-1"></i> ระดับชั้นปี (Year)</span>
-        <div class="flex flex-wrap gap-2 p-1.5 bg-slate-100 rounded-xl w-full sm:w-fit">
-          <button onclick="changeYear(1)" id="btn-y-1" class="year-btn flex-1 sm:flex-none text-center px-5 py-2 rounded-lg font-bold text-xs bg-white text-amber-600 shadow-xs transition-all">ปี 1</button>
-          <button onclick="changeYear(2)" id="btn-y-2" class="year-btn flex-1 sm:flex-none text-center px-5 py-2 rounded-lg font-medium text-xs text-slate-600 hover:bg-slate-50 transition-all">ปี 2</button>
-          <button onclick="changeYear(3)" id="btn-y-3" class="year-btn flex-1 sm:flex-none text-center px-5 py-2 rounded-lg font-medium text-xs text-slate-600 hover:bg-slate-50 transition-all">ปี 3</button>
-          <button onclick="changeYear(4)" id="btn-y-4" class="year-btn flex-1 sm:flex-none text-center px-5 py-2 rounded-lg font-medium text-xs text-slate-600 hover:bg-slate-50 transition-all">ปี 4</button>
+    <section class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200/60 flex flex-col xl:flex-row xl:items-end justify-between gap-6">
+      <div class="flex flex-col sm:flex-row items-start sm:items-center gap-6 flex-1 w-full">
+        <div class="space-y-2 w-full sm:w-auto">
+          <span class="text-xs font-bold text-slate-400 uppercase tracking-wider block"><i class="fa-solid fa-graduation-cap mr-1"></i> ระดับชั้นปี (Year)</span>
+          <div class="flex flex-wrap gap-2 p-1.5 bg-slate-100 rounded-xl w-full sm:w-fit">
+            <button onclick="changeYear(1)" id="btn-y-1" class="year-btn flex-1 sm:flex-none text-center px-5 py-2 rounded-lg font-bold text-xs bg-white text-amber-600 shadow-xs transition-all cursor-pointer">ปี 1</button>
+            <button onclick="changeYear(2)" id="btn-y-2" class="year-btn flex-1 sm:flex-none text-center px-5 py-2 rounded-lg font-medium text-xs text-slate-600 hover:bg-slate-50 transition-all cursor-pointer">ปี 2</button>
+            <button onclick="changeYear(3)" id="btn-y-3" class="year-btn flex-1 sm:flex-none text-center px-5 py-2 rounded-lg font-medium text-xs text-slate-600 hover:bg-slate-50 transition-all cursor-pointer">ปี 3</button>
+            <button onclick="changeYear(4)" id="btn-y-4" class="year-btn flex-1 sm:flex-none text-center px-5 py-2 rounded-lg font-medium text-xs text-slate-600 hover:bg-slate-50 transition-all cursor-pointer">ปี 4</button>
+          </div>
+        </div>
+        
+        <div class="space-y-2 w-full sm:w-auto">
+          <span class="text-xs font-bold text-slate-400 uppercase tracking-wider block"><i class="fa-solid fa-layer-group mr-1"></i> กลุ่มเรียน (Section)</span>
+          <div class="flex items-center gap-3 p-1.5 bg-slate-100 rounded-xl w-full sm:w-fit">
+            <button onclick="changeSec(1)" id="btn-s-1" class="sec-btn w-9 h-9 rounded-lg font-bold text-xs bg-gradient-to-br from-amber-500 to-amber-600 text-white shadow-xs transition-all cursor-pointer">1</button>
+            <button onclick="changeSec(2)" id="btn-s-2" class="sec-btn w-9 h-9 rounded-lg font-medium text-xs bg-white text-slate-600 hover:bg-slate-50 border border-slate-200/40 shadow-xs transition-all cursor-pointer">2</button>
+            <button onclick="changeSec(3)" id="btn-s-3" class="sec-btn w-9 h-9 rounded-lg font-medium text-xs bg-white text-slate-600 hover:bg-slate-50 border border-slate-200/40 shadow-xs transition-all cursor-pointer">3</button>
+          </div>
         </div>
       </div>
-      
-      <div class="space-y-2">
-        <span class="text-xs font-bold text-slate-400 uppercase tracking-wider block"><i class="fa-solid fa-layer-group mr-1"></i> กลุ่มเรียน (Section)</span>
-        <div class="flex items-center gap-3 p-1.5 bg-slate-100 rounded-xl w-full sm:w-fit">
-          <button onclick="changeSec(1)" id="btn-s-1" class="sec-btn w-9 h-9 rounded-lg font-bold text-xs bg-gradient-to-br from-amber-500 to-amber-600 text-white shadow-xs transition-all">1</button>
-          <button onclick="changeSec(2)" id="btn-s-2" class="sec-btn w-9 h-9 rounded-lg font-medium text-xs bg-white text-slate-600 hover:bg-slate-50 border border-slate-200/40 shadow-xs transition-all">2</button>
-          <button onclick="changeSec(3)" id="btn-s-3" class="sec-btn w-9 h-9 rounded-lg font-medium text-xs bg-white text-slate-600 hover:bg-slate-50 border border-slate-200/40 shadow-xs transition-all">3</button>
+
+      <div class="space-y-2 w-full xl:max-w-xs">
+        <span class="text-xs font-bold text-slate-400 uppercase tracking-wider block"><i class="fa-solid fa-magnifying-glass mr-1"></i> ค้นหาสมาชิก (Search)</span>
+        <div class="relative">
+          <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-400">
+            <i class="fa-solid fa-magnifying-glass text-xs"></i>
+          </span>
+          <input type="text" id="search-input" oninput="filterStudents()" placeholder="พิมพ์ชื่อ หรือ รหัสนิสิตที่ต้องการค้นหา..." class="w-full border border-slate-200 rounded-xl pl-10 pr-4 py-2 text-xs bg-slate-50 focus:bg-white focus:outline-none focus:border-amber-500 transition-all shadow-inner">
         </div>
       </div>
     </section>
+
+    <div class="flex items-center justify-between px-1">
+      <div class="text-xs font-bold text-slate-500 bg-slate-200/60 px-3 py-1.5 rounded-lg flex items-center gap-1.5 border border-slate-200">
+        <i class="fa-solid fa-users text-slate-400"></i> สมาชิกในกลุ่มข้อมูล: <span id="member-count" class="text-amber-600 font-extrabold">0</span> คน
+      </div>
+    </div>
 
     <section id="students-container" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"></section>
 
@@ -85,15 +105,15 @@
         <div class="flex flex-col sm:flex-row gap-2.5">
           <input type="url" id="admin-poster-input" placeholder="วางลิงก์ URL รูปภาพโปสเตอร์ประกาศด่วนที่นี่..." class="flex-1 border border-slate-200 rounded-xl p-2.5 text-xs bg-white focus:outline-none focus:border-rose-500 transition-all">
           <div class="flex gap-2">
-            <button onclick="updateUrgentPoster()" id="btn-save-poster" class="bg-rose-500 hover:bg-rose-600 text-white font-bold px-4 py-2.5 rounded-xl text-xs transition whitespace-nowrap">
+            <button onclick="updateUrgentPoster()" id="btn-save-poster" class="bg-rose-500 hover:bg-rose-600 text-white font-bold px-4 py-2.5 rounded-xl text-xs transition whitespace-nowrap cursor-pointer">
               <i class="fa-solid fa-floppy-disk mr-1"></i> อัปเดตประกาศ
             </button>
-            <button onclick="clearUrgentPoster()" id="btn-clear-poster" class="bg-slate-200 hover:bg-slate-300 text-slate-600 font-bold px-3 py-2.5 rounded-xl text-xs transition" title="ล้างรูปภาพประกาศชั่วคราว">
+            <button onclick="clearUrgentPoster()" id="btn-clear-poster" class="bg-slate-200 hover:bg-slate-300 text-slate-600 font-bold px-3 py-2.5 rounded-xl text-xs transition cursor-pointer" title="ล้างรูปภาพประกาศชั่วคราว">
               ล้างค่า
             </button>
           </div>
         </div>
-        <p class="text-[11px] text-slate-400 leading-normal">ไม่ต้องมาเปลี่ยนในโค้ดแล้วครับ! วางลิงก์รูปภาพ เช่น ลิงก์จาก ImgBB หรือ Unsplash แล้วกดอัปเดต ระบบจะแสดงป๊อปอัพให้ทุกคนเห็นทันทีกรณีที่มีประกาศ (หากไม่ต้องการแสดง ให้กดปุ่ม "ล้างค่า" หรือปล่อยว่างไว้แล้วกดอัปเดต)</p>
+        <p class="text-[11px] text-slate-400 leading-normal">วางลิงก์รูปภาพ เช่น ลิงก์จาก ImgBB หรือ Unsplash แล้วกดอัปเดต ระบบจะแสดงป๊อปอัพให้ทุกคนเห็นทันทีกรณีที่มีประกาศ (หากไม่ต้องการแสดง ให้กดปุ่ม "ล้างค่า")</p>
       </div>
 
       <div class="space-y-2">
@@ -117,12 +137,12 @@
 
   <div id="auth-modal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center z-50 p-4 transition-all">
     <div class="bg-white rounded-3xl max-w-sm w-full p-6 shadow-2xl relative border border-slate-100">
-      <button onclick="closeModal('auth-modal')" class="absolute top-5 right-5 text-slate-400 hover:text-slate-600 transition p-1 rounded-lg hover:bg-slate-50">
+      <button onclick="closeModal('auth-modal')" class="absolute top-5 right-5 text-slate-400 hover:text-slate-600 transition p-1 rounded-lg hover:bg-slate-50 cursor-pointer">
         <i class="fa-solid fa-xmark text-lg"></i>
       </button>
       <div id="auth-tab-bar" class="flex border-b border-slate-100 mb-5 text-sm font-bold">
-        <button onclick="toggleAuthTab('login')" id="tab-login" class="w-1/2 pb-3 text-center text-amber-500 border-b-2 border-amber-500 transition-all">เข้าสู่ระบบ</button>
-        <button onclick="toggleAuthTab('register')" id="tab-register" class="w-1/2 pb-3 text-center text-slate-400 transition-all">สมัครสมาชิก</button>
+        <button onclick="toggleAuthTab('login')" id="tab-login" class="w-1/2 pb-3 text-center text-amber-500 border-b-2 border-amber-500 transition-all cursor-pointer">เข้าสู่ระบบ</button>
+        <button onclick="toggleAuthTab('register')" id="tab-register" class="w-1/2 pb-3 text-center text-slate-400 transition-all cursor-pointer">สมัครสมาชิก</button>
       </div>
       
       <form id="form-login" onsubmit="handleLogin(event)" class="space-y-4">
@@ -140,7 +160,7 @@
             <input type="password" id="login-pass" required class="w-full border border-slate-200 rounded-xl pl-9 pr-3 py-2.5 text-xs focus:outline-none focus:border-amber-500 transition-all">
           </div>
         </div>
-        <button type="submit" id="btn-login-submit" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-3 rounded-xl text-xs transition shadow-xs mt-2">เข้าสู่ระบบด้วยบัญชีเว็บ</button>
+        <button type="submit" id="btn-login-submit" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-3 rounded-xl text-xs transition shadow-xs mt-2 cursor-pointer">เข้าสู่ระบบด้วยบัญชีเว็บ</button>
         
         <div class="relative flex py-2 items-center">
           <div class="flex-grow border-t border-slate-200"></div>
@@ -152,8 +172,8 @@
       
       <form id="form-register" onsubmit="handleRegister(event)" class="space-y-4 hidden">
         <div>
-          <label class="block text-xs font-bold text-slate-500 mb-1.5">รหัสนิสิต</label>
-          <input type="text" id="reg-id" required class="w-full border border-slate-200 rounded-xl p-2.5 text-xs focus:outline-none focus:border-amber-500 transition-all">
+          <label class="block text-xs font-bold text-slate-500 mb-1.5">รหัสนิสิต (ตัวเลข 11 หลัก)</label>
+          <input type="text" id="reg-id" required placeholder="ตัวอย่าง: 67XXXXXXXXX" class="w-full border border-slate-200 rounded-xl p-2.5 text-xs focus:outline-none focus:border-amber-500 transition-all">
         </div>
         <div>
           <label class="block text-xs font-bold text-slate-500 mb-1.5">ชื่อ-นามสกุล</label>
@@ -181,7 +201,7 @@
           <label class="block text-xs font-bold text-slate-500 mb-1.5">ตั้งรหัสผ่าน</label>
           <input type="password" id="reg-pass" required class="w-full border border-slate-200 rounded-xl p-2.5 text-xs focus:outline-none focus:border-amber-500 transition-all">
         </div>
-        <button type="submit" id="btn-reg-submit" class="w-full bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 font-bold py-3 rounded-xl text-xs transition mt-2">ลงทะเบียนสมาชิก</button>
+        <button type="submit" id="btn-reg-submit" class="w-full bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 font-bold py-3 rounded-xl text-xs transition mt-2 cursor-pointer">ลงทะเบียนสมาชิก</button>
       </form>
 
       <form id="form-google-firsttime" onsubmit="handleGoogleSetupSubmit(event)" class="space-y-4 hidden">
@@ -211,14 +231,14 @@
             </select>
           </div>
         </div>
-        <button type="submit" id="btn-g-setup-submit" class="w-full bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 font-bold py-3 rounded-xl text-xs transition mt-2">ยืนยันข้อมูลและบันทึกเข้าทำเนียบ</button>
+        <button type="submit" id="btn-g-setup-submit" class="w-full bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 font-bold py-3 rounded-xl text-xs transition mt-2 cursor-pointer">ยืนยันข้อมูลและบันทึกเข้าทำเนียบ</button>
       </form>
     </div>
   </div>
 
   <div id="profile-modal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center z-50 p-4 transition-all">
     <div class="bg-white rounded-3xl max-w-sm w-full shadow-2xl relative border border-slate-100 max-h-[calc(100vh-2rem)] overflow-y-auto flex flex-col">
-      <button onclick="closeModal('profile-modal')" class="absolute top-4 right-4 text-white/70 hover:text-white bg-black/20 hover:bg-black/40 p-1.5 rounded-full z-10 transition">
+      <button onclick="closeModal('profile-modal')" class="absolute top-4 right-4 text-white/70 hover:text-white bg-black/20 hover:bg-black/40 p-1.5 rounded-full z-10 transition cursor-pointer">
         <i class="fa-solid fa-xmark text-base"></i>
       </button>
       
@@ -239,10 +259,10 @@
           </div>
           
           <div id="p-owner-btn-zone" class="hidden pt-3 border-t border-slate-100 grid grid-cols-2 gap-2">
-            <button onclick="switchProfileMode('edit')" class="bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold py-2.5 rounded-xl transition flex items-center justify-center gap-1">
+            <button onclick="switchProfileMode('edit')" class="bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold py-2.5 rounded-xl transition flex items-center justify-center gap-1 cursor-pointer">
               <i class="fa-solid fa-user-gear"></i> แก้ไขข้อมูล
             </button>
-            <button onclick="switchProfileMode('password')" id="btn-p-switch-pwd" class="bg-amber-50 hover:bg-amber-100 text-amber-700 text-xs font-bold py-2.5 rounded-xl transition flex items-center justify-center gap-1 border border-amber-200">
+            <button onclick="switchProfileMode('password')" id="btn-p-switch-pwd" class="bg-amber-50 hover:bg-amber-100 text-amber-700 text-xs font-bold py-2.5 rounded-xl transition flex items-center justify-center gap-1 border border-amber-200 cursor-pointer">
               <i class="fa-solid fa-key"></i> เปลี่ยนรหัส
             </button>
           </div>
@@ -289,8 +309,8 @@
           </div>
 
           <div class="flex gap-2.5 pt-2">
-            <button type="button" onclick="switchProfileMode('display')" class="w-1/2 bg-slate-100 hover:bg-slate-200 text-slate-600 py-2.5 rounded-xl text-xs font-bold transition">ยกเลิก</button>
-            <button type="submit" id="btn-edit-submit" class="w-1/2 bg-emerald-500 hover:bg-emerald-600 text-white py-2.5 rounded-xl text-xs font-bold transition">บันทึกข้อมูล</button>
+            <button type="button" onclick="switchProfileMode('display')" class="w-1/2 bg-slate-100 hover:bg-slate-200 text-slate-600 py-2.5 rounded-xl text-xs font-bold transition cursor-pointer">ยกเลิก</button>
+            <button type="submit" id="btn-edit-submit" class="w-1/2 bg-emerald-500 hover:bg-emerald-600 text-white py-2.5 rounded-xl text-xs font-bold transition cursor-pointer">บันทึกข้อมูล</button>
           </div>
         </form>
 
@@ -308,8 +328,8 @@
             <input type="password" id="p-pwd-confirm" required class="w-full border border-slate-200 rounded-xl p-2.5 text-xs focus:outline-none focus:border-amber-500 transition-all">
           </div>
           <div class="flex gap-2.5 pt-2">
-            <button type="button" onclick="switchProfileMode('display')" class="w-1/2 bg-slate-100 hover:bg-slate-200 text-slate-600 py-2.5 rounded-xl text-xs font-bold transition">ยกเลิก</button>
-            <button type="submit" id="btn-pwd-submit" class="w-1/2 bg-amber-500 hover:bg-amber-600 text-slate-950 py-2.5 rounded-xl text-xs font-bold transition">อัปเดตรหัสผ่าน</button>
+            <button type="button" onclick="switchProfileMode('display')" class="w-1/2 bg-slate-100 hover:bg-slate-200 text-slate-600 py-2.5 rounded-xl text-xs font-bold transition cursor-pointer">ยกเลิก</button>
+            <button type="submit" id="btn-pwd-submit" class="w-1/2 bg-amber-500 hover:bg-amber-600 text-slate-950 py-2.5 rounded-xl text-xs font-bold transition cursor-pointer">อัปเดตรหัสผ่าน</button>
           </div>
         </form>
       </div>
@@ -318,17 +338,14 @@
 
   <div id="urgent-modal" class="hidden fixed inset-0 bg-slate-900/80 backdrop-blur-md flex items-center justify-center z-999 p-4 transition-all">
     <div class="bg-white rounded-3xl max-w-md w-full overflow-hidden shadow-2xl relative border-2 border-rose-500 flex flex-col max-h-[calc(100vh-4rem)]">
-      
-      <button onclick="closeUrgentModal()" class="absolute top-3 right-3 text-white bg-black/40 hover:bg-black/60 transition p-2 rounded-full z-50 backdrop-blur-xs shadow-sm" title="ปิดประกาศ">
+      <button onclick="closeUrgentModal()" class="absolute top-3 right-3 text-white bg-black/40 hover:bg-black/60 transition p-2 rounded-full z-50 backdrop-blur-xs shadow-sm cursor-pointer" title="ปิดประกาศ">
         <i class="fa-solid fa-xmark text-base leading-none"></i>
       </button>
-      
       <div class="relative w-full bg-slate-100 overflow-y-auto flex-1">
         <img id="urgent-poster-img" src="" class="w-full h-auto block" alt="รูปภาพประกาศเร่งด่วน">
       </div>
-      
       <div class="p-4 bg-slate-50 border-t border-slate-100 flex-shrink-0">
-        <button onclick="closeUrgentModal()" class="w-full bg-gradient-to-r from-rose-500 to-rose-600 hover:from-rose-600 hover:to-rose-700 text-white font-bold py-3 rounded-xl text-xs tracking-wide transition active:translate-y-0.5">
+        <button onclick="closeUrgentModal()" class="w-full bg-gradient-to-r from-rose-500 to-rose-600 hover:from-rose-600 hover:to-rose-700 text-white font-bold py-3 rounded-xl text-xs tracking-wide transition active:translate-y-0.5 cursor-pointer">
           <i class="fa-solid fa-check-double mr-1"></i> รับทราบประกาศด่วน
         </button>
       </div>
@@ -344,6 +361,33 @@
       checkUrgentPoster();
     };
 
+    // ⚡ ฟังก์ชันสำหรับแสดงระบบ Toast Notification แทนการใช้ alert() แบบเดิม
+    function showToast(message, type = 'success') {
+      const container = document.getElementById("toast-container");
+      const toast = document.createElement("div");
+      
+      // ตั้งค่าสีสไตล์ตามประเภทการแจ้งเตือน
+      let bgStyle = 'bg-slate-900';
+      let icon = '<i class="fa-solid fa-circle-info"></i>';
+      if (type === 'success') { bgStyle = 'bg-emerald-500'; icon = '<i class="fa-solid fa-circle-check"></i>'; }
+      else if (type === 'error') { bgStyle = 'bg-rose-500'; icon = '<i class="fa-solid fa-circle-xmark"></i>'; }
+      else if (type === 'warning') { bgStyle = 'bg-amber-500 text-slate-950'; icon = '<i class="fa-solid fa-triangle-exclamation"></i>'; }
+      
+      toast.className = `${bgStyle} p-4 rounded-xl shadow-xl text-xs font-bold text-white transition-all duration-300 transform translate-y-4 opacity-0 flex items-center gap-2.5 pointer-events-auto border border-white/10`;
+      toast.innerHTML = `${icon} <span class="flex-1">${message}</span>`;
+      
+      container.appendChild(toast);
+      
+      // ดึงอนิเมชั่นขาเข้า
+      setTimeout(() => { toast.classList.remove('translate-y-4', 'opacity-0'); }, 10);
+      
+      // นำ Toast ออกอัตโนมัติภายใน 3.5 วินาที
+      setTimeout(() => {
+        toast.classList.add('opacity-0', 'translate-y-2');
+        setTimeout(() => { toast.remove(); }, 300);
+      }, 3500);
+    }
+
     async function checkUrgentPoster() {
       const res = await callAPI({ action: "getUrgentPoster" });
       if (res && res.success && res.url) {
@@ -356,7 +400,7 @@
     }
 
     async function updateUrgentPoster() {
-      if (!loggedInUser || loggedInUser.role !== 'admin') { alert("คุณไม่มีสิทธิ์ทำรายการนี้"); return; }
+      if (!loggedInUser || loggedInUser.role !== 'admin') { showToast("คุณไม่มีสิทธิ์ทำรายการนี้", "warning"); return; }
       const posterUrl = document.getElementById("admin-poster-input").value.trim();
       const btn = document.getElementById("btn-save-poster");
       
@@ -368,10 +412,10 @@
       btn.disabled = false;
 
       if (res && res.success) {
-        alert(res.message);
+        showToast(res.message, "success");
         checkUrgentPoster();
       } else {
-        alert(res ? res.message : "เกิดข้อผิดพลาด");
+        showToast(res ? res.message : "เกิดข้อผิดพลาด", "error");
       }
     }
 
@@ -393,7 +437,7 @@
       try {
         const response = await fetch(API_URL, { method: "POST", body: JSON.stringify(payload) });
         return await response.json();
-      } catch (error) { alert("ขาดการเชื่อมต่อกับหลังบ้าน"); }
+      } catch (error) { showToast("ขาดการเชื่อมต่อกับระบบหลังบ้าน", "error"); }
     }
 
     async function uploadToImgBB(file) {
@@ -407,47 +451,75 @@
       } catch (error) { console.error("ImgBB Upload Error:", error); return null; }
     }
 
+    // ⚡ ฟังก์ชันโหลดข้อมูลนิสิตพร้อมระบบสเกเลตัน (Skeleton Loader Loading State)
     async function loadStudents() {
       const container = document.getElementById("students-container");
-      container.innerHTML = `
-        <div class="col-span-full text-center py-16 text-slate-400">
-          <div class="inline-block p-4 bg-white rounded-2xl border border-slate-100 shadow-xs mb-3">
-            <i class="fa-solid fa-circle-notch animate-spin text-2xl text-amber-500"></i>
-          </div>
-          <p class="text-xs font-medium tracking-wide">กำลังโหลดทำเนียบนิสิตสาขาคณิตศาสตร์...</p>
+      document.getElementById("member-count").innerText = "0";
+      
+      // สเตตัสการจำลองโหลดภาพการ์ดแบบระยิบระยับล่วงหน้า
+      const skeletonCard = `
+        <div class="bg-white rounded-2xl p-5 border border-slate-100 shadow-2xs flex flex-col items-center animate-pulse">
+          <div class="w-20 h-20 rounded-full bg-slate-200 mb-4"></div>
+          <div class="h-4 bg-slate-200 rounded w-3/4 mb-2"></div>
+          <div class="h-3 bg-slate-200 rounded w-1/2 mb-6"></div>
+          <div class="h-9 bg-slate-200 rounded-xl w-full mt-auto"></div>
         </div>`;
+      container.innerHTML = Array(4).fill(skeletonCard).join('');
       
       const res = await callAPI({ action: "getStudents", year: currentYear, section: currentSec });
       if (res && res.success) {
         loadedStudents = res.data;
-        if(loadedStudents.length === 0) { 
-          container.innerHTML = `
-            <div class="col-span-full text-center py-16 text-slate-400 bg-white rounded-2xl border border-slate-200/50">
-              <i class="fa-regular fa-folder-open text-3xl mb-2 text-slate-300"></i>
-              <p class="text-xs font-medium">ไม่พบข้อมูลนิสิตในกลุ่มเรียนหรือชั้นปีนี้</p>
-            </div>`; 
-          return; 
-        }
-        
-        container.innerHTML = loadedStudents.map(std => {
-          const isAdmin = std.role === 'admin';
-          const borderStyle = isAdmin ? 'border-rose-200 hover:border-rose-400 shadow-sm' : 'border-slate-200/60 hover:border-amber-300';
-          const adminBadge = isAdmin ? `<span class="mb-1 text-[10px] bg-rose-100 text-rose-700 font-bold px-2 py-0.5 rounded-md"><i class="fa-solid fa-shield-halved mr-0.5"></i> Admin</span>` : '';
-          
-          return `
-            <div class="bg-white rounded-2xl p-5 border ${borderStyle} hover:shadow-xl transition-all duration-300 flex flex-col items-center text-center group relative overflow-hidden">
-              <div class="absolute top-0 inset-x-0 h-1.5 bg-gradient-to-r ${isAdmin ? 'from-rose-500 to-rose-600' : 'from-amber-400 to-amber-500'} opacity-0 group-hover:opacity-100 transition-all"></div>
-              <div class="relative mb-4">
-                <img src="${std.imageUrl}" class="w-20 h-20 rounded-full object-cover border-2 ${isAdmin ? 'border-rose-100 group-hover:border-rose-400' : 'border-slate-100 group-hover:border-amber-400'} shadow-sm">
-              </div>
-              ${adminBadge}
-              <h3 class="font-bold text-slate-900 text-sm ${isAdmin ? 'group-hover:text-rose-600' : 'group-hover:text-amber-600'} transition-colors">${std.name}</h3>
-              <p class="text-[11px] font-medium text-slate-400 mt-0.5 mb-5">รหัสนิสิต: ${std.studentId}</p>
-              <button onclick="openProfileModal('${std.id}')" class="mt-auto w-full bg-slate-900 hover:bg-slate-800 text-white text-[11px] font-bold py-2.5 rounded-xl transition-all flex items-center justify-center gap-1.5 shadow-sm"><i class="fa-solid fa-address-card opacity-70"></i> ดูข้อมูลประวัติ</button>
-            </div>
-          `;
-        }).join('');
+        document.getElementById("search-input").value = ""; 
+        renderStudentCards(loadedStudents);
       }
+    }
+
+    function renderStudentCards(studentsList) {
+      const container = document.getElementById("students-container");
+      
+      // อัปเดตตัวเลขนับสมาชิกที่คัดกรองได้ในพริบตา
+      document.getElementById("member-count").innerText = studentsList ? studentsList.length : 0;
+      
+      if(!studentsList || studentsList.length === 0) { 
+        container.innerHTML = `
+          <div class="col-span-full text-center py-16 text-slate-400 bg-white rounded-2xl border border-slate-200/50">
+            <i class="fa-regular fa-folder-open text-3xl mb-2 text-slate-300"></i>
+            <p class="text-xs font-medium">ไม่พบข้อมูลนิสิตในกลุ่มเรียนหรือชั้นปีนี้</p>
+          </div>`; 
+        return; 
+      }
+      
+      container.innerHTML = studentsList.map(std => {
+        const isAdmin = std.role === 'admin';
+        const borderStyle = isAdmin ? 'border-rose-200 hover:border-rose-400 shadow-2xs' : 'border-slate-200/60 hover:border-amber-400';
+        const adminBadge = isAdmin ? `<span class="mb-1.5 text-[10px] bg-rose-50 text-rose-600 font-bold px-2 py-0.5 rounded-md border border-rose-100 flex items-center gap-1"><i class="fa-solid fa-shield-halved text-[9px]"></i> Admin</span>` : '';
+        
+        return `
+          <div class="bg-white rounded-2xl p-5 border ${borderStyle} hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col items-center text-center group relative overflow-hidden">
+            <div class="absolute top-0 inset-x-0 h-1.5 bg-gradient-to-r ${isAdmin ? 'from-rose-500 to-rose-600' : 'from-amber-400 to-amber-500'} opacity-0 group-hover:opacity-100 transition-all"></div>
+            <div class="relative mb-4">
+              <img src="${std.imageUrl || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=150&q=80'}" class="w-20 h-20 rounded-full object-cover border-2 ${isAdmin ? 'border-rose-100 group-hover:border-rose-400' : 'border-slate-100 group-hover:border-amber-400'} shadow-2xs transition-all duration-300">
+            </div>
+            ${adminBadge}
+            <h3 class="font-bold text-slate-900 text-sm ${isAdmin ? 'group-hover:text-rose-600' : 'group-hover:text-amber-600'} transition-colors">${std.name}</h3>
+            <p class="text-[11px] font-medium text-slate-400 mt-0.5 mb-5">รหัสนิสิต: ${std.studentId}</p>
+            <button onclick="openProfileModal('${std.id}')" class="mt-auto w-full bg-slate-950 hover:bg-amber-500 hover:text-slate-950 text-white text-[11px] font-bold py-2.5 rounded-xl transition-all duration-200 flex items-center justify-center gap-1.5 shadow-xs cursor-pointer"><i class="fa-solid fa-address-card opacity-70"></i> ดูข้อมูลประวัติ</button>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function filterStudents() {
+      const query = document.getElementById("search-input").value.trim().toLowerCase();
+      if (!loadedStudents) return;
+
+      const filtered = loadedStudents.filter(std => {
+        const name = (std.name || "").toLowerCase();
+        const studentId = (std.studentId || "").toLowerCase();
+        return name.includes(query) || studentId.includes(query);
+      });
+
+      renderStudentCards(filtered);
     }
 
     async function handleLogin(e) {
@@ -469,10 +541,11 @@
           loadStudents();
           document.getElementById("login-user").value = "";
           document.getElementById("login-pass").value = "";
+          showToast("เข้าสู่ระบบเรียบร้อย ยินดีต้อนรับกลับครับ!", "success");
         } else { 
-          alert(res && res.message ? res.message : "รหัสนิสิตหรือรหัสผ่านไม่ถูกต้อง"); 
+          showToast(res && res.message ? res.message : "รหัสนิสิตหรือรหัสผ่านไม่ถูกต้อง", "error"); 
         }
-      } catch (error) { alert("ระบบหลังบ้านขัดข้อง กรุณาลองใหม่อีกครั้ง"); } finally {
+      } catch (error) { showToast("ระบบล็อกอินขัดข้อง กรุณาลองใหม่อีกครั้ง", "error"); } finally {
         submitBtn.innerText = originalText;
         submitBtn.disabled = false;
       }
@@ -481,14 +554,21 @@
     async function handleRegister(e) {
       e.preventDefault();
       const submitBtn = document.getElementById("btn-reg-submit");
-      submitBtn.innerText = "กำลังอัปโหลดรูปภาพ..."; submitBtn.disabled = true;
+      
+      const sId = document.getElementById("reg-id").value.trim();
+      // 🔒 ดักตรวจสอบ Regex รูปแบบรหัสนิสิต มมส (ตัวเลข 11 หลัก)
+      if(!/^\d{11}$/.test(sId)) {
+        showToast("รหัสนิสิตไม่ถูกต้อง! ต้องเป็นตัวเลขความยาว 11 หลักเท่านั้น", "warning");
+        return;
+      }
 
+      submitBtn.innerText = "กำลังอัปโหลดรูปภาพ..."; submitBtn.disabled = true;
       const file = document.getElementById("reg-imgfile").files[0];
       const uploadedImgUrl = await uploadToImgBB(file);
-      if(!uploadedImgUrl) { alert("อัปโหลดรูปภาพล้มเหลว"); submitBtn.innerText = "ลงทะเบียน"; submitBtn.disabled = false; return; }
+      if(!uploadedImgUrl) { showToast("อัปโหลดรูปภาพล้มเหลว", "error"); submitBtn.innerText = "ลงทะเบียน"; submitBtn.disabled = false; return; }
 
       const studentData = {
-        studentId: document.getElementById("reg-id").value,
+        studentId: sId,
         name: document.getElementById("reg-name").value,
         year: document.getElementById("reg-year").value,
         section: document.getElementById("reg-sec").value,
@@ -498,7 +578,7 @@
 
       const res = await callAPI({ action: "register", studentData });
       submitBtn.innerText = "ลงทะเบียนสมาชิก"; submitBtn.disabled = false;
-      if(res && res.success) { alert(res.message); toggleAuthTab('login'); } else { alert(res.message); }
+      if(res && res.success) { showToast(res.message, "success"); toggleAuthTab('login'); } else { showToast(res.message, "error"); }
     }
 
     function initGoogleLogin() {
@@ -515,7 +595,7 @@
       const container = document.getElementById("students-container");
       container.innerHTML = `
         <div class="col-span-full text-center py-16 text-slate-400">
-          <div class="inline-block p-4 bg-white rounded-2xl border border-slate-100 shadow-xs mb-3">
+          <div class="inline-block p-4 bg-white rounded-2xl border border-slate-100 shadow-2xs mb-3">
             <i class="fa-solid fa-circle-notch animate-spin text-2xl text-amber-500"></i>
           </div>
           <p class="text-xs font-medium tracking-wide">กำลังยืนยันบัญชี Google มหาวิทยาลัย...</p>
@@ -547,10 +627,10 @@
           updateAuthUI();
           loadAdminPanel();
           loadStudents();
-          alert("เข้าสู่ระบบสำเร็จ! ยินดีต้อนรับคุณ " + res.user.name);
+          showToast("เข้าสู่ระบบ Google สำเร็จ ยินดีต้อนรับคุณ " + res.user.name, "success");
         }
       } else {
-        alert(res ? res.message : "ล็อกอินล้มเหลว");
+        showToast(res ? res.message : "ล็อกอินล้มเหลว", "error");
         loadStudents();
       }
     }
@@ -581,10 +661,10 @@
         closeModal('auth-modal');
         changeYear(parseInt(finalStudentData.year));
         changeSec(parseInt(finalStudentData.section));
-        alert("สร้างโปรไฟล์และเข้าสู่ระบบสำเร็จ!");
+        showToast("สร้างสิทธิ์และล็อกอินครั้งแรกสำเร็จเรียบร้อย!", "success");
         googleTempData = null;
       } else {
-        alert(res ? res.message : "เกิดข้อผิดพลาดในการบันทึก");
+        showToast(res ? res.message : "เกิดข้อผิดพลาดในการบันทึก", "error");
       }
     }
 
@@ -609,7 +689,7 @@
       const res = await callAPI({ action: "updateProfile", currentUser: loggedInUser, targetId: activeTargetId, updatedData });
       submitBtn.innerText = "บันทึกข้อมูล"; submitBtn.disabled = false;
       if(res && res.success) { 
-        alert(res.message); 
+        showToast(res.message, "success"); 
         closeModal('profile-modal'); 
         loadStudents(); 
         if(loggedInUser && loggedInUser.id === activeTargetId) {
@@ -622,22 +702,22 @@
           loggedInUser.lineId = updatedData.lineId;
           updateAuthUI();
         }
-      } else { alert(res.message); }
+      } else { showToast(res.message, "error"); }
     }
 
-    async function handleStudentChangePassword(e) {
-      e.preventDefault();
+    async function handleStudentChangePassword(event) {
+      event.preventDefault();
       const oldPassword = document.getElementById("p-pwd-old").value;
       const newPassword = document.getElementById("p-pwd-new").value;
       const confirmPassword = document.getElementById("p-pwd-confirm").value;
       
-      if (newPassword !== confirmPassword) { alert("รหัสผ่านใหม่ไม่ตรงกัน"); return; }
+      if (newPassword !== confirmPassword) { showToast("รหัสผ่านใหม่สองช่องไม่ตรงกัน", "warning"); return; }
       const submitBtn = document.getElementById("btn-pwd-submit");
       submitBtn.innerText = "กำลังอัปเดต..."; submitBtn.disabled = true;
       
       const res = await callAPI({ action: "studentResetPassword", currentUser: loggedInUser, oldPassword, newPassword });
       submitBtn.innerText = "อัปเดตรหัสผ่าน"; submitBtn.disabled = false;
-      if (res && res.success) { alert(res.message); closeModal('profile-modal'); } else { alert(res.message); }
+      if (res && res.success) { showToast(res.message, "success"); closeModal('profile-modal'); } else { showToast(res.message, "error"); }
     }
 
     async function loadAdminPanel() {
@@ -662,7 +742,7 @@
       const checks = currentRow.querySelectorAll('input[type="checkbox"]');
       const permissions = { canEdit: checks[0].checked, canPass: checks[1].checked, canManageAdmin: checks[2].checked };
       const res = await callAPI({ action: "updateAdminPermission", currentUser: loggedInUser, targetAdminId: adminId, permissions });
-      if(!res.success) { alert(res.message); loadAdminPanel(); }
+      if(!res.success) { showToast(res.message, "error"); loadAdminPanel(); } else { showToast("อัปเดตสิทธิ์ผู้ดูแลเรียบร้อย", "success"); }
     }
 
     function updateAuthUI() {
@@ -670,21 +750,21 @@
       if(loggedInUser) {
         zone.innerHTML = `
           <div class="inline-flex items-center gap-3 bg-slate-100 p-1.5 pr-4 rounded-xl border border-slate-200 text-left shadow-xs">
-            <img src="${loggedInUser.imageUrl}" class="w-8 h-8 rounded-full object-cover border border-amber-400">
+            <img src="${loggedInUser.imageUrl || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=150&q=80'}" class="w-8 h-8 rounded-full object-cover border border-amber-400">
             <div>
               <p class="text-xs font-bold text-slate-800 leading-none">${loggedInUser.name}</p>
               <span class="text-[10px] text-slate-400 font-bold mt-1 block">${loggedInUser.role === 'admin' ? '🛡️ ผู้ดูแลระบบ' : '🎓 นิสิต'}</span>
             </div>
-            <button onclick="logout()" class="text-slate-400 hover:text-rose-500 ml-3 transition p-1 rounded-lg hover:bg-white text-xs" title="ออกจากระบบ"><i class="fa-solid fa-power-off"></i></button>
+            <button onclick="logout()" class="text-slate-400 hover:text-rose-500 ml-3 transition p-1 rounded-lg hover:bg-white text-xs cursor-pointer" title="ออกจากระบบ"><i class="fa-solid fa-power-off"></i></button>
           </div>`;
       } else { 
-        zone.innerHTML = `<button onclick="openModal('auth-modal')" class="w-full sm:w-auto bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 text-xs font-bold px-5 py-2.5 rounded-xl transition shadow-xs flex items-center justify-center gap-2 mx-auto"><i class="fa-solid fa-right-to-bracket text-sm"></i> เข้าสู่ระบบ / สมัครสมาชิก</button>`; 
+        zone.innerHTML = `<button onclick="openModal('auth-modal')" class="w-full sm:w-auto bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 text-xs font-bold px-5 py-2.5 rounded-xl transition shadow-xs flex items-center justify-center gap-2 mx-auto cursor-pointer"><i class="fa-solid fa-right-to-bracket text-sm"></i> เข้าสู่ระบบ / สมัครสมาชิก</button>`; 
       }
     }
 
-    function logout() { loggedInUser = null; updateAuthUI(); loadStudents(); document.getElementById("admin-panel").classList.add('hidden'); alert("ออกจากระบบแล้ว"); }
-    function changeYear(y) { currentYear = y; document.querySelectorAll('.year-btn').forEach((b, i) => b.className = (i+1===y) ? "year-btn flex-1 sm:flex-none text-center px-5 py-2 rounded-lg font-bold text-xs bg-white text-amber-600 shadow-xs transition-all" : "year-btn flex-1 sm:flex-none text-center px-5 py-2 rounded-lg font-medium text-xs text-slate-600 hover:bg-slate-50 transition-all"); loadStudents(); }
-    function changeSec(s) { currentSec = s; document.querySelectorAll('.sec-btn').forEach((b, i) => b.className = (i+1===s) ? "sec-btn w-9 h-9 rounded-lg font-bold text-xs bg-gradient-to-br from-amber-500 to-amber-600 text-white shadow-xs transition-all" : "sec-btn w-9 h-9 rounded-lg font-medium text-xs bg-white text-slate-600 hover:bg-slate-50 border border-slate-200/40 shadow-xs transition-all"); loadStudents(); }
+    function logout() { loggedInUser = null; updateAuthUI(); loadStudents(); document.getElementById("admin-panel").classList.add('hidden'); showToast("ออกจากระบบแล้ว บายครับ!", "info"); }
+    function changeYear(y) { currentYear = y; document.querySelectorAll('.year-btn').forEach((b, i) => b.className = (i+1===y) ? "year-btn flex-1 sm:flex-none text-center px-5 py-2 rounded-lg font-bold text-xs bg-white text-amber-600 shadow-xs transition-all cursor-pointer" : "year-btn flex-1 sm:flex-none text-center px-5 py-2 rounded-lg font-medium text-xs text-slate-600 hover:bg-slate-50 transition-all cursor-pointer"); loadStudents(); }
+    function changeSec(s) { currentSec = s; document.querySelectorAll('.sec-btn').forEach((b, i) => b.className = (i+1===s) ? "sec-btn w-9 h-9 rounded-lg font-bold text-xs bg-gradient-to-br from-amber-500 to-amber-600 text-white shadow-xs transition-all cursor-pointer" : "sec-btn w-9 h-9 rounded-lg font-medium text-xs bg-white text-slate-600 hover:bg-slate-50 border border-slate-200/40 shadow-xs transition-all cursor-pointer"); loadStudents(); }
     
     function openModal(id) { 
       document.getElementById(id).classList.remove('hidden'); 
@@ -704,15 +784,15 @@
       document.getElementById("form-google-firsttime").classList.add('hidden');
       document.getElementById("form-login").classList.toggle('hidden', mode==='register');
       document.getElementById("form-register").classList.toggle('hidden', mode==='login');
-      document.getElementById("tab-login").className = mode==='login' ? "w-1/2 pb-3 text-center text-amber-500 border-b-2 border-amber-500 transition-all" : "w-1/2 pb-3 text-center text-slate-400 transition-all";
-      document.getElementById("tab-register").className = mode==='register' ? "w-1/2 pb-3 text-center text-amber-500 border-b-2 border-amber-500 transition-all" : "w-1/2 pb-3 text-center text-slate-400 transition-all";
+      document.getElementById("tab-login").className = mode==='login' ? "w-1/2 pb-3 text-center text-amber-500 border-b-2 border-amber-500 transition-all cursor-pointer" : "w-1/2 pb-3 text-center text-slate-400 transition-all cursor-pointer";
+      document.getElementById("tab-register").className = mode==='register' ? "w-1/2 pb-3 text-center text-amber-500 border-b-2 border-amber-500 transition-all cursor-pointer" : "w-1/2 pb-3 text-center text-slate-400 transition-all cursor-pointer";
     }
     
     function openProfileModal(id) {
       const target = loadedStudents.find(std => std.id === id); if(!target) return; activeTargetId = id;
-      document.getElementById("p-view-img").src = target.imageUrl;
-      document.getElementById("p-view-name").innerText = target.name;
-      document.getElementById("p-view-id").innerText = `รหัสนิสิต: ${target.studentId}`;
+      document.getElementById("p-view-img").src = target.imageUrl || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=150&q=80';
+      document.getElementById("p-view-name").innerText = target.name || "";
+      document.getElementById("p-view-id").innerText = `รหัสนิสิต: ${target.studentId || ""}`;
       
       const roleText = target.role === 'admin' ? "🛡️ ผู้ดูแลระบบ" : "🎓 นิสิตทั่วไป";
       document.getElementById("p-view-tag").innerText = `ชั้นปี ${target.year} | Section ${target.section} (${roleText})`;
@@ -720,20 +800,24 @@
       const socialBox = document.getElementById("p-view-social-box");
       let socialHTML = "";
       
-      if(target.facebook && target.facebook.startsWith('http')) {
-        socialHTML += `<a href="${target.facebook}" target="_blank" class="w-10 h-10 rounded-full bg-blue-50 text-blue-600 hover:bg-blue-600 hover:text-white transition-all flex items-center justify-center text-lg shadow-xs" title="Facebook"><i class="fa-brands fa-facebook"></i></a>`;
+      if(target.facebook && target.facebook.toString().trim() !== "") {
+        let fbLink = target.facebook.toString().trim();
+        if(!fbLink.startsWith('http')) { fbLink = "https://facebook.com/" + fbLink; }
+        socialHTML += `<a href="${fbLink}" target="_blank" class="w-10 h-10 rounded-full bg-blue-50 text-blue-600 hover:bg-blue-600 hover:text-white transition-all flex items-center justify-center text-lg shadow-xs" title="Facebook"><i class="fa-brands fa-facebook"></i></a>`;
       } else {
         socialHTML += `<span class="w-10 h-10 rounded-full bg-slate-100 text-slate-300 cursor-not-allowed flex items-center justify-center text-lg" title="ไม่มีข้อมูล Facebook"><i class="fa-brands fa-facebook"></i></span>`;
       }
       
-      if(target.instagram) {
-        socialHTML += `<a href="https://instagram.com/${target.instagram}" target="_blank" class="w-10 h-10 rounded-full bg-pink-50 text-pink-600 hover:bg-pink-600 hover:text-white transition-all flex items-center justify-center text-lg shadow-xs" title="Instagram"><i class="fa-brands fa-instagram"></i></a>`;
+      if(target.instagram && target.instagram.toString().trim() !== "") {
+        let igUser = target.instagram.toString().trim().replace('@', '');
+        socialHTML += `<a href="https://instagram.com/${igUser}" target="_blank" class="w-10 h-10 rounded-full bg-pink-50 text-pink-600 hover:bg-pink-600 hover:text-white transition-all flex items-center justify-center text-lg shadow-xs" title="Instagram"><i class="fa-brands fa-instagram"></i></a>`;
       } else {
         socialHTML += `<span class="w-10 h-10 rounded-full bg-slate-100 text-slate-300 cursor-not-allowed flex items-center justify-center text-lg" title="ไม่มีข้อมูล Instagram"><i class="fa-brands fa-instagram"></i></span>`;
       }
       
-      if(target.lineId) {
-        const lineHref = target.lineId.startsWith('http') ? target.lineId : `https://line.me/ti/p/~${target.lineId}`;
+      if(target.lineId && target.lineId.toString().trim() !== "") {
+        const lineVal = target.lineId.toString().trim();
+        const lineHref = lineVal.startsWith('http') ? lineVal : `https://line.me/ti/p/~${lineVal}`;
         socialHTML += `<a href="${lineHref}" target="_blank" class="w-10 h-10 rounded-full bg-emerald-50 text-emerald-600 hover:bg-emerald-600 hover:text-white transition-all flex items-center justify-center text-lg shadow-xs" title="Line"><i class="fa-brands fa-line"></i></a>`;
       } else {
         socialHTML += `<span class="w-10 h-10 rounded-full bg-slate-100 text-slate-300 cursor-not-allowed flex items-center justify-center text-lg" title="ไม่มีข้อมูล Line"><i class="fa-brands fa-line"></i></span>`;
@@ -746,9 +830,9 @@
 
       if (loggedInUser && (loggedInUser.id === id || loggedInUser.role === 'admin')) {
         ownerZone.classList.remove('hidden'); 
-        document.getElementById("p-edit-name").value = target.name; 
-        document.getElementById("p-edit-year").value = target.year; 
-        document.getElementById("p-edit-sec").value = target.section;
+        document.getElementById("p-edit-name").value = target.name || ""; 
+        document.getElementById("p-edit-year").value = target.year || "1"; 
+        document.getElementById("p-edit-sec").value = target.section || "1";
         
         document.getElementById("p-edit-fb").value = target.facebook || "";
         document.getElementById("p-edit-ig").value = target.instagram || "";
