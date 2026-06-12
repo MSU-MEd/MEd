@@ -17,7 +17,7 @@
 <body class="bg-[#f8fafc] text-slate-800 antialiased min-h-screen">
 
   <script>
-    const API_URL = "https://script.google.com/macros/s/AKfycbyw4tORz4TV4UaG_L-IQ42y1MpWSsvypNlPyBh1sYCJigM_NG1jJE1W10CD3AAkl393PA/exec"; 
+    const API_URL = "https://script.google.com/macros/s/AKfycbxX6-FD4O8Ft5TB8QuKR9mRuCycTQTBItuQrrU659GEwq0mYegDm45n2UpM96eb6u-NkQ/exec"; 
     const IMGBB_KEY = "0046726cd8e124ae20c8dd7ea9bcebf5"; 
     const GOOGLE_CLIENT_ID = "708135767632-mu0rfu25t1p8c4upjihn58q4rio865ea.apps.googleusercontent.com"; 
   </script>
@@ -54,7 +54,8 @@
         <div class="space-y-2 w-full sm:w-auto">
           <span class="text-xs font-bold text-slate-400 uppercase tracking-wider block"><i class="fa-solid fa-graduation-cap mr-1"></i> ระดับชั้นปี (Year)</span>
           <div class="flex flex-wrap gap-2 p-1.5 bg-slate-100 rounded-xl w-full sm:w-fit">
-            <button onclick="changeYear(1)" id="btn-y-1" class="year-btn flex-1 sm:flex-none text-center px-5 py-2 rounded-lg font-bold text-xs bg-white text-amber-600 shadow-xs transition-all cursor-pointer">ปี 1</button>
+            <button onclick="changeYear(0)" id="btn-y-0" class="year-btn flex-1 sm:flex-none text-center px-5 py-2 rounded-lg font-bold text-xs bg-white text-amber-600 shadow-xs transition-all cursor-pointer">ทั้งหมด</button>
+            <button onclick="changeYear(1)" id="btn-y-1" class="year-btn flex-1 sm:flex-none text-center px-5 py-2 rounded-lg font-medium text-xs text-slate-600 hover:bg-slate-50 transition-all cursor-pointer">ปี 1</button>
             <button onclick="changeYear(2)" id="btn-y-2" class="year-btn flex-1 sm:flex-none text-center px-5 py-2 rounded-lg font-medium text-xs text-slate-600 hover:bg-slate-50 transition-all cursor-pointer">ปี 2</button>
             <button onclick="changeYear(3)" id="btn-y-3" class="year-btn flex-1 sm:flex-none text-center px-5 py-2 rounded-lg font-medium text-xs text-slate-600 hover:bg-slate-50 transition-all cursor-pointer">ปี 3</button>
             <button onclick="changeYear(4)" id="btn-y-4" class="year-btn flex-1 sm:flex-none text-center px-5 py-2 rounded-lg font-medium text-xs text-slate-600 hover:bg-slate-50 transition-all cursor-pointer">ปี 4</button>
@@ -64,7 +65,8 @@
         <div class="space-y-2 w-full sm:w-auto">
           <span class="text-xs font-bold text-slate-400 uppercase tracking-wider block"><i class="fa-solid fa-layer-group mr-1"></i> กลุ่มเรียน (Section)</span>
           <div class="flex items-center gap-3 p-1.5 bg-slate-100 rounded-xl w-full sm:w-fit">
-            <button onclick="changeSec(1)" id="btn-s-1" class="sec-btn w-9 h-9 rounded-lg font-bold text-xs bg-gradient-to-br from-amber-500 to-amber-600 text-white shadow-xs transition-all cursor-pointer">1</button>
+            <button onclick="changeSec(0)" id="btn-s-0" class="sec-btn px-3 h-9 rounded-lg font-bold text-xs bg-gradient-to-br from-amber-500 to-amber-600 text-white shadow-xs transition-all cursor-pointer">ทั้งหมด</button>
+            <button onclick="changeSec(1)" id="btn-s-1" class="sec-btn w-9 h-9 rounded-lg font-medium text-xs bg-white text-slate-600 hover:bg-slate-50 border border-slate-200/40 shadow-xs transition-all cursor-pointer">1</button>
             <button onclick="changeSec(2)" id="btn-s-2" class="sec-btn w-9 h-9 rounded-lg font-medium text-xs bg-white text-slate-600 hover:bg-slate-50 border border-slate-200/40 shadow-xs transition-all cursor-pointer">2</button>
             <button onclick="changeSec(3)" id="btn-s-3" class="sec-btn w-9 h-9 rounded-lg font-medium text-xs bg-white text-slate-600 hover:bg-slate-50 border border-slate-200/40 shadow-xs transition-all cursor-pointer">3</button>
           </div>
@@ -239,7 +241,7 @@
   <div id="profile-modal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center z-50 p-4 transition-all">
     <div class="bg-white rounded-3xl max-w-sm w-full shadow-2xl relative border border-slate-100 max-h-[calc(100vh-2rem)] overflow-y-auto flex flex-col">
       <button onclick="closeModal('profile-modal')" class="absolute top-4 right-4 text-white/70 hover:text-white bg-black/20 hover:bg-black/40 p-1.5 rounded-full z-10 transition cursor-pointer">
-        <i class="fa-solid fa-xmark text-base"></i>
+        <i class="fa-solid fa-xmark text-base leading-none"></i>
       </button>
       
       <div class="bg-gradient-to-b from-slate-900 to-slate-800 text-white p-6 pt-8 text-center relative flex-shrink-0">
@@ -353,7 +355,8 @@
   </div>
 
   <script>
-    let currentYear = 1, currentSec = 1, loggedInUser = null, loadedStudents = [], activeTargetId = null;
+    // 💡 ปรับค่าเริ่มต้นเป็น 0 เพื่อแสดงรายชื่อทั้งหมดเมื่อเปิดเว็บ
+    let currentYear = 0, currentSec = 0, loggedInUser = null, loadedStudents = [], activeTargetId = null;
     let googleTempData = null; 
 
     window.onload = () => { 
@@ -361,12 +364,10 @@
       checkUrgentPoster();
     };
 
-    // ⚡ ฟังก์ชันสำหรับแสดงระบบ Toast Notification แทนการใช้ alert() แบบเดิม
     function showToast(message, type = 'success') {
       const container = document.getElementById("toast-container");
       const toast = document.createElement("div");
       
-      // ตั้งค่าสีสไตล์ตามประเภทการแจ้งเตือน
       let bgStyle = 'bg-slate-900';
       let icon = '<i class="fa-solid fa-circle-info"></i>';
       if (type === 'success') { bgStyle = 'bg-emerald-500'; icon = '<i class="fa-solid fa-circle-check"></i>'; }
@@ -377,11 +378,8 @@
       toast.innerHTML = `${icon} <span class="flex-1">${message}</span>`;
       
       container.appendChild(toast);
-      
-      // ดึงอนิเมชั่นขาเข้า
       setTimeout(() => { toast.classList.remove('translate-y-4', 'opacity-0'); }, 10);
       
-      // นำ Toast ออกอัตโนมัติภายใน 3.5 วินาที
       setTimeout(() => {
         toast.classList.add('opacity-0', 'translate-y-2');
         setTimeout(() => { toast.remove(); }, 300);
@@ -451,12 +449,10 @@
       } catch (error) { console.error("ImgBB Upload Error:", error); return null; }
     }
 
-    // ⚡ ฟังก์ชันโหลดข้อมูลนิสิตพร้อมระบบสเกเลตัน (Skeleton Loader Loading State)
     async function loadStudents() {
       const container = document.getElementById("students-container");
       document.getElementById("member-count").innerText = "0";
       
-      // สเตตัสการจำลองโหลดภาพการ์ดแบบระยิบระยับล่วงหน้า
       const skeletonCard = `
         <div class="bg-white rounded-2xl p-5 border border-slate-100 shadow-2xs flex flex-col items-center animate-pulse">
           <div class="w-20 h-20 rounded-full bg-slate-200 mb-4"></div>
@@ -476,8 +472,6 @@
 
     function renderStudentCards(studentsList) {
       const container = document.getElementById("students-container");
-      
-      // อัปเดตตัวเลขนับสมาชิกที่คัดกรองได้ในพริบตา
       document.getElementById("member-count").innerText = studentsList ? studentsList.length : 0;
       
       if(!studentsList || studentsList.length === 0) { 
@@ -554,9 +548,8 @@
     async function handleRegister(e) {
       e.preventDefault();
       const submitBtn = document.getElementById("btn-reg-submit");
-      
       const sId = document.getElementById("reg-id").value.trim();
-      // 🔒 ดักตรวจสอบ Regex รูปแบบรหัสนิสิต มมส (ตัวเลข 11 หลัก)
+
       if(!/^\d{11}$/.test(sId)) {
         showToast("รหัสนิสิตไม่ถูกต้อง! ต้องเป็นตัวเลขความยาว 11 หลักเท่านั้น", "warning");
         return;
@@ -763,8 +756,36 @@
     }
 
     function logout() { loggedInUser = null; updateAuthUI(); loadStudents(); document.getElementById("admin-panel").classList.add('hidden'); showToast("ออกจากระบบแล้ว บายครับ!", "info"); }
-    function changeYear(y) { currentYear = y; document.querySelectorAll('.year-btn').forEach((b, i) => b.className = (i+1===y) ? "year-btn flex-1 sm:flex-none text-center px-5 py-2 rounded-lg font-bold text-xs bg-white text-amber-600 shadow-xs transition-all cursor-pointer" : "year-btn flex-1 sm:flex-none text-center px-5 py-2 rounded-lg font-medium text-xs text-slate-600 hover:bg-slate-50 transition-all cursor-pointer"); loadStudents(); }
-    function changeSec(s) { currentSec = s; document.querySelectorAll('.sec-btn').forEach((b, i) => b.className = (i+1===s) ? "sec-btn w-9 h-9 rounded-lg font-bold text-xs bg-gradient-to-br from-amber-500 to-amber-600 text-white shadow-xs transition-all cursor-pointer" : "sec-btn w-9 h-9 rounded-lg font-medium text-xs bg-white text-slate-600 hover:bg-slate-50 border border-slate-200/40 shadow-xs transition-all cursor-pointer"); loadStudents(); }
+    
+    // 💡 ฟังก์ชันเปลี่ยนชั้นปีรองรับการเช็ก ID แทน Index ลำดับปุ่ม
+    function changeYear(y) { 
+      currentYear = y; 
+      document.querySelectorAll('.year-btn').forEach((b) => {
+        if (b.id === `btn-y-${y}`) {
+          b.className = "year-btn flex-1 sm:flex-none text-center px-5 py-2 rounded-lg font-bold text-xs bg-white text-amber-600 shadow-xs transition-all cursor-pointer";
+        } else {
+          b.className = "year-btn flex-1 sm:flex-none text-center px-5 py-2 rounded-lg font-medium text-xs text-slate-600 hover:bg-slate-50 transition-all cursor-pointer";
+        }
+      }); 
+      loadStudents(); 
+    }
+
+    // 💡 ฟังก์ชันเปลี่ยน Section รองรับปุ่ม 'ทั้งหมด' (ค่า 0) และไฮไลต์ปุ่มได้แม่นยำขึ้น
+    function changeSec(s) { 
+      currentSec = s; 
+      document.querySelectorAll('.sec-btn').forEach((b) => {
+        if (b.id === `btn-s-${s}`) {
+          b.className = "sec-btn px-3 h-9 sm:w-auto rounded-lg font-bold text-xs bg-gradient-to-br from-amber-500 to-amber-600 text-white shadow-xs transition-all cursor-pointer";
+        } else {
+          if (b.id === 'btn-s-0') {
+            b.className = "sec-btn px-3 h-9 rounded-lg font-medium text-xs bg-white text-slate-600 hover:bg-slate-50 border border-slate-200/40 shadow-xs transition-all cursor-pointer";
+          } else {
+            b.className = "sec-btn w-9 h-9 rounded-lg font-medium text-xs bg-white text-slate-600 hover:bg-slate-50 border border-slate-200/40 shadow-xs transition-all cursor-pointer";
+          }
+        }
+      }); 
+      loadStudents(); 
+    }
     
     function openModal(id) { 
       document.getElementById(id).classList.remove('hidden'); 
