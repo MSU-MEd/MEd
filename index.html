@@ -3,100 +3,201 @@
  <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ระบบลงทะเบียนจัดกลุ่มนิสิต รหัส 68</title>
+  <title>ระบบลงทะเบียนจัดกลุ่มสวัสดิการหลีด</title>
   <script src="https://cdn.tailwindcss.com/3.4.17"></script>
   <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
+  <!-- คลังระบบล็อกอิน Google -->
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
   <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
         body { font-family: 'Sarabun', sans-serif; }
         .toast { animation: slideIn 0.3s ease, fadeOut 0.3s ease 2.7s; }
         @keyframes slideIn { from { transform: translateY(-20px); opacity: 0; } }
         @keyframes fadeOut { to { opacity: 0; } }
+        .fade-in { animation: fadeIn 0.4s ease forwards; opacity: 0; }
+        @keyframes fadeIn { to { opacity: 1; } }
   </style>
  </head>
  <body class="min-h-screen w-full bg-orange-50/30 text-gray-800">
   
-  <header class="w-full border-b border-orange-100 bg-white shadow-sm sticky top-0 z-10">
-   <div class="max-w-3xl mx-auto px-4 py-4">
-    <!-- ส่วนแสดงโลโก้ 3 ตัวเรียงกันตรงกลาง (ปรับปรุงโครงสร้างการแสดงผลรูปภาพใหม่) -->
-    <div class="flex justify-center items-center gap-4 mb-3">
-     <img src="https://scontent.fkkc3-1.fna.fbcdn.net/v/t39.30808-6/642768993_1941877609748834_2263063250765183521_n.jpg?stp=dst-jpg_tt6&cstp=mx2048x2048&ctp=s2048x2048&_nc_cat=109&ccb=1-7&_nc_sid=833d8c&_nc_eui2=AeFgdVRxMzDQoMn_WZ3PKav5HKXoF5YiSVocpegXliJJWomRnl3-W1ZkXpnF-IHRvyL-fqoXXFSj7bIqslzyZ2kK&_nc_ohc=yYASt5K_HFAQ7kNvwFXCG-o&_nc_oc=AdprLExm5EamUmN9Abu-lp2L37pMB0K7f_Md2yIsMH6AzuRZj9kQFDVoAm0RyclRoD8&_nc_zt=23&_nc_ht=scontent.fkkc3-1.fna&_nc_gid=Va2Z8EV8DzJe5E5Wl_HQ-Q&_nc_ss=7b2a8&oh=00_AQA5Ohq7_olaID3PrfEa9Kz4Ab80agfEqJq8nhikgT7HHQ&oe=6A62B96B" alt="Logo 1" class="h-16 w-16 object-contain p-1 rounded-full border border-orange-200 shadow-sm bg-white">
-     <img src="https://scontent.fkkc3-1.fna.fbcdn.net/v/t39.30808-6/663053337_1971148600155068_3543915145222936824_n.jpg?stp=dst-jpg_tt6&cstp=mx2048x1449&ctp=s2048x1449&_nc_cat=110&ccb=1-7&_nc_sid=833d8c&_nc_eui2=AeH0Ylb-hwgqKTpvN3dV2BcaaZUZ0G2osN9plRnQbaiw339LeWYPMKzBDUJPM9YrxnTPMRu26kuL22h_IzA5vO7I&_nc_ohc=YYSBcff4D5YQ7kNvwGEujny&_nc_oc=AdrAguy5wuB84Udg7oYtHBsAW8M9UIocmVfBdStDM1wwNlkY45PkLMdKvHnkhznpgSY&_nc_zt=23&_nc_ht=scontent.fkkc3-1.fna&_nc_gid=9EFy8Tzw4h8Q-yIcZ7k6OQ&_nc_ss=7b2a8&oh=00_AQADromT4eATZV1RUpPXDchRK_EVUFnLvtSiG_qayrJfSQ&oe=6A629B98" alt="Logo 2" class="h-20 w-20 object-contain p-1 rounded-full border-2 border-orange-400 shadow-md bg-white">
-     <img src="https://scontent.fkkc3-1.fna.fbcdn.net/v/t39.30808-6/642355807_1941877579748837_136105529239050778_n.jpg?stp=dst-jpg_tt6&cstp=mx2048x2048&ctp=s2048x2048&_nc_cat=110&ccb=1-7&_nc_sid=833d8c&_nc_eui2=AeGoNuB4kdc4TXH0TTSJ2BniBfekBKi2L8kF96QEqLYvyV1eX4MSCorpCd_C4Kc1KUmZoO3IjylYjRUPPKxesC1I&_nc_ohc=bl8IF0KScDwQ7kNvwGnqR8u&_nc_oc=AdqSfQbPA-3Ejlp-WvldZGbXXmAJl-HOTNtVeZNd_rf3t3gbIv1wm5ZKfk5eHPcDwPQ&_nc_zt=23&_nc_ht=scontent.fkkc3-1.fna&_nc_gid=a-NnU2kQk7Z7zrNkiJ7bvQ&_nc_ss=7b2a8&oh=00_AQB5-yXYheIR1a6wToYVlsQNQ507KV5E8aR9uHQ8DH4ihg&oe=6A62B8EB" alt="Logo 3" class="h-16 w-16 object-contain p-1 rounded-full border border-orange-200 shadow-sm bg-white">
-    </div>
-    <h1 class="font-bold text-2xl text-center text-orange-600">ระบบลงทะเบียนจัดกลุ่มนิสิต</h1>
-    <p class="text-center text-gray-500 text-sm mt-1">กรอกเลขท้ายรหัสนิสิต 3 หลัก เพื่อจับกลุ่มรหัส 68010511 (กลุ่มละ 2-3 คน)</p>
-   </div>
-  </header>
-
-  <main class="max-w-3xl mx-auto px-4 py-6 space-y-6">
-   <!-- ฟอร์มลงทะเบียน -->
-   <section class="bg-white rounded-2xl p-6 shadow-sm border border-orange-100">
-    <h2 class="font-semibold text-lg text-orange-700 mb-4 flex items-center gap-2">
-     <i data-lucide="users" class="w-5 h-5"></i> ฟอร์มจับกลุ่มสมาชิก
-    </h2>
-    <div class="space-y-4" id="member-slots">
-     
-     <!-- สมาชิกคนที่ 1 -->
-     <div class="member-slot bg-orange-50/40 p-3 rounded-xl border border-orange-100/70" data-index="1">
-      <label class="block text-sm font-medium text-gray-600 mb-1.5">สมาชิกคนที่ 1 <span class="text-red-500">*</span></label>
-      <div class="flex gap-3 items-center">
-       <input type="text" maxlength="3" pattern="\d{3}" placeholder="เช่น 001" class="w-32 px-3 py-2 border border-gray-300 rounded-lg text-center text-lg font-semibold tracking-widest focus:ring-2 focus:ring-orange-400 focus:border-orange-400 outline-none shadow-sm bg-white" data-member="1"> 
-       <span class="member-name text-gray-400 font-medium flex-1 text-base transition-colors duration-200" data-name="1">พิมพ์รหัส 3 ตัวท้ายเพื่อค้นหาชื่อ...</span>
+  <!-- ========================================== -->
+  <!-- 1. หน้าจอล็อกอิน (Login Screen) -->
+  <!-- ========================================== -->
+  <div id="login-screen" class="min-h-screen w-full flex items-center justify-center p-6 bg-orange-50/20">
+    <div class="text-center max-w-md w-full bg-white rounded-2xl p-8 shadow-sm border border-orange-100 fade-in">
+      <div class="mb-6">
+        <div class="w-20 h-20 mx-auto rounded-2xl bg-gradient-to-br from-orange-400 to-amber-500 flex items-center justify-center mb-6 shadow-md shadow-orange-500/20">
+          <i data-lucide="users" class="w-10 h-10 text-white"></i>
+        </div>
+        <h1 class="text-2xl font-bold text-orange-600 mb-2">ระบบลงทะเบียนจัดกลุ่มสวัสดิการหลีด</h1>
+        <p class="text-gray-500 text-sm mb-6">กรุณาเข้าสู่ระบบด้วยอีเมลมหาวิทยาลัย @msu.ac.th เท่านั้น</p>
+        <!-- ปุ่มล็อกอิน Google -->
+        <div id="buttonDiv" class="mx-auto flex justify-center"></div>
       </div>
-     </div>
-
-     <!-- สมาชิกคนที่ 2 -->
-     <div class="member-slot bg-orange-50/40 p-3 rounded-xl border border-orange-100/70" data-index="2">
-      <label class="block text-sm font-medium text-gray-600 mb-1.5">สมาชิกคนที่ 2 <span class="text-red-500">*</span></label>
-      <div class="flex gap-3 items-center">
-       <input type="text" maxlength="3" pattern="\d{3}" placeholder="เช่น 002" class="w-32 px-3 py-2 border border-gray-300 rounded-lg text-center text-lg font-semibold tracking-widest focus:ring-2 focus:ring-orange-400 focus:border-orange-400 outline-none shadow-sm bg-white" data-member="2"> 
-       <span class="member-name text-gray-400 font-medium flex-1 text-base transition-colors duration-200" data-name="2">พิมพ์รหัส 3 ตัวท้ายเพื่อค้นหาชื่อ...</span>
-      </div>
-     </div>
-
-     <!-- สมาชิกคนที่ 3 -->
-     <div class="member-slot bg-orange-50/40 p-3 rounded-xl border border-orange-100/70" data-index="3">
-      <label class="block text-sm font-medium text-gray-500 mb-1.5">สมาชิกคนที่ 3 (ไม่บังคับ)</label>
-      <div class="flex gap-3 items-center">
-       <input type="text" maxlength="3" pattern="\d{3}" placeholder="เช่น 004" class="w-32 px-3 py-2 border border-gray-300 rounded-lg text-center text-lg font-semibold tracking-widest focus:ring-2 focus:ring-orange-300 focus:border-orange-300 outline-none shadow-sm bg-white" data-member="3"> 
-       <span class="member-name text-gray-400 font-medium flex-1 text-base transition-colors duration-200" data-name="3">พิมพ์รหัส 3 ตัวท้ายเพื่อค้นหาชื่อ...</span>
-      </div>
-     </div>
-
     </div>
-    <button type="button" id="submit-btn" class="mt-6 w-full py-3 bg-orange-500 text-white rounded-xl font-bold text-lg shadow-md hover:bg-orange-600 active:scale-[0.99] transition disabled:opacity-50 disabled:pointer-events-none flex items-center justify-center gap-2">
-     <i data-lucide="user-plus" class="w-5 h-5"></i> ยืนยันการลงทะเบียนกลุ่ม
-    </button>
-   </section>
+  </div>
 
-   <!-- รายชื่อกลุ่มที่ลงทะเบียนแล้ว -->
-   <section>
-    <h2 class="font-semibold text-lg text-gray-700 mb-3 flex items-center gap-2">
-     <i data-lucide="clipboard-list" class="w-5 h-5"></i> รายชื่อกลุ่มที่ลงทะเบียนสำเร็จแล้ว (<span id="group-count">0</span> กลุ่ม)
-    </h2>
-    <div id="loading-state" class="text-center py-8 text-gray-400">
-      <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-orange-500 mx-auto mb-2"></div>
-      กำลังโหลดข้อมูลจาก Google Sheets...
-    </div>
-    <div id="groups-list" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
-    <p id="empty-msg" class="hidden text-center py-12 text-gray-400 bg-white rounded-2xl border border-dashed border-gray-200">ยังไม่มีการลงทะเบียนกลุ่มในระบบ</p>
-   </section>
-  </main>
+  <!-- ========================================== -->
+  <!-- 2. หน้าแอปหลัก (Main App) -->
+  <!-- ========================================== -->
+  <div id="main-app" class="hidden fade-in">
+    <header class="w-full border-b border-orange-100 bg-white shadow-sm sticky top-0 z-10">
+     <div class="max-w-3xl mx-auto px-4 py-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+      
+      <!-- โลโก้ 3 ตัวเรียงกันตรงกลางส่วนหัว -->
+      <div class="flex items-center gap-3">
+        <div class="flex justify-center items-center gap-2">
+         <img src="https://scontent.fkkc3-1.fna.fbcdn.net/v/t39.30808-6/642768993_1941877609748834_2263063250765183521_n.jpg?stp=dst-jpg_tt6&cstp=mx2048x2048&ctp=s2048x2048&_nc_cat=109&ccb=1-7&_nc_sid=833d8c&_nc_eui2=AeFgdVRxMzDQoMn_WZ3PKav5HKXoF5YiSVocpegXliJJWomRnl3-W1ZkXpnF-IHRvyL-fqoXXFSj7bIqslzyZ2kK&_nc_ohc=yYASt5K_HFAQ7kNvwFXCG-o&_nc_oc=AdprLExm5EamUmN9Abu-lp2L37pMB0K7f_Md2yIsMH6AzuRZj9kQFDVoAm0RyclRoD8&_nc_zt=23&_nc_ht=scontent.fkkc3-1.fna&_nc_gid=Va2Z8EV8DzJe5E5Wl_HQ-Q&_nc_ss=7b2a8&oh=00_AQA5Ohq7_olaID3PrfEa9Kz4Ab80agfEqJq8nhikgT7HHQ&oe=6A62B96B" alt="Logo 1" class="h-12 w-12 object-contain p-1 rounded-full border border-orange-200 shadow-sm bg-white">
+         <img src="https://scontent.fkkc3-1.fna.fbcdn.net/v/t39.30808-6/663053337_1971148600155068_3543915145222936824_n.jpg?stp=dst-jpg_tt6&cstp=mx2048x1449&ctp=s2048x1449&_nc_cat=110&ccb=1-7&_nc_sid=833d8c&_nc_eui2=AeH0Ylb-hwgqKTpvN3dV2BcaaZUZ0G2osN9plRnQbaiw339LeWYPMKzBDUJPM9YrxnTPMRu26kuL22h_IzA5vO7I&_nc_ohc=YYSBcff4D5YQ7kNvwGEujny&_nc_oc=AdrAguy5wuB84Udg7oYtHBsAW8M9UIocmVfBdStDM1wwNlkY45PkLMdKvHnkhznpgSY&_nc_zt=23&_nc_ht=scontent.fkkc3-1.fna&_nc_gid=9EFy8Tzw4h8Q-yIcZ7k6OQ&_nc_ss=7b2a8&oh=00_AQADromT4eATZV1RUpPXDchRK_EVUFnLvtSiG_qayrJfSQ&oe=6A629B98" alt="Logo 2" class="h-14 w-14 object-contain p-1 rounded-full border-2 border-orange-400 shadow-md bg-white">
+         <img src="https://scontent.fkkc3-1.fna.fbcdn.net/v/t39.30808-6/642355807_1941877579748837_136105529239050778_n.jpg?stp=dst-jpg_tt6&cstp=mx2048x2048&ctp=s2048x2048&_nc_cat=110&ccb=1-7&_nc_sid=833d8c&_nc_eui2=AeGoNuB4kdc4TXH0TTSJ2BniBfekBKi2L8kF96QEqLYvyV1eX4MSCorpCd_C4Kc1KUmZoO3IjylYjRUPPKxesC1I&_nc_ohc=bl8IF0KScDwQ7kNvwGnqR8u&_nc_oc=AdqSfQbPA-3Ejlp-WvldZGbXXmAJl-HOTNtVeZNd_rf3t3gbIv1wm5ZKfk5eHPcDwPQ&_nc_zt=23&_nc_ht=scontent.fkkc3-1.fna&_nc_gid=a-NnU2kQk7Z7zrNkiJ7bvQ&_nc_ss=7b2a8&oh=00_AQB5-yXYheIR1a6wToYVlsQNQ507KV5E8aR9uHQ8DH4ihg&oe=6A62B8EB" alt="Logo 3" class="h-12 w-12 object-contain p-1 rounded-full border border-orange-200 shadow-sm bg-white">
+        </div>
+        <div class="text-left ml-2">
+          <h1 class="font-bold text-xl text-orange-600 leading-tight">ระบบลงทะเบียนจัดกลุ่ม</h1>
+          <p class="text-gray-500 text-xs">ระบบลงทะเบียนจัดกลุ่มสวัสดิการหลีด กลุ่มละ 3 คน</p>
+        </div>
+      </div>
+
+      <!-- ส่วนโปรไฟล์ผู้เข้าใช้งาน และปุ่ม Logout -->
+      <div class="flex items-center gap-3">
+        <div id="user-display" class="hidden flex items-center gap-2 bg-orange-50 px-3 py-1.5 rounded-full border border-orange-100">
+          <div id="user-avatar" class="w-7 h-7 rounded-full overflow-hidden border border-orange-200 bg-white"></div>
+          <span id="user-name-display" class="text-orange-700 text-xs font-semibold max-w-[120px] truncate"></span>
+        </div>
+        <button onclick="handleLogout()" class="text-gray-400 hover:text-red-500 p-2 rounded-xl hover:bg-red-50 transition" title="ออกจากระบบ">
+          <i data-lucide="log-out" class="w-4 h-4"></i>
+        </button>
+      </div>
+
+     </div>
+    </header>
+
+    <main class="max-w-3xl mx-auto px-4 py-6 space-y-6">
+     <!-- ฟอร์มลงทะเบียน -->
+     <section class="bg-white rounded-2xl p-6 shadow-sm border border-orange-100">
+      <h2 class="font-semibold text-lg text-orange-700 mb-4 flex items-center gap-2">
+       <i data-lucide="users" class="w-5 h-5"></i> ฟอร์มจับกลุ่มสมาชิก
+      </h2>
+      <div class="space-y-4" id="member-slots">
+       
+       <!-- สมาชิกคนที่ 1 -->
+       <div class="member-slot bg-orange-50/40 p-3 rounded-xl border border-orange-100/70" data-index="1">
+        <label class="block text-sm font-medium text-gray-600 mb-1.5">สมาชิกคนที่ 1 <span class="text-red-500">*</span></label>
+        <div class="flex gap-3 items-center">
+         <input type="text" maxlength="3" pattern="\d{3}" placeholder="เช่น 001" class="w-32 px-3 py-2 border border-gray-300 rounded-lg text-center text-lg font-semibold tracking-widest focus:ring-2 focus:ring-orange-400 focus:border-orange-400 outline-none shadow-sm bg-white" data-member="1"> 
+         <span class="member-name text-gray-400 font-medium flex-1 text-base transition-colors duration-200" data-name="1">พิมพ์รหัส 3 ตัวท้ายเพื่อค้นหาชื่อ...</span>
+        </div>
+       </div>
+
+       <!-- สมาชิกคนที่ 2 -->
+       <div class="member-slot bg-orange-50/40 p-3 rounded-xl border border-orange-100/70" data-index="2">
+        <label class="block text-sm font-medium text-gray-600 mb-1.5">สมาชิกคนที่ 2 <span class="text-red-500">*</span></label>
+        <div class="flex gap-3 items-center">
+         <input type="text" maxlength="3" pattern="\d{3}" placeholder="เช่น 002" class="w-32 px-3 py-2 border border-gray-300 rounded-lg text-center text-lg font-semibold tracking-widest focus:ring-2 focus:ring-orange-400 focus:border-orange-400 outline-none shadow-sm bg-white" data-member="2"> 
+         <span class="member-name text-gray-400 font-medium flex-1 text-base transition-colors duration-200" data-name="2">พิมพ์รหัส 3 ตัวท้ายเพื่อค้นหาชื่อ...</span>
+        </div>
+       </div>
+
+       <!-- สมาชิกคนที่ 3 -->
+       <div class="member-slot bg-orange-50/40 p-3 rounded-xl border border-orange-100/70" data-index="3">
+        <label class="block text-sm font-medium text-gray-500 mb-1.5">สมาชิกคนที่ 3 </label>
+        <div class="flex gap-3 items-center">
+         <input type="text" maxlength="3" pattern="\d{3}" placeholder="เช่น 004" class="w-32 px-3 py-2 border border-gray-300 rounded-lg text-center text-lg font-semibold tracking-widest focus:ring-2 focus:ring-orange-300 focus:border-orange-300 outline-none shadow-sm bg-white" data-member="3"> 
+         <span class="member-name text-gray-400 font-medium flex-1 text-base transition-colors duration-200" data-name="3">พิมพ์รหัส 3 ตัวท้ายเพื่อค้นหาชื่อ...</span>
+        </div>
+       </div>
+
+      </div>
+      <button type="button" id="submit-btn" class="mt-6 w-full py-3 bg-orange-500 text-white rounded-xl font-bold text-lg shadow-md hover:bg-orange-600 active:scale-[0.99] transition disabled:opacity-50 disabled:pointer-events-none flex items-center justify-center gap-2">
+       <i data-lucide="user-plus" class="w-5 h-5"></i> ยืนยันการลงทะเบียนกลุ่ม
+      </button>
+     </section>
+
+     <!-- รายชื่อกลุ่มที่ลงทะเบียนแล้ว -->
+     <section>
+      <h2 class="font-semibold text-lg text-gray-700 mb-3 flex items-center gap-2">
+       <i data-lucide="clipboard-list" class="w-5 h-5"></i> รายชื่อกลุ่มที่ลงทะเบียนสำเร็จแล้ว (<span id="group-count">0</span> กลุ่ม)
+      </h2>
+      <div id="loading-state" class="text-center py-8 text-gray-400 bg-white rounded-2xl border border-gray-100 shadow-sm">
+        <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-orange-500 mx-auto mb-2"></div>
+        กำลังโหลดข้อมูลจากฐานข้อมูล...
+      </div>
+      <div id="groups-list" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
+      <p id="empty-msg" class="hidden text-center py-12 text-gray-400 bg-white rounded-2xl border border-dashed border-gray-200">ยังไม่มีการลงทะเบียนกลุ่มในระบบ</p>
+     </section>
+    </main>
+  </div>
 
   <div id="toast-container" class="fixed top-4 right-4 z-50 space-y-2"></div>
 
   <script>
-    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyL9LuPn5wFFqvF2YshpUoEnGMqeGESJsBrKtWHXK4Y3qRYAgp988snIzRnnypvKTGp/exec";
+    // ==========================================
+    // กำหนดค่าคอนฟิกหลักระบบล็อกอินองค์กร
+    // ==========================================
+    const CLIENT_ID = "257299402825-el5mheppr6fnd09mebi7vmgulilqg9ru.apps.googleusercontent.com";
+    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxrbd9Cs9scjfznfNqUvYjA4T208IijANaPRcw901Kgj0vdxm49ypN4GpSSr7PNgbQ/exec";
     
     const PREFIX = "68010511";
+    const ORG_DOMAIN = "msu.ac.th"; 
+    
     const ROSTER = {
         "001":"นางสาวจิรัชญา หล่าโคตร์","002":"นางสาวจิรัชยา แสนวงษ์","004":"นางสาวณัฐธิดา บุญทวี","005":"นางสาวบุณยานุช สุขศรี","006":"นายปิยะวัฒน์ จงวัตร","007":"นางสาวพิชญา จันทา","008":"นายพีรพล ปานนพภา","009":"นายวรัท ยางกลาง","010":"นางสาวศุภิสรา จิตรเสงี่ยม","012":"นายปุญญพัตน์ เอี่ยมวอน","013":"นางสาวกชวรรณ เกลอสูงเนิน","014":"นายกนก รัตนา","015":"นางสาวกมลชนก เรืองธรรม","016":"นายกรกฤต พุฒลา","017":"นางสาวกฤษณา ไชยคุณ","018":"นางสาวกิ่งกาญจน์ จุลหงษ์","019":"นายกิตติธัช นิลไชย","020":"นายกิตติศักดิ์ โต๊ะจรัญ","021":"นายกิตติศักดิ์ สมปอง","022":"นางสาวจันทภา ทบพักตร์","023":"นายจิตติพัฒน์ เจริญสุข","025":"นางสาวจิรนันท์ สังข์วงศ์","026":"นางสาวฉัตรรพี วรรณพราหมณ์","027":"นางสาวชลดา ไหมน้ำคำ","028":"นางสาวชลธิชา เจริญขันธ์","029":"นางสาวชาลิสา สิงห์นา","030":"นางสาวฐิติวรดา อารมณ์เพียร","031":"นายณภัทร ชาแสน","032":"นายณัฐชัย มีชัย","033":"นายณัฐพล บุญเอก","034":"นางสาวทักษอร อินาลา","035":"นายธนดล สายสุด","037":"นายธีรภัทร แสนโทโพ","038":"นายธีรศักดิ์ ภารดิลก","039":"นายนนทภัทร สุทธิสน","040":"นางสาวนรินธร ใบพิมูล","041":"นางสาวนฤมล ต้นแก้ว","042":"นายนิธิ บุญพิมพ์","043":"นางสาวปภาวรินท์ งามสนิท","044":"นางสาวประภัสสร วันทองทักษ์","045":"นางสาวปุณณดา มงคลพิศ","046":"นางสาวพรนภัส พรมไชยา","047":"นางสาวพรรณวริสา ตรีสอน","048":"นายพรรษิษฐ์ กีรตินันท์กูล","049":"นางสาวพอเพียง บุญมั่ง","050":"นายพันธวัช อนุอัน","051":"นายพิชญปกรณ์ สุขแสวง","052":"นายพิเชฐ จำปาโท","053":"นายพิทวัส สาระรัตน์","054":"นางสาวพิมพ์ใจ ฉลาด","055":"นางสาวพิมพ์ชนก ทาแพงน้อย","056":"นางสาวพิมพ์ชนก ไขขุนทด","057":"นายพีรวัส ศรีชาหลวง","058":"นายภูเบศว์ แพงพุด","060":"นายยุทธชัย มาตขาว","061":"นายรัชพล ขวัญโพน","062":"นางสาววชิรญาณ์ พรหมโคตร","063":"นายศุภโชค บุญประเสริฐ","064":"นายสรณ์ศิริ ราชภักดิ์","065":"นางสาวสลิลทิพย์ ปัดสี","066":"นางสาวสุชานันท์ วิชามุข","067":"นางสาวสุพิชญา วิเชียรรมย์","069":"นางสาวอภิสุตา บุศดี","070":"นายอริย์ธัช อุฒาพยับ","071":"นายกนกพล คูณหาร","072":"นางสาวกัญญารัตน์ ภวภูตานนท์ฯ","073":"นางสาวกุลชา เศรษฐมาตย์","074":"นางสาวขวัญข้าว อุ่นพิกุล","075":"นางสาวจรรยพร ตันตีบ","076":"นางสาวจิดาภา อาศัยนา","078":"นายณัฐพล เกลี้ยงพร้อม","079":"นายธนภัทร อาษาธง","081":"นางสาวธิยากรณ์ ศรีคำ","082":"นายธีรธรรม บุญอำนวย","083":"นายนัทธพงศ์ งามเมืองปัก","084":"นายปิยวัฒน์ ภูพันนา","085":"นายพศุตม์ สัมพันธ์","086":"นางสาวพิรยากร ทิพมาตย์","087":"นายภควินทร์ ศิรินามมนตรี","088":"นายภูสิต สายจันทร์","089":"นางสาวมิ่งขวัญ ใจกล้า","090":"นางสาววิลาวัลย์ มาลาศรี","091":"นางสาวศิริยาภรณ์ นูพิมพ์","092":"นางสาวศุจีภรณ์ ซ่อนจันทร์","093":"นายสุรเดช แช่มมาลี"
     };
 
     let allGroups = [];
+    let currentUser = null;
 
-    // ระบบตรวจจับการพิมพ์เพื่อแสดงชื่ออัตโนมัติ
+    // ระบบล็อกอิน Google GSI Client
+    window.onload = function () {
+      google.accounts.id.initialize({
+        client_id: CLIENT_ID,
+        callback: handleCredentialResponse,
+        hosted_domain: ORG_DOMAIN
+      });
+      
+      google.accounts.id.renderButton(
+        document.getElementById("buttonDiv"),
+        { theme: "outline", size: "large", shape: "pill", width: "260" }
+      );
+      lucide.createIcons();
+    };
+
+    function parseJwt(token) {
+      const base64Url = token.split('.')[1];
+      const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+      return JSON.parse(decodeURIComponent(window.atob(base64).split('').map(c => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)).join('')));
+    }
+
+    async function handleCredentialResponse(response) {
+      const data = parseJwt(response.credential);
+      
+      if (data.hd !== ORG_DOMAIN && !data.email.endsWith(`@${ORG_DOMAIN}`)) {
+        showToast(`สิทธิ์จำกัดเฉพาะภายใน @${ORG_DOMAIN} เท่านั้น`, true);
+        return;
+      }
+
+      currentUser = { name: data.name, email: data.email, picture: data.picture };
+      
+      document.getElementById('login-screen').classList.add('hidden');
+      document.getElementById('main-app').classList.remove('hidden');
+      
+      document.getElementById('user-name-display').textContent = currentUser.name;
+      document.getElementById('user-avatar').innerHTML = `<img src="${currentUser.picture}" class="w-full h-full object-cover">`;
+      document.getElementById('user-display').classList.remove('hidden');
+
+      showToast('เข้าสู่ระบบสำเร็จ กำลังโหลดข้อมูลกลุ่ม...', false);
+      lucide.createIcons();
+      await fetchGroups();
+    }
+
+    function handleLogout() {
+      currentUser = null;
+      google.accounts.id.disableAutoSelect();
+      document.getElementById('main-app').classList.add('hidden');
+      document.getElementById('login-screen').classList.remove('hidden');
+      lucide.createIcons();
+    }
+
+    // ตรวจจับการพิมพ์และดึงชื่ออัตโนมัติ
     document.querySelectorAll('input[data-member]').forEach(input => {
         input.addEventListener('input', e => {
             const v = e.target.value.replace(/\D/g,'');
@@ -150,9 +251,9 @@
         return members;
     }
 
-    // ฟังก์ชันดึงข้อมูลจาก Google Sheets
     async function fetchGroups() {
         try {
+            document.getElementById('loading-state').classList.remove('hidden');
             const response = await fetch(GOOGLE_SCRIPT_URL);
             const resData = await response.json();
             if(resData.isOk) {
@@ -161,15 +262,17 @@
             }
         } catch (error) {
             console.error("Fetch error:", error);
-            showToast('ดึงข้อมูลจาก Google Sheets ล้มเหลว', true);
+            showToast('ดึงข้อมูลจากฐานข้อมูลล้มเหลว', true);
         } finally {
             document.getElementById('loading-state').classList.add('hidden');
         }
     }
 
-    // ยืนยันข้อมูลและบันทึกลง Google Sheets
+    // ยืนยันข้อมูลลงทะเบียนและส่ง POST
     const submitBtn = document.getElementById('submit-btn');
     submitBtn.addEventListener('click', async () => {
+        if(!currentUser) { showToast('เซสชันหมดอายุ กรุณาล็อกอินใหม่', true); return; }
+        
         const members = getMembers();
         if(members === 'not_enough') { showToast('กรุณากรอกข้อมูลนิสิตอย่างน้อย 2 คน', true); return; }
         if(members === null) { showToast('กรุณากรอกรหัสให้ถูกต้องครบทุกคน', true); return; }
@@ -184,15 +287,18 @@
         if(alreadyTaken) { showToast(`❌ ${alreadyTaken.name} มีกลุ่มแล้ว`, true); return; }
 
         submitBtn.disabled = true;
-        submitBtn.innerHTML = `<div class="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div> กำลังบันทึกลง Google Sheets...`;
+        submitBtn.innerHTML = `<div class="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div> กำลังบันทึกลงฐานข้อมูล...`;
         
         const groupNum = allGroups.length + 1;
+        
         const record = {
             group_number: groupNum,
             member1_id: members[0].id, member1_name: members[0].name,
             member2_id: members[1].id, member2_name: members[1].name,
             member3_id: members[2]?.id || '', member3_name: members[2]?.name || '',
-            created_at: new Date().toLocaleString('th-TH')
+            created_at: new Date().toLocaleString('th-TH'),
+            created_by_name: currentUser.name,
+            created_by_email: currentUser.email
         };
 
         try {
@@ -252,20 +358,24 @@
                 </li>
             `).join('');
 
+            const creatorHtml = g.created_by_name 
+              ? `<div class="mt-2 pt-2 border-t border-dashed border-gray-100 text-[10px] text-gray-400 flex items-center gap-1 justify-end">
+                   <i data-lucide="user" class="w-3 h-3"></i> บันทึกโดย: ${g.created_by_name}
+                 </div>`
+              : '';
+
             card.innerHTML = `
                 <div class="flex justify-between items-center border-b border-orange-50 pb-2 mb-3">
                     <span class="bg-orange-100 text-orange-700 text-xs font-bold px-2.5 py-1 rounded-full">กลุ่มที่ ${g.group_number}</span>
                     <span class="text-[10px] text-gray-400 flex items-center gap-1"><i data-lucide="calendar" class="w-3 h-3"></i> ${g.created_at.split(' ')[0] || ''}</span>
                 </div>
                 <ul class="space-y-1.5">${membersHtml}</ul>
+                ${creatorHtml}
             `;
             list.appendChild(card);
         });
         lucide.createIcons();
     }
-
-    fetchGroups();
-    lucide.createIcons();
   </script>
  </body>
 </html>
