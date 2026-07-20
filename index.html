@@ -41,25 +41,44 @@
   <!-- ========================================== -->
   <div id="main-app" class="hidden fade-in">
     <header class="w-full border-b border-orange-100 bg-white shadow-sm sticky top-0 z-10">
-     <div class="max-w-3xl mx-auto px-4 py-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+     <div class="max-w-3xl mx-auto px-4 py-3 sm:py-4 flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-4">
       
-      <!-- โลโก้ 3 ตัวเรียงกัน -->
-      <div class="flex items-center gap-3">
-        <div class="flex justify-center items-center gap-2">
-         <img src="https://scontent.fkkc3-1.fna.fbcdn.net/v/t39.30808-6/642768993_1941877609748834_2263063250765183521_n.jpg?stp=dst-jpg_tt6&cstp=mx2048x2048&ctp=s2048x2048&_nc_cat=109&ccb=1-7&_nc_sid=833d8c&_nc_eui2=AeFgdVRxMzDQoMn_WZ3PKav5HKXoF5YiSVocpegXliJJWomRnl3-W1ZkXpnF-IHRvyL-fqoXXFSj7bIqslzyZ2kK&_nc_ohc=yYASt5K_HFAQ7kNvwFXCG-o&_nc_oc=AdprLExm5EamUmN9Abu-lp2L37pMB0K7f_Md2yIsMH6AzuRZj9kQFDVoAm0RyclRoD8&_nc_zt=23&_nc_ht=scontent.fkkc3-1.fna&_nc_gid=Va2Z8EV8DzJe5E5Wl_HQ-Q&_nc_ss=7b2a8&oh=00_AQA5Ohq7_olaID3PrfEa9Kz4Ab80agfEqJq8nhikgT7HHQ&oe=6A62B96B" alt="Logo 1" class="h-12 w-12 object-contain p-1 rounded-full border border-orange-200 shadow-sm bg-white">
-         <img src="https://scontent.fkkc3-1.fna.fbcdn.net/v/t39.30808-6/663053337_1971148600155068_3543915145222936824_n.jpg?stp=dst-jpg_tt6&cstp=mx2048x1449&ctp=s2048x1449&_nc_cat=110&ccb=1-7&_nc_sid=833d8c&_nc_eui2=AeF0Ylb-hwgqKTpvN3dV2BcaaZUZ0G2osN9plRnQbaiw339LeWYPMKzBDUJPM9YrxnTPMRu26kuL22h_IzA5vO7I&_nc_ohc=YYSBcff4D5YQ7kNvwGEujny&_nc_oc=AdrAguy5wuB84Udg7oYtHBsAW8M9UIocmVfBdStDM1wwNlkY45PkLMdKvHnkhznpgSY&_nc_zt=23&_nc_ht=scontent.fkkc3-1.fna&_nc_gid=9EFy8Tzw4h8Q-yIcZ7k6OQ&_nc_ss=7b2a8&oh=00_AQADromT4eATZV1RUpPXDchRK_EVUFnLvtSiG_qayrJfSQ&oe=6A629B98" alt="Logo 2" class="h-14 w-14 object-contain p-1 rounded-full border-2 border-orange-400 shadow-md bg-white">
-         <img src="https://scontent.fkkc3-1.fna.fbcdn.net/v/t39.30808-6/642355807_1941877579748837_136105529239050778_n.jpg?stp=dst-jpg_tt6&cstp=mx2048x2048&ctp=s2048x2048&_nc_cat=110&ccb=1-7&_nc_sid=833d8c&_nc_eui2=AeGoNuB4kdc4TXH0TTSJ2BniBfekBKi2L8kF96QEqLYvyV1eX4MSCorpCd_C4Kc1KUmZoO3IjylYjRUPPKxesC1I&_nc_ohc=bl8IF0KScDwQ7kNvwGnqR8u&_nc_oc=AdqSfQbPA-3Ejlp-WvldZGbXXmAJl-HOTNtVeZNd_rf3t3gbIv1wm5ZKfk5eHPcDwPQ&_nc_zt=23&_nc_ht=scontent.fkkc3-1.fna&_nc_gid=a-NnU2kQk7Z7zrNkiJ7bvQ&_nc_ss=7b2a8&oh=00_AQB5-yXYheIR1a6wToYVlsQNQ507KV5E8aR9uHQ8DH4ihg&oe=6A62B8EB" alt="Logo 3" class="h-12 w-12 object-contain p-1 rounded-full border border-orange-200 shadow-sm bg-white">
+      <!-- โลโก้ 3 ตัว ปรับขนาดกรอบเท่ากันเป๊ะ 12x12 (48px) พร้อมระบบแสดงรูปสำรองเมื่อลิงก์หมดอายุ -->
+      <div class="flex items-center gap-2.5 sm:gap-3">
+        <div class="flex justify-center items-center gap-1.5 sm:gap-2">
+          
+          <!-- Logo 1 -->
+          <div class="w-11 h-11 sm:w-12 sm:h-12 rounded-full border border-orange-200 shadow-sm bg-white overflow-hidden flex items-center justify-center shrink-0">
+            <img src="https://scontent.fkkc3-1.fna.fbcdn.net/v/t39.30808-6/642768993_1941877609748834_2263063250765183521_n.jpg?stp=dst-jpg_tt6&cstp=mx2048x2048&ctp=s2048x2048&_nc_cat=109&ccb=1-7&_nc_sid=833d8c&_nc_eui2=AeFgdVRxMzDQoMn_WZ3PKav5HKXoF5YiSVocpegXliJJWomRnl3-W1ZkXpnF-IHRvyL-fqoXXFSj7bIqslzyZ2kK&_nc_ohc=yYASt5K_HFAQ7kNvwFXCG-o&_nc_oc=AdprLExm5EamUmN9Abu-lp2L37pMB0K7f_Md2yIsMH6AzuRZj9kQFDVoAm0RyclRoD8&_nc_zt=23&_nc_ht=scontent.fkkc3-1.fna&_nc_gid=Va2Z8EV8DzJe5E5Wl_HQ-Q&_nc_ss=7b2a8&oh=00_AQA5Ohq7_olaID3PrfEa9Kz4Ab80agfEqJq8nhikgT7HHQ&oe=6A62B96B" 
+                 alt="Logo 1" class="w-full h-full object-cover" 
+                 onerror="this.style.display='none'; this.parentElement.innerHTML='<i data-lucide=\'award\' class=\'w-6 h-6 text-orange-500\'></i>'; lucide.createIcons();">
+          </div>
+
+          <!-- Logo 2 -->
+          <div class="w-11 h-11 sm:w-12 sm:h-12 rounded-full border-2 border-orange-400 shadow-md bg-white overflow-hidden flex items-center justify-center shrink-0">
+            <img src="https://scontent.fkkc3-1.fna.fbcdn.net/v/t39.30808-6/663053337_1971148600155068_3543915145222936824_n.jpg?stp=dst-jpg_tt6&cstp=mx2048x1449&ctp=s2048x1449&_nc_cat=110&ccb=1-7&_nc_sid=833d8c&_nc_eui2=AeH0Ylb-hwgqKTpvN3dV2BcaaZUZ0G2osN9plRnQbaiw339LeWYPMKzBDUJPM9YrxnTPMRu26kuL22h_IzA5vO7I&_nc_ohc=YYSBcff4D5YQ7kNvwGEujny&_nc_oc=AdrAguy5wuB84Udg7oYtHBsAW8M9UIocmVfBdStDM1wwNlkY45PkLMdKvHnkhznpgSY&_nc_zt=23&_nc_ht=scontent.fkkc3-1.fna&_nc_gid=9EFy8Tzw4h8Q-yIcZ7k6OQ&_nc_ss=7b2a8&oh=00_AQADromT4eATZV1RUpPXDchRK_EVUFnLvtSiG_qayrJfSQ&oe=6A629B98" 
+                 alt="Logo 2" class="w-full h-full object-cover" 
+                 onerror="this.style.display='none'; this.parentElement.innerHTML='<i data-lucide=\'star\' class=\'w-6 h-6 text-orange-500\'></i>'; lucide.createIcons();">
+          </div>
+
+          <!-- Logo 3 -->
+          <div class="w-11 h-11 sm:w-12 sm:h-12 rounded-full border border-orange-200 shadow-sm bg-white overflow-hidden flex items-center justify-center shrink-0">
+            <img src="https://scontent.fkkc3-1.fna.fbcdn.net/v/t39.30808-6/642355807_1941877579748837_136105529239050778_n.jpg?stp=dst-jpg_tt6&cstp=mx2048x2048&ctp=s2048x2048&_nc_cat=110&ccb=1-7&_nc_sid=833d8c&_nc_eui2=AeGoNuB4kdc4TXH0TTSJ2BniBfekBKi2L8kF96QEqLYvyV1eX4MSCorpCd_C4Kc1KUmZoO3IjylYjRUPPKxesC1I&_nc_ohc=bl8IF0KScDwQ7kNvwGnqR8u&_nc_oc=AdqSfQbPA-3Ejlp-WvldZGbXXmAJl-HOTNtVeZNd_rf3t3gbIv1wm5ZKfk5eHPcDwPQ&_nc_zt=23&_nc_ht=scontent.fkkc3-1.fna&_nc_gid=a-NnU2kQk7Z7zrNkiJ7bvQ&_nc_ss=7b2a8&oh=00_AQB5-yXYheIR1a6wToYVlsQNQ507KV5E8aR9uHQ8DH4ihg&oe=6A62B8EB" 
+                 alt="Logo 3" class="w-full h-full object-cover" 
+                 onerror="this.style.display='none'; this.parentElement.innerHTML='<i data-lucide=\'heart\' class=\'w-6 h-6 text-orange-500\'></i>'; lucide.createIcons();">
+          </div>
+
         </div>
-        <div class="text-left ml-2">
-          <h1 class="font-bold text-xl text-orange-600 leading-tight">ระบบลงทะเบียนจัดกลุ่ม</h1>
-          <p class="text-gray-500 text-xs">ระบบลงทะเบียนจัดกลุ่มสวัสดิการหลีด กลุ่มละ 3 คน</p>
+        <div class="text-left ml-1">
+          <h1 class="font-bold text-lg sm:text-xl text-orange-600 leading-tight">ระบบลงทะเบียนจัดกลุ่ม</h1>
+          <p class="text-gray-500 text-xs mt-0.5">ระบบลงทะเบียนจัดกลุ่มสวัสดิการหลีด กลุ่มละ 3 คน</p>
         </div>
       </div>
 
       <!-- ส่วนโปรไฟล์ผู้ใช้ -->
       <div class="flex items-center gap-3">
         <div id="user-display" class="hidden flex items-center gap-2 bg-orange-50 px-3 py-1.5 rounded-full border border-orange-100">
-          <div id="user-avatar" class="w-7 h-7 rounded-full overflow-hidden border border-orange-200 bg-white"></div>
+          <div id="user-avatar" class="w-7 h-7 rounded-full overflow-hidden border border-orange-200 bg-white shrink-0"></div>
           <span id="user-name-display" class="text-orange-700 text-xs font-semibold max-w-[120px] truncate"></span>
         </div>
         <button onclick="handleLogout()" class="text-gray-400 hover:text-red-500 p-2 rounded-xl hover:bg-red-50 transition" title="ออกจากระบบ">
@@ -73,12 +92,12 @@
     <main class="max-w-3xl mx-auto px-4 py-6 space-y-6">
 
      <!-- ฟอร์มลงทะเบียน / แก้ไขกลุ่ม -->
-     <section id="form-section" class="bg-white rounded-2xl p-6 shadow-sm border border-orange-100 transition-all">
-      <div class="flex justify-between items-center mb-4">
+     <section id="form-section" class="bg-white rounded-2xl p-5 sm:p-6 shadow-sm border border-orange-100 transition-all">
+      <div class="flex justify-between items-center mb-5">
         <h2 id="form-title" class="font-semibold text-lg text-orange-700 flex items-center gap-2">
          <i data-lucide="users" class="w-5 h-5"></i> ฟอร์มจับกลุ่มสมาชิก
         </h2>
-        <button id="cancel-edit-btn" onclick="cancelEdit()" class="hidden text-xs text-red-500 hover:text-red-700 font-bold bg-red-50 border border-red-200 px-3 py-1.5 rounded-lg flex items-center gap-1">
+        <button id="cancel-edit-btn" onclick="cancelEdit()" class="hidden text-xs text-red-500 hover:text-red-700 font-bold bg-red-50 border border-red-200 px-3 py-1.5 rounded-lg flex items-center gap-1 transition">
           <i data-lucide="x" class="w-3.5 h-3.5"></i> ยกเลิกการแก้ไข
         </button>
       </div>
@@ -88,51 +107,54 @@
        <div class="bg-orange-50/60 p-4 rounded-xl border border-orange-200/70">
         <div class="flex justify-between items-center mb-2">
           <label class="block text-sm font-bold text-gray-700 flex items-center gap-1.5">
-            <i data-lucide="calendar-check" class="w-4 h-4 text-orange-500"></i> เลือกวันที่ / เลขที่สวัสดิการ <span class="text-red-500">*</span>
+            <i data-lucide="calendar-check" class="w-4 h-4 text-orange-500"></i> เลือกวันที่ / เลขที่สวัสดิการ <span class="text-gray-400 text-xs font-normal">(ไม่เลือกก็ได้)</span>
           </label>
-          <button type="button" onclick="promptAddNewDate()" class="text-xs font-bold text-orange-600 hover:text-orange-800 bg-white border border-orange-300 px-2.5 py-1 rounded-lg shadow-sm hover:bg-orange-50 flex items-center gap-1 transition">
+          <button type="button" onclick="promptAddNewDate()" class="text-xs font-bold text-orange-600 hover:text-orange-800 bg-white border border-orange-300 px-2.5 py-1 rounded-lg shadow-sm hover:bg-orange-50 flex items-center gap-1 transition shrink-0">
             <i data-lucide="plus-circle" class="w-3.5 h-3.5 text-orange-500"></i> เพิ่มเลขที่ใหม่
           </button>
         </div>
         
-        <select id="selected-date" class="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-gray-800 font-semibold focus:ring-2 focus:ring-orange-400 focus:border-orange-400 outline-none bg-white text-base">
+        <select id="selected-date" class="w-full px-3.5 py-2.5 border border-gray-300 rounded-lg text-gray-800 font-semibold focus:ring-2 focus:ring-orange-400 focus:border-orange-400 outline-none bg-white text-sm sm:text-base">
           <option value="">-- กำลังโหลดรายการเลขที่... --</option>
         </select>
-        <p class="text-[11px] text-gray-500 mt-1.5">* เลือกได้เฉพาะเลขที่ยังไม่มีกลุ่มอื่นจอง (แต่ละกลุ่มต้องใช้เลขไม่ซ้ำกัน)</p>
+        <p class="text-[11px] text-gray-500 mt-1.5">* หากวันที่ไม่มีในตัวเลือก สามารถกดเพิ่มเลขที่ใหม่ หรือกดลงทะเบียนกลุ่มได้ทันที</p>
        </div>
 
+       <!-- ส่วนกรอกสมาชิกล็อกขนาดให้เท่ากันเป๊ะ -->
        <div class="space-y-3" id="member-slots">
+         
          <!-- สมาชิกคนที่ 1 -->
-         <div class="member-slot bg-orange-50/30 p-3 rounded-xl border border-orange-100/70" data-index="1">
-          <label class="block text-sm font-medium text-gray-600 mb-1.5">สมาชิกคนที่ 1 <span class="text-red-500">*</span></label>
+         <div class="member-slot bg-orange-50/30 p-3.5 rounded-xl border border-orange-100/70" data-index="1">
+          <label class="block text-sm font-semibold text-gray-700 mb-2">สมาชิกคนที่ 1 <span class="text-red-500">*</span></label>
           <div class="flex gap-3 items-center">
-           <input type="text" maxlength="3" pattern="\d{3}" placeholder="เช่น 001" class="w-28 px-3 py-2 border border-gray-300 rounded-lg text-center text-lg font-semibold tracking-widest focus:ring-2 focus:ring-orange-400 outline-none bg-white" data-member="1"> 
-           <span class="member-name text-gray-400 font-medium flex-1 text-sm" data-name="1">พิมพ์รหัส 3 ตัวท้ายเพื่อค้นหาชื่อ...</span>
+           <input type="text" maxlength="3" pattern="\d{3}" placeholder="เช่น 001" class="w-28 sm:w-32 px-3 py-2 border border-gray-300 rounded-lg text-center text-base sm:text-lg font-bold tracking-widest focus:ring-2 focus:ring-orange-400 outline-none bg-white shadow-sm shrink-0" data-member="1"> 
+           <span class="member-name text-gray-400 font-medium flex-1 text-sm leading-normal truncate" data-name="1">พิมพ์รหัส 3 ตัวท้ายเพื่อค้นหาชื่อ...</span>
           </div>
          </div>
 
          <!-- สมาชิกคนที่ 2 -->
-         <div class="member-slot bg-orange-50/30 p-3 rounded-xl border border-orange-100/70" data-index="2">
-          <label class="block text-sm font-medium text-gray-600 mb-1.5">สมาชิกคนที่ 2 <span class="text-red-500">*</span></label>
+         <div class="member-slot bg-orange-50/30 p-3.5 rounded-xl border border-orange-100/70" data-index="2">
+          <label class="block text-sm font-semibold text-gray-700 mb-2">สมาชิกคนที่ 2 <span class="text-red-500">*</span></label>
           <div class="flex gap-3 items-center">
-           <input type="text" maxlength="3" pattern="\d{3}" placeholder="เช่น 002" class="w-28 px-3 py-2 border border-gray-300 rounded-lg text-center text-lg font-semibold tracking-widest focus:ring-2 focus:ring-orange-400 outline-none bg-white" data-member="2"> 
-           <span class="member-name text-gray-400 font-medium flex-1 text-sm" data-name="2">พิมพ์รหัส 3 ตัวท้ายเพื่อค้นหาชื่อ...</span>
+           <input type="text" maxlength="3" pattern="\d{3}" placeholder="เช่น 002" class="w-28 sm:w-32 px-3 py-2 border border-gray-300 rounded-lg text-center text-base sm:text-lg font-bold tracking-widest focus:ring-2 focus:ring-orange-400 outline-none bg-white shadow-sm shrink-0" data-member="2"> 
+           <span class="member-name text-gray-400 font-medium flex-1 text-sm leading-normal truncate" data-name="2">พิมพ์รหัส 3 ตัวท้ายเพื่อค้นหาชื่อ...</span>
           </div>
          </div>
 
          <!-- สมาชิกคนที่ 3 -->
-         <div class="member-slot bg-orange-50/30 p-3 rounded-xl border border-orange-100/70" data-index="3">
-          <label class="block text-sm font-medium text-gray-500 mb-1.5">สมาชิกคนที่ 3</label>
+         <div class="member-slot bg-orange-50/30 p-3.5 rounded-xl border border-orange-100/70" data-index="3">
+          <label class="block text-sm font-semibold text-gray-500 mb-2">สมาชิกคนที่ 3 <span class="text-gray-400 text-xs font-normal">(ไม่จำเป็น)</span></label>
           <div class="flex gap-3 items-center">
-           <input type="text" maxlength="3" pattern="\d{3}" placeholder="เช่น 004" class="w-28 px-3 py-2 border border-gray-300 rounded-lg text-center text-lg font-semibold tracking-widest focus:ring-2 focus:ring-orange-300 outline-none bg-white" data-member="3"> 
-           <span class="member-name text-gray-400 font-medium flex-1 text-sm" data-name="3">พิมพ์รหัส 3 ตัวท้ายเพื่อค้นหาชื่อ...</span>
+           <input type="text" maxlength="3" pattern="\d{3}" placeholder="เช่น 004" class="w-28 sm:w-32 px-3 py-2 border border-gray-300 rounded-lg text-center text-base sm:text-lg font-bold tracking-widest focus:ring-2 focus:ring-orange-300 outline-none bg-white shadow-sm shrink-0" data-member="3"> 
+           <span class="member-name text-gray-400 font-medium flex-1 text-sm leading-normal truncate" data-name="3">พิมพ์รหัส 3 ตัวท้ายเพื่อค้นหาชื่อ...</span>
           </div>
          </div>
+
        </div>
 
       </div>
 
-      <button type="button" id="submit-btn" class="mt-6 w-full py-3 bg-orange-500 text-white rounded-xl font-bold text-lg shadow-md hover:bg-orange-600 active:scale-[0.99] transition disabled:opacity-50 flex items-center justify-center gap-2">
+      <button type="button" id="submit-btn" class="mt-6 w-full py-3 bg-orange-500 text-white rounded-xl font-bold text-base sm:text-lg shadow-md hover:bg-orange-600 active:scale-[0.99] transition disabled:opacity-50 flex items-center justify-center gap-2">
        <i data-lucide="user-plus" class="w-5 h-5"></i> ยืนยันการลงทะเบียนกลุ่ม
       </button>
      </section>
@@ -156,7 +178,7 @@
 
   <script>
     const CLIENT_ID = "257299402825-el5mheppr6fnd09mebi7vmgulilqg9ru.apps.googleusercontent.com";
-    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz0cZeP3n6OY5U-Zv5Q8qRyaFqhyAv2HJwx16RaGrPlnh3M9utmgeMvlCT1SuzIcQ/exec";
+    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxrbd9Cs9scjfznfNqUvYjA4T208IijANaPRcw901Kgj0vdxm49ypN4GpSSr7PNgbQ/exec";
     
     const PREFIX = "68010511";
     const ORG_DOMAIN = "msu.ac.th"; 
@@ -232,14 +254,14 @@
                 const name = ROSTER[v];
                 if(name) {
                     nameEl.textContent = name;
-                    nameEl.className = 'member-name text-gray-800 font-semibold flex-1 text-sm';
+                    nameEl.className = 'member-name text-gray-800 font-semibold flex-1 text-sm truncate';
                 } else {
                     nameEl.textContent = '❌ ไม่พบรหัสนิสิตนี้ในระบบ';
-                    nameEl.className = 'member-name text-red-500 font-medium flex-1 text-xs';
+                    nameEl.className = 'member-name text-red-500 font-medium flex-1 text-xs truncate';
                 }
             } else {
                 nameEl.textContent = 'พิมพ์รหัส 3 ตัวท้ายเพื่อค้นหาชื่อ...';
-                nameEl.className = 'member-name text-gray-400 font-medium flex-1 text-sm';
+                nameEl.className = 'member-name text-gray-400 font-medium flex-1 text-sm truncate';
             }
         });
     });
@@ -274,7 +296,7 @@
         return members;
     }
 
-    // ดึงข้อมูลกลุ่มและรายการเลขที่จากเซิร์ฟเวอร์
+    // ดึงข้อมูลกลุ่มและรายการเลขที่
     async function fetchGroups() {
         try {
             document.getElementById('loading-state').classList.remove('hidden');
@@ -294,12 +316,18 @@
         }
     }
 
-    // แสดงตัวเลือกใน Dropdown เลขที่/วันที่ (กรองตัวที่ถูกเลือกไปแล้วออก)
+    // แสดงตัวเลือกใน Dropdown (หากไม่มีวันที่ สามารถลงทะเบียนได้เลย)
     function renderDateDropdown(currentSelectedDate = null) {
         const select = document.getElementById('selected-date');
-        select.innerHTML = '<option value="">-- กรุณากดเลือกเลขที่/วันที่ --</option>';
+        select.innerHTML = '';
 
-        // รวบรวมเลขที่ถูกเลือกไปแล้วโดยกลุ่มอื่น
+        const defaultOpt = document.createElement('option');
+        defaultOpt.value = "";
+        defaultOpt.textContent = availableDates.length === 0 
+            ? "-- ไม่พบรายการวันที่ (สามารถลงทะเบียนได้โดยไม่เลือกวัน) --" 
+            : "-- ไม่เลือก / ระบุภายหลัง --";
+        select.appendChild(defaultOpt);
+
         const takenDates = new Set();
         allGroups.forEach(g => {
             if (g.selected_date && Number(g.group_number) !== Number(editingGroupNum)) {
@@ -327,7 +355,6 @@
         });
     }
 
-    // ป๊อปอัปให้ใครก็สามารถพิมพ์เพิ่มเลขที่/วันที่ใหม่ได้เลย
     async function promptAddNewDate() {
         const val = prompt("กรุณาระบุเลขที่หรือวันที่ต้องการเพิ่ม (เช่น 4 หรือ วันที่ 4):");
         if (!val || !val.trim()) return;
@@ -349,14 +376,12 @@
         }
     }
 
-    // กดปุ่มแก้ไขกลุ่ม
     function editGroup(groupNum) {
         const group = allGroups.find(g => Number(g.group_number) === Number(groupNum));
         if (!group) return;
 
         editingGroupNum = groupNum;
 
-        // ใส่ข้อมูลลงในฟอร์ม
         [group.member1_id, group.member2_id, group.member3_id].forEach((id, index) => {
             const input = document.querySelector(`input[data-member="${index + 1}"]`);
             if (input) {
@@ -367,7 +392,6 @@
 
         renderDateDropdown(group.selected_date);
 
-        // ปรับ UI เข้าสู่โหมดแก้ไข
         document.getElementById('form-title').innerHTML = `<i data-lucide="edit-3" class="w-5 h-5 text-orange-600"></i> แก้ไขข้อมูลกลุ่มที่ ${groupNum}`;
         document.getElementById('cancel-edit-btn').classList.remove('hidden');
         
@@ -383,7 +407,7 @@
         document.querySelectorAll('input[data-member]').forEach(i => i.value = '');
         document.querySelectorAll('.member-name').forEach(s => {
             s.textContent = 'พิมพ์รหัส 3 ตัวท้ายเพื่อค้นหาชื่อ...';
-            s.className = 'member-name text-gray-400 font-medium flex-1 text-sm';
+            s.className = 'member-name text-gray-400 font-medium flex-1 text-sm truncate';
         });
         
         renderDateDropdown();
@@ -396,20 +420,18 @@
         lucide.createIcons();
     }
 
-    // ยืนยันบันทึก / แก้ไขข้อมูล
+    // บันทึกข้อมูลกลุ่ม (ไม่บังคับเลือกวันที่แล้ว)
     const submitBtn = document.getElementById('submit-btn');
     submitBtn.addEventListener('click', async () => {
         if(!currentUser) { showToast('เซสชันหมดอายุ กรุณาล็อกอินใหม่', true); return; }
         
         const selectedDate = document.getElementById('selected-date').value;
-        if (!selectedDate) { showToast('กรุณากดเลือกเลขที่/วันที่สวัสดิการ', true); return; }
 
         const members = getMembers();
         if(members === 'not_enough') { showToast('กรุณากรอกข้อมูลนิสิตอย่างน้อย 2 คน', true); return; }
         if(members === null) { showToast('กรุณากรอกรหัสให้ถูกต้องครบทุกคน', true); return; }
         if(members === 'dup_self') { showToast('กรุณาตรวจสอบ รหัสนิสิตในกลุ่มซ้ำกันเอง', true); return; }
 
-        // เช็กนิสิตซ้ำกลุ่ม (ยกเว้นกลุ่มตัวเองที่กำลังแก้ไข)
         const takenIds = new Set();
         allGroups.forEach(g => {
             if (Number(g.group_number) !== Number(editingGroupNum)) {
@@ -463,7 +485,7 @@
         }
     });
 
-    // แสดงการ์ดรายการกลุ่มทั้งหมด
+    // แสดงการ์ดรายการกลุ่ม ปรับขนาดบรรทัดและระยะห่างให้อยู่ทรงเท่ากันทุกการ์ด
     function renderGroups(data) {
         const list = document.getElementById('groups-list');
         const emptyMsg = document.getElementById('empty-msg');
@@ -479,7 +501,7 @@
 
         data.forEach(g => {
             const card = document.createElement('div');
-            card.className = "bg-white rounded-xl p-4 border border-orange-100 shadow-sm hover:shadow-md transition flex flex-col justify-between";
+            card.className = "bg-white rounded-xl p-4 border border-orange-100 shadow-sm hover:shadow-md transition flex flex-col justify-between h-full";
             
             const membersHtml = [
                 { id: g.member1_id, name: g.member1_name },
@@ -488,21 +510,20 @@
             ]
             .filter(m => m.id)
             .map(m => `
-                <li class="flex items-center gap-2 text-gray-600 bg-orange-50/20 px-2 py-1.5 rounded-lg border border-orange-50">
-                    <span class="text-xs bg-orange-500 text-white font-bold px-1.5 py-0.5 rounded">${String(m.id).slice(-3)}</span>
-                    <span class="text-sm font-medium">${m.name}</span>
+                <li class="flex items-center gap-2 text-gray-700 bg-orange-50/20 px-2.5 py-1.5 rounded-lg border border-orange-50/50">
+                    <span class="text-xs bg-orange-500 text-white font-bold px-1.5 py-0.5 rounded shrink-0">${String(m.id).slice(-3)}</span>
+                    <span class="text-sm font-medium truncate">${m.name}</span>
                 </li>
             `).join('');
 
-            // แสดงปุ่มแก้ไขเฉพาะนิสิตที่เป็นผู้สร้างกลุ่มเท่านั้น
             const isCreator = currentUser && currentUser.email.toLowerCase() === String(g.created_by_email).toLowerCase();
             const editBtnHtml = isCreator 
-                ? `<button onclick="editGroup(${g.group_number})" class="text-xs font-bold text-orange-600 hover:text-orange-800 bg-orange-50 hover:bg-orange-100 border border-orange-200 px-2.5 py-1 rounded-lg flex items-center gap-1 transition">
+                ? `<button onclick="editGroup(${g.group_number})" class="text-xs font-bold text-orange-600 hover:text-orange-800 bg-orange-50 hover:bg-orange-100 border border-orange-200 px-2.5 py-1 rounded-lg flex items-center gap-1 transition shrink-0">
                     <i data-lucide="edit-3" class="w-3.5 h-3.5"></i> แก้ไขข้อมูล
                    </button>`
                 : '';
 
-            const dateLabel = g.selected_date ? g.selected_date : 'ยังไม่เลือก';
+            const dateLabel = g.selected_date ? g.selected_date : 'ไม่ได้ระบุ';
 
             card.innerHTML = `
                 <div>
@@ -515,9 +536,9 @@
                     <ul class="space-y-1.5">${membersHtml}</ul>
                 </div>
 
-                <div class="mt-3 pt-2 border-t border-dashed border-gray-100 flex items-center justify-between">
-                    <span class="text-[10px] text-gray-400 flex items-center gap-1">
-                      <i data-lucide="user" class="w-3 h-3"></i> บันทึกโดย: ${g.created_by_name || 'ไม่ระบุ'}
+                <div class="mt-3 pt-2 border-t border-dashed border-gray-100 flex items-center justify-between min-h-[28px]">
+                    <span class="text-[11px] text-gray-400 flex items-center gap-1 truncate">
+                      <i data-lucide="user" class="w-3 h-3 shrink-0"></i> บันทึกโดย: ${g.created_by_name || 'ไม่ระบุ'}
                     </span>
                     ${editBtnHtml}
                 </div>
