@@ -1,153 +1,245 @@
 <!doctype html>
-<html lang="th">
- <head>
+<html lang="th" class="h-full">
+<head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ระบบลงทะเบียนจัดกลุ่มสวัสดิการหลีด</title>
-  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
-  <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
-  <!-- คลังระบบล็อกอิน Google -->
-  <script src="https://accounts.google.com/gsi/client" async defer></script>
-  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <style>
-        body { font-family: 'Sarabun', sans-serif; }
-        .toast { animation: slideIn 0.3s ease, fadeOut 0.3s ease 2.7s; }
-        @keyframes slideIn { from { transform: translateY(-20px); opacity: 0; } }
-        @keyframes fadeOut { to { opacity: 0; } }
-        .fade-in { animation: fadeIn 0.4s ease forwards; opacity: 0; }
-        @keyframes fadeIn { to { opacity: 1; } }
-  </style>
- </head>
- <body class="min-h-screen w-full bg-orange-50/30 text-gray-800">
 
-  <!-- 1. หน้าจอล็อกอิน (Login Screen) -->
-  <div id="login-screen" class="min-h-screen w-full flex items-center justify-center p-6 bg-orange-50/20">
-    <div class="text-center max-w-md w-full bg-white rounded-2xl p-8 shadow-sm border border-orange-100 fade-in">
-      <div class="mb-6">
-        <div class="w-20 h-20 mx-auto rounded-2xl bg-gradient-to-br from-orange-400 to-amber-500 flex items-center justify-center mb-6 shadow-md shadow-orange-500/20">
-          <i data-lucide="users" class="w-10 h-10 text-white"></i>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <!-- Lucide Icons -->
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
+  <!-- Google Sign-In SDK -->
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+
+  <!-- Google Fonts: Prompt (สำหรับหัวข้อ Gen-Z) & Sarabun (สำหรับเนื้อหา) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;500;600;700&family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Sarabun', 'sans-serif'],
+            display: ['Prompt', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body { font-family: 'Sarabun', sans-serif; }
+    h1, h2, h3, .font-display { font-family: 'Prompt', sans-serif; }
+
+    .glass-card {
+      background: rgba(255, 255, 255, 0.82);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.7);
+    }
+    
+    .toast { animation: slideDown 0.35s cubic-bezier(0.16, 1, 0.3, 1), fadeOut 0.3s ease 2.7s forwards; }
+    @keyframes slideDown { from { transform: translateY(-100%) scale(0.9); opacity: 0; } to { transform: translateY(0) scale(1); opacity: 1; } }
+    @keyframes fadeOut { to { opacity: 0; transform: translateY(-10px); } }
+
+    .fade-in { animation: fadeIn 0.4s ease-out forwards; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 99px; }
+    ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+  </style>
+</head>
+
+<body class="min-h-screen w-full bg-gradient-to-br from-orange-50 via-amber-50/40 to-rose-50/30 text-gray-800 antialiased selection:bg-orange-500 selection:text-white relative overflow-x-hidden">
+
+  <!-- ฉากหลังเรืองแสง Ambient Glass Glow -->
+  <div class="fixed inset-0 pointer-events-none -z-10 overflow-hidden">
+    <div class="absolute -top-32 -right-32 w-96 h-96 bg-gradient-to-br from-orange-300/40 to-amber-400/30 rounded-full blur-3xl"></div>
+    <div class="absolute top-1/3 -left-32 w-96 h-96 bg-gradient-to-tr from-rose-300/30 to-orange-200/40 rounded-full blur-3xl"></div>
+    <div class="absolute -bottom-32 right-1/4 w-96 h-96 bg-gradient-to-tl from-amber-300/30 to-orange-300/20 rounded-full blur-3xl"></div>
+  </div>
+
+  <!-- ================= 1. หน้าจอล็อกอิน (Login Screen) ================= -->
+  <div id="login-screen" class="min-h-screen w-full flex items-center justify-center p-4 sm:p-6">
+    <div class="glass-card max-w-md w-full rounded-3xl p-8 shadow-2xl shadow-orange-500/10 border border-white/80 text-center fade-in relative overflow-hidden">
+      <div class="absolute -top-12 -left-12 w-32 h-32 bg-orange-400/20 rounded-full blur-2xl"></div>
+      
+      <div class="relative z-10">
+        <!-- Logo Badge -->
+        <div class="w-20 h-20 mx-auto rounded-2xl bg-gradient-to-tr from-orange-500 via-amber-500 to-orange-400 flex items-center justify-center mb-6 shadow-xl shadow-orange-500/25 ring-4 ring-white/60">
+          <i data-lucide="sparkles" class="w-10 h-10 text-white animate-pulse"></i>
         </div>
-        <h1 class="text-2xl font-bold text-orange-600 mb-2">ระบบลงทะเบียนจัดกลุ่มสวัสดิการหลีด</h1>
-        <p class="text-gray-500 text-sm mb-6">กรุณาเข้าสู่ระบบด้วยอีเมลมหาวิทยาลัย @msu.ac.th เท่านั้น</p>
-        <div id="buttonDiv" class="mx-auto flex justify-center"></div>
+
+        <h1 class="text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight mb-2">
+          ระบบลงทะเบียนจัดกลุ่ม
+        </h1>
+        <p class="text-xs sm:text-sm font-medium text-orange-600 bg-orange-100/70 py-1 px-3 rounded-full inline-block mb-6 border border-orange-200/50">
+          สวัสดิการหลีด MSU
+        </p>
+        
+        <p class="text-gray-500 text-xs sm:text-sm mb-8 leading-relaxed">
+          กรุณาเข้าสู่ระบบด้วยอีเมลมหาวิทยาลัย<br>
+          <span class="font-semibold text-gray-700 bg-gray-100 px-2 py-0.5 rounded border border-gray-200 text-xs">@msu.ac.th</span> เท่านั้น
+        </p>
+
+        <div id="buttonDiv" class="mx-auto flex justify-center hover:scale-[1.02] transition-transform duration-200"></div>
       </div>
     </div>
   </div>
 
-  <!-- 2. หน้าแอปหลัก (Main App) -->
-  <div id="main-app" class="hidden fade-in">
-    <header class="w-full border-b border-orange-100 bg-white shadow-sm sticky top-0 z-10">
-     <div class="max-w-3xl mx-auto px-4 py-3 sm:py-4 flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-4">
+  <!-- ================= 2. หน้าแอปหลัก (Main App) ================= -->
+  <div id="main-app" class="hidden min-h-screen flex flex-col fade-in">
+    
+    <!-- Navigation Header -->
+    <header class="w-full border-b border-orange-100/80 bg-white/75 backdrop-blur-md sticky top-0 z-30 shadow-sm shadow-orange-500/5">
+      <div class="max-w-4xl mx-auto px-4 py-3 sm:py-3.5 flex items-center justify-between gap-3">
 
-      <div class="flex items-center gap-2.5 sm:gap-3">
-        <div class="flex justify-center items-center gap-1.5 sm:gap-2">
-          <!-- Logo 1 -->
-          <div class="w-11 h-11 sm:w-12 sm:h-12 rounded-full border border-orange-200 shadow-sm bg-white overflow-hidden flex items-center justify-center shrink-0">
-            <img src="https://cdn.phototourl.com/free/2026-07-26-03d91194-60e5-4fff-990a-50c0ba65d268.jpg" 
-                 alt="Logo 1" class="w-full h-full object-cover" 
-                 onerror="this.style.display='none'; this.parentElement.innerHTML='<i data-lucide=\'award\' class=\'w-6 h-6 text-orange-500\'></i>'; lucide.createIcons();">
+        <!-- Logos & Title -->
+        <div class="flex items-center gap-3">
+          <div class="flex items-center -space-x-2 overflow-hidden py-1">
+            <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-full border-2 border-white shadow-md bg-white overflow-hidden shrink-0 ring-2 ring-orange-400/30">
+              <img src="https://cdn.phototourl.com/free/2026-07-26-03d91194-60e5-4fff-990a-50c0ba65d268.jpg" alt="Logo 1" class="w-full h-full object-cover" onerror="this.style.display='none'; this.parentElement.innerHTML='<i data-lucide=\'award\' class=\'w-5 h-5 text-orange-500 m-2.5\'></i>'; lucide.createIcons();">
+            </div>
+            <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-full border-2 border-white shadow-md bg-white overflow-hidden shrink-0 ring-2 ring-amber-400/40 z-10">
+              <img src="https://cdn.phototourl.com/free/2026-07-21-2f1e7db8-94b7-4683-800a-2d2934552f3d.jpg" alt="Logo 2" class="w-full h-full object-cover" onerror="this.style.display='none'; this.parentElement.innerHTML='<i data-lucide=\'star\' class=\'w-5 h-5 text-orange-500 m-2.5\'></i>'; lucide.createIcons();">
+            </div>
+            <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-full border-2 border-white shadow-md bg-white overflow-hidden shrink-0 ring-2 ring-orange-400/30 z-20">
+              <img src="https://cdn.phototourl.com/free/2026-07-26-bd5a4b55-5c3b-4a10-b673-8241fd597c4f.jpg" alt="Logo 3" class="w-full h-full object-cover" onerror="this.style.display='none'; this.parentElement.innerHTML='<i data-lucide=\'heart\' class=\'w-5 h-5 text-orange-500 m-2.5\'></i>'; lucide.createIcons();">
+            </div>
           </div>
 
-          <!-- Logo 2 -->
-          <div class="w-11 h-11 sm:w-12 sm:h-12 rounded-full border-2 border-orange-400 shadow-md bg-white overflow-hidden flex items-center justify-center shrink-0">
-            <img src="https://cdn.phototourl.com/free/2026-07-21-2f1e7db8-94b7-4683-800a-2d2934552f3d.jpg" 
-                 alt="Logo 2" class="w-full h-full object-cover" 
-                 onerror="this.style.display='none'; this.parentElement.innerHTML='<i data-lucide=\'star\' class=\'w-6 h-6 text-orange-500\'></i>'; lucide.createIcons();">
-          </div>
-
-          <!-- Logo 3 -->
-          <div class="w-11 h-11 sm:w-12 sm:h-12 rounded-full border border-orange-200 shadow-sm bg-white overflow-hidden flex items-center justify-center shrink-0">
-            <img src="https://cdn.phototourl.com/free/2026-07-26-bd5a4b55-5c3b-4a10-b673-8241fd597c4f.jpg" 
-                 alt="Logo 3" class="w-full h-full object-cover" 
-                 onerror="this.style.display='none'; this.parentElement.innerHTML='<i data-lucide=\'heart\' class=\'w-6 h-6 text-orange-500\'></i>'; lucide.createIcons();">
+          <div>
+            <h1 class="font-display font-bold text-base sm:text-lg text-gray-900 leading-tight">
+              จัดกลุ่มสวัสดิการหลีด
+            </h1>
+            <p class="text-[11px] text-orange-600 font-medium">ระบบลงทะเบียน (ไม่จำกัดจำนวนคน)</p>
           </div>
         </div>
-        <div class="text-left ml-1">
-          <h1 class="font-bold text-lg sm:text-xl text-orange-600 leading-tight">ระบบลงทะเบียนจัดกลุ่ม</h1>
-          <p class="text-gray-500 text-xs mt-0.5">ระบบลงทะเบียนจัดกลุ่มสวัสดิการหลีด (ไม่จำกัดจำนวนคน)</p>
+
+        <!-- Profile & Logout -->
+        <div class="flex items-center gap-2">
+          <div id="user-display" class="hidden flex items-center gap-2 bg-orange-50/80 hover:bg-orange-100/80 px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-full border border-orange-200/60 transition">
+            <div id="user-avatar" class="w-6 h-6 sm:w-7 sm:h-7 rounded-full overflow-hidden border border-orange-300 shadow-sm bg-white shrink-0"></div>
+            <span id="user-name-display" class="text-gray-800 text-xs font-semibold max-w-[100px] sm:max-w-[140px] truncate"></span>
+          </div>
+
+          <button onclick="handleLogout()" class="p-2 rounded-full text-gray-400 hover:text-red-500 hover:bg-red-50 active:scale-95 transition" title="ออกจากระบบ">
+            <i data-lucide="log-out" class="w-4 h-4"></i>
+          </button>
         </div>
+
       </div>
-
-      <!-- ส่วนโปรไฟล์ผู้ใช้ -->
-      <div class="flex items-center gap-3">
-        <div id="user-display" class="hidden flex items-center gap-2 bg-orange-50 px-3 py-1.5 rounded-full border border-orange-100">
-          <div id="user-avatar" class="w-7 h-7 rounded-full overflow-hidden border border-orange-200 bg-white shrink-0"></div>
-          <span id="user-name-display" class="text-orange-700 text-xs font-semibold max-w-[120px] truncate"></span>
-        </div>
-        <button onclick="handleLogout()" class="text-gray-400 hover:text-red-500 p-2 rounded-xl hover:bg-red-50 transition" title="ออกจากระบบ">
-          <i data-lucide="log-out" class="w-4 h-4"></i>
-        </button>
-      </div>
-
-     </div>
     </header>
 
-    <main class="max-w-3xl mx-auto px-4 py-6 space-y-6">
+    <!-- Main Content -->
+    <main class="max-w-3xl mx-auto px-4 py-6 sm:py-8 space-y-6 sm:space-y-8 w-full flex-1">
 
-     <!-- ฟอร์มลงทะเบียน / แก้ไขกลุ่ม -->
-     <section id="form-section" class="bg-white rounded-2xl p-5 sm:p-6 shadow-sm border border-orange-100 transition-all">
-      <div class="flex justify-between items-center mb-5">
-        <h2 id="form-title" class="font-semibold text-lg text-orange-700 flex items-center gap-2">
-         <i data-lucide="users" class="w-5 h-5"></i> ฟอร์มจัดกลุ่มสมาชิก
-        </h2>
-        <button id="cancel-edit-btn" onclick="cancelEdit()" class="hidden text-xs text-red-500 hover:text-red-700 font-bold bg-red-50 border border-red-200 px-3 py-1.5 rounded-lg flex items-center gap-1 transition">
-          <i data-lucide="x" class="w-3.5 h-3.5"></i> ยกเลิกการแก้ไข
-        </button>
-      </div>
-
-      <div class="space-y-4">
-       <!-- ช่องเลือกเลขที่/วันที่สวัสดิการ -->
-       <div class="bg-orange-50/60 p-4 rounded-xl border border-orange-200/70">
-        <div class="mb-2">
-          <label class="block text-sm font-bold text-gray-700 flex items-center gap-1.5">
-            <i data-lucide="calendar-check" class="w-4 h-4 text-orange-500"></i> เลือกวันที่ / เลขที่สวัสดิการ <span class="text-gray-400 text-xs font-normal">(ไม่เลือกก็ได้)</span>
-          </label>
-        </div>
+      <!-- Form Section Card -->
+      <section id="form-section" class="glass-card rounded-3xl p-5 sm:p-7 shadow-xl shadow-orange-500/5 border border-white/90 relative overflow-hidden transition-all duration-300">
         
-        <select id="selected-date" class="w-full px-3.5 py-2.5 border border-gray-300 rounded-lg text-gray-800 font-semibold focus:ring-2 focus:ring-orange-400 focus:border-orange-400 outline-none bg-white text-sm sm:text-base">
-          <option value="">-- กำลังโหลดรายการเลขที่... --</option>
-        </select>
-        <p class="text-[11px] text-gray-500 mt-1.5">* สามารถเลือกลงทะเบียนกลุ่มโดยไม่ระบุวันที่ได้ทันที</p>
-       </div>
+        <div class="flex items-center justify-between border-b border-orange-100/80 pb-4 mb-5">
+          <h2 id="form-title" class="font-display font-bold text-lg sm:text-xl text-gray-900 flex items-center gap-2.5">
+            <div class="p-2 rounded-xl bg-orange-500 text-white shadow-md shadow-orange-500/20">
+              <i data-lucide="users" class="w-5 h-5"></i>
+            </div>
+            <span>ฟอร์มจัดกลุ่มสมาชิก</span>
+          </h2>
 
-       <!-- ส่วนกรอกสมาชิก (ยืดหยุ่น เพิ่ม/ลบ ได้ไม่จำกัด) -->
-       <div class="space-y-3">
-         <div class="flex justify-between items-center">
-           <label class="block text-sm font-bold text-gray-700">รายชื่อสมาชิกในกลุ่ม</label>
-           <button type="button" onclick="addMemberSlot()" class="text-xs text-orange-600 hover:text-orange-700 font-bold bg-orange-50 hover:bg-orange-100 border border-orange-200 px-3 py-1.5 rounded-lg flex items-center gap-1 transition">
-             <i data-lucide="plus-circle" class="w-3.5 h-3.5"></i> เพิ่มสมาชิก
-           </button>
-         </div>
+          <button id="cancel-edit-btn" onclick="cancelEdit()" class="hidden text-xs font-semibold text-red-600 bg-red-50 hover:bg-red-100 border border-red-200/80 px-3 py-1.5 rounded-xl flex items-center gap-1.5 transition active:scale-95">
+            <i data-lucide="x-circle" class="w-4 h-4"></i> ยกเลิกการแก้ไข
+          </button>
+        </div>
 
-         <div id="member-slots" class="space-y-3">
-           <!-- ช่องสมาชิกจะถูกสร้างที่นี่โดย JS -->
-         </div>
-       </div>
+        <div class="space-y-5">
+          <!-- Date / ID Select -->
+          <div class="bg-gradient-to-r from-orange-50/80 to-amber-50/60 p-4 rounded-2xl border border-orange-100/80 shadow-inner">
+            <label class="block text-xs sm:text-sm font-semibold text-gray-800 mb-2 flex items-center gap-1.5">
+              <i data-lucide="calendar" class="w-4 h-4 text-orange-500"></i>
+              <span>เลือกวันที่ / เลขที่สวัสดิการ</span>
+              <span class="text-gray-400 font-normal text-[11px]">(ไม่เลือกก็ได้)</span>
+            </label>
+            
+            <div class="relative">
+              <select id="selected-date" class="w-full px-4 py-2.5 sm:py-3 border border-orange-200/80 rounded-xl text-gray-800 font-semibold focus:ring-2 focus:ring-orange-400/60 focus:border-orange-400 outline-none bg-white/90 text-xs sm:text-sm shadow-sm transition appearance-none cursor-pointer pr-10">
+                <option value="">-- กำลังโหลดรายการเลขที่... --</option>
+              </select>
+              <div class="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-orange-500">
+                <i data-lucide="chevron-down" class="w-4 h-4"></i>
+              </div>
+            </div>
+            <p class="text-[11px] text-gray-500 mt-2 flex items-center gap-1">
+              <i data-lucide="info" class="w-3.5 h-3.5 text-orange-400 shrink-0"></i>
+              <span>สามารถเลือกลงทะเบียนกลุ่มโดยไม่ระบุวันที่ได้ทันที</span>
+            </p>
+          </div>
 
-      </div>
+          <!-- Dynamic Member Inputs -->
+          <div class="space-y-3">
+            <div class="flex justify-between items-center px-1">
+              <label class="block text-xs sm:text-sm font-bold text-gray-800 font-display">
+                รายชื่อสมาชิกในกลุ่ม
+              </label>
+              <button type="button" onclick="addMemberSlot()" class="text-xs font-semibold text-orange-600 bg-orange-100/70 hover:bg-orange-200/70 border border-orange-200/80 px-3 py-1.5 rounded-xl flex items-center gap-1.5 transition active:scale-95 shadow-sm">
+                <i data-lucide="plus" class="w-3.5 h-3.5"></i> เพิ่มสมาชิก
+              </button>
+            </div>
 
-      <button type="button" id="submit-btn" class="mt-6 w-full py-3 bg-orange-500 text-white rounded-xl font-bold text-base sm:text-lg shadow-md hover:bg-orange-600 active:scale-[0.99] transition disabled:opacity-50 flex items-center justify-center gap-2">
-       <i data-lucide="user-plus" class="w-5 h-5"></i> ยืนยันการลงทะเบียนกลุ่ม
-      </button>
-     </section>
+            <div id="member-slots" class="space-y-3">
+              <!-- Member slots rendered here via JS -->
+            </div>
+          </div>
+        </div>
 
-     <!-- รายชื่อกลุ่มที่ลงทะเบียนแล้ว -->
-     <section>
-      <h2 class="font-semibold text-lg text-gray-700 mb-3 flex items-center gap-2">
-       <i data-lucide="clipboard-list" class="w-5 h-5"></i> รายชื่อกลุ่มที่ลงทะเบียนสำเร็จแล้ว (<span id="group-count">0</span> กลุ่ม)
-      </h2>
-      <div id="loading-state" class="text-center py-8 text-gray-400 bg-white rounded-2xl border border-gray-100 shadow-sm">
-        <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-orange-500 mx-auto mb-2"></div>
-        กำลังโหลดข้อมูลจากฐานข้อมูล...
-      </div>
-      <div id="groups-list" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
-      <p id="empty-msg" class="hidden text-center py-12 text-gray-400 bg-white rounded-2xl border border-dashed border-gray-200">ยังไม่มีการลงทะเบียนกลุ่มในระบบ</p>
-     </section>
+        <!-- Submit Button -->
+        <button type="button" id="submit-btn" class="mt-6 w-full py-3.5 sm:py-4 bg-gradient-to-r from-orange-500 via-amber-500 to-orange-500 hover:from-orange-600 hover:to-amber-600 text-white rounded-2xl font-display font-semibold text-base sm:text-lg shadow-lg shadow-orange-500/25 active:scale-[0.99] transition-all duration-200 disabled:opacity-50 flex items-center justify-center gap-2">
+          <i data-lucide="user-plus" class="w-5 h-5"></i>
+          <span>ยืนยันการลงทะเบียนกลุ่ม</span>
+        </button>
+
+      </section>
+
+      <!-- Registered Groups List Section -->
+      <section class="space-y-4">
+        <div class="flex items-center justify-between px-1">
+          <h2 class="font-display font-bold text-base sm:text-lg text-gray-800 flex items-center gap-2">
+            <i data-lucide="layers" class="w-5 h-5 text-orange-500"></i>
+            <span>กลุ่มที่ลงทะเบียนสำเร็จแล้ว</span>
+            <span id="group-count" class="bg-orange-500 text-white text-xs px-2.5 py-0.5 rounded-full font-sans font-bold shadow-sm shadow-orange-500/30">0</span>
+            <span class="text-xs font-normal text-gray-500">กลุ่ม</span>
+          </h2>
+        </div>
+
+        <!-- Loading Spinner -->
+        <div id="loading-state" class="text-center py-10 text-gray-400 glass-card rounded-2xl border border-white/80 shadow-sm">
+          <div class="animate-spin rounded-full h-8 w-8 border-3 border-orange-500 border-t-transparent mx-auto mb-3"></div>
+          <p class="text-xs font-medium text-gray-500">กำลังโหลดข้อมูลจากฐานข้อมูล...</p>
+        </div>
+
+        <!-- Groups Cards Container -->
+        <div id="groups-list" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
+
+        <!-- Empty State -->
+        <div id="empty-msg" class="hidden text-center py-12 glass-card rounded-2xl border border-dashed border-gray-300/80">
+          <div class="w-12 h-12 mx-auto mb-3 text-gray-300 flex items-center justify-center rounded-full bg-gray-50">
+            <i data-lucide="inbox" class="w-6 h-6"></i>
+          </div>
+          <p class="text-sm font-medium text-gray-400">ยังไม่มีการลงทะเบียนกลุ่มในระบบ</p>
+        </div>
+      </section>
+
     </main>
   </div>
 
-  <div id="toast-container" class="fixed top-4 right-4 z-50 space-y-2"></div>
+  <!-- Toast Notification Container -->
+  <div id="toast-container" class="fixed top-5 right-5 z-50 space-y-2 pointer-events-none"></div>
 
+  <!-- JavaScript Code Section (การทำงานเดิมคงอยู่ครบถ้วน) -->
   <script>
     const CLIENT_ID = "257299402825-el5mheppr6fnd09mebi7vmgulilqg9ru.apps.googleusercontent.com";
     const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxwqKm_IHIjZWJbSJRmFQKrnK-mo8cp3ScUbz6lhUa4yvJjtFw3wj8JCWAmgf_gA9U/exec";
@@ -177,7 +269,6 @@
         { theme: "outline", size: "large", shape: "pill", width: "260" }
       );
       
-      // เริ่มต้นด้วย 4 ช่องเริ่มต้น
       resetMemberSlots(4);
       lucide.createIcons();
     };
@@ -218,7 +309,6 @@
       lucide.createIcons();
     }
 
-    // คำนวณจำนวนครั้งที่นิสิตเคยลงทะเบียนไว้ในระบบ
     function getRegistrationCount(fullId) {
         if (!fullId) return 0;
         let count = 0;
@@ -234,24 +324,24 @@
         return count;
     }
 
-    // เพิ่มช่องกรอกสมาชิก
+    // เพิ่มช่องกรอกสมาชิก (ดีไซน์ใหม่)
     function addMemberSlot(val = '') {
         slotCount++;
         const container = document.getElementById('member-slots');
         const div = document.createElement('div');
-        div.className = "member-slot bg-orange-50/30 p-3.5 rounded-xl border border-orange-100/70 relative";
+        div.className = "member-slot bg-white/70 backdrop-blur-sm p-3.5 rounded-2xl border border-orange-100/90 shadow-sm relative hover:border-orange-200 transition";
         div.setAttribute('id', `slot-${slotCount}`);
         
         div.innerHTML = `
           <div class="flex justify-between items-center mb-1.5">
-            <label class="block text-xs font-semibold text-gray-600">สมาชิกคนที่ ${container.children.length + 1}</label>
-            <button type="button" onclick="removeMemberSlot(${slotCount})" class="remove-btn text-xs text-red-400 hover:text-red-600 flex items-center gap-0.5">
+            <label class="block text-[11px] font-semibold text-gray-500 uppercase tracking-wider">สมาชิกคนที่ ${container.children.length + 1}</label>
+            <button type="button" onclick="removeMemberSlot(${slotCount})" class="remove-btn text-xs text-red-400 hover:text-red-600 flex items-center gap-1 transition p-0.5 rounded-md hover:bg-red-50">
               <i data-lucide="trash-2" class="w-3.5 h-3.5"></i> ลบ
             </button>
           </div>
-          <div class="flex gap-3 items-center">
-           <input type="text" maxlength="3" pattern="\\d{3}" placeholder="เช่น 001" value="${val}" class="w-28 sm:w-32 px-3 py-2 border border-gray-300 rounded-lg text-center text-base sm:text-lg font-bold tracking-widest focus:ring-2 focus:ring-orange-400 outline-none bg-white shadow-sm shrink-0" data-slot="${slotCount}"> 
-           <span class="member-name text-gray-400 font-medium flex-1 text-sm leading-normal truncate" data-name-slot="${slotCount}">พิมพ์รหัส 3 ตัวท้ายเพื่อค้นหาชื่อ...</span>
+          <div class="flex gap-2.5 items-center">
+           <input type="text" maxlength="3" pattern="\\d{3}" placeholder="001" value="${val}" class="w-24 sm:w-28 px-3 py-2 border border-orange-200/80 rounded-xl text-center text-base sm:text-lg font-bold tracking-widest text-orange-600 focus:ring-2 focus:ring-orange-400 outline-none bg-white shadow-inner shrink-0 transition" data-slot="${slotCount}"> 
+           <span class="member-name text-gray-400 font-medium flex-1 text-xs sm:text-sm leading-normal truncate" data-name-slot="${slotCount}">พิมพ์รหัส 3 ตัวท้ายเพื่อค้นหาชื่อ...</span>
           </div>
         `;
         
@@ -299,18 +389,18 @@
                     const fullId = PREFIX + v;
                     const count = getRegistrationCount(fullId);
                     const countText = count > 0 
-                        ? `<span class="ml-1 text-xs text-amber-600 bg-amber-100/80 px-2 py-0.5 rounded-full font-bold">ลงซ้ำไปแล้ว ${count} ครั้ง</span>`
-                        : `<span class="ml-1 text-xs text-green-600 bg-green-100/80 px-2 py-0.5 rounded-full font-semibold">ยังไม่เคยลงทะเบียน</span>`;
+                        ? `<span class="text-[10px] text-amber-700 bg-amber-100/90 border border-amber-200 px-2 py-0.5 rounded-full font-bold shadow-2xl">ลงซ้ำไปแล้ว ${count} ครั้ง</span>`
+                        : `<span class="text-[10px] text-emerald-700 bg-emerald-100/90 border border-emerald-200 px-2 py-0.5 rounded-full font-semibold">ยังไม่เคยลงทะเบียน</span>`;
                         
-                    nameEl.innerHTML = `${name} ${countText}`;
-                    nameEl.className = 'member-name text-gray-800 font-semibold flex-1 text-sm truncate flex items-center flex-wrap gap-1';
+                    nameEl.innerHTML = `<span class="font-semibold text-gray-800">${name}</span> ${countText}`;
+                    nameEl.className = 'member-name flex-1 text-xs sm:text-sm truncate flex items-center flex-wrap gap-1.5';
                 } else {
                     nameEl.textContent = '❌ ไม่พบรหัสนิสิตนี้ในระบบ';
                     nameEl.className = 'member-name text-red-500 font-medium flex-1 text-xs truncate';
                 }
             } else {
                 nameEl.textContent = 'พิมพ์รหัส 3 ตัวท้ายเพื่อค้นหาชื่อ...';
-                nameEl.className = 'member-name text-gray-400 font-medium flex-1 text-sm truncate';
+                nameEl.className = 'member-name text-gray-400 font-medium flex-1 text-xs sm:text-sm truncate';
             }
         });
     }
@@ -326,18 +416,16 @@
     function showToast(msg, isError) {
         const c = document.getElementById('toast-container');
         const t = document.createElement('div');
-        t.className = `toast px-4 py-3 rounded-xl shadow-md text-sm font-semibold text-white flex items-center gap-2 ${isError ? 'bg-red-500' : 'bg-orange-500'}`;
-        t.innerHTML = `<i data-lucide="${isError ? 'alert-circle' : 'check-circle'}" class="w-4 h-4"></i> ${msg}`;
+        t.className = `toast px-4 py-3 rounded-2xl shadow-xl text-xs sm:text-sm font-semibold text-white flex items-center gap-2 pointer-events-auto border backdrop-blur-md ${isError ? 'bg-red-500/95 border-red-400/50 shadow-red-500/20' : 'bg-orange-500/95 border-orange-400/50 shadow-orange-500/20'}`;
+        t.innerHTML = `<i data-lucide="${isError ? 'alert-circle' : 'check-circle-2'}" class="w-4 h-4 shrink-0"></i> <span>${msg}</span>`;
         c.appendChild(t);
         lucide.createIcons();
         setTimeout(() => t.remove(), 3000);
     }
 
-    // ดึงรายชื่อสมาชิกในฟอร์ม (ลงกี่คนก็ได้ แต่ต้องมีอย่างน้อย 1 คนที่ไม่ว่าง)
     function getMembers() {
         const members = [];
         const inputs = document.querySelectorAll('#member-slots input');
-        
         let hasInvalid = false;
 
         inputs.forEach(input => {
@@ -357,7 +445,6 @@
         return members;
     }
 
-    // ดึงข้อมูลกลุ่มและรายการเลขที่
     async function fetchGroups() {
         try {
             document.getElementById('loading-state').classList.remove('hidden');
@@ -369,7 +456,6 @@
                 renderDateDropdown();
                 renderGroups(allGroups);
                 
-                // รีเฟรชสถานะจำนวนครั้งในฟอร์มปัจจุบัน
                 document.querySelectorAll('#member-slots input').forEach(input => {
                     if(input.value.length === 3) input.dispatchEvent(new Event('input'));
                 });
@@ -382,7 +468,6 @@
         }
     }
 
-    // แสดงตัวเลือกใน Dropdown
     function renderDateDropdown(currentSelectedDate = null) {
         const select = document.getElementById('selected-date');
         select.innerHTML = '';
@@ -442,11 +527,16 @@
 
         renderDateDropdown(group.selected_date);
 
-        document.getElementById('form-title').innerHTML = `<i data-lucide="edit-3" class="w-5 h-5 text-orange-600"></i> แก้ไขข้อมูลกลุ่มที่ ${groupNum}`;
+        document.getElementById('form-title').innerHTML = `
+          <div class="p-2 rounded-xl bg-amber-500 text-white shadow-md shadow-amber-500/20">
+            <i data-lucide="edit-3" class="w-5 h-5"></i>
+          </div>
+          <span>แก้ไขข้อมูลกลุ่มที่ ${groupNum}</span>
+        `;
         document.getElementById('cancel-edit-btn').classList.remove('hidden');
         
         const submitBtn = document.getElementById('submit-btn');
-        submitBtn.innerHTML = `<i data-lucide="check-circle" class="w-5 h-5"></i> บันทึกการแก้ไขกลุ่มที่ ${groupNum}`;
+        submitBtn.innerHTML = `<i data-lucide="check-circle-2" class="w-5 h-5"></i> <span>บันทึกการแก้ไขกลุ่มที่ ${groupNum}</span>`;
         
         document.getElementById('form-section').scrollIntoView({ behavior: 'smooth' });
         lucide.createIcons();
@@ -457,15 +547,19 @@
         resetMemberSlots(4);
         renderDateDropdown();
 
-        document.getElementById('form-title').innerHTML = `<i data-lucide="users" class="w-5 h-5"></i> ฟอร์มจัดกลุ่มสมาชิก`;
+        document.getElementById('form-title').innerHTML = `
+          <div class="p-2 rounded-xl bg-orange-500 text-white shadow-md shadow-orange-500/20">
+            <i data-lucide="users" class="w-5 h-5"></i>
+          </div>
+          <span>ฟอร์มจัดกลุ่มสมาชิก</span>
+        `;
         document.getElementById('cancel-edit-btn').classList.add('hidden');
         
         const submitBtn = document.getElementById('submit-btn');
-        submitBtn.innerHTML = `<i data-lucide="user-plus" class="w-5 h-5"></i> ยืนยันการลงทะเบียนกลุ่ม`;
+        submitBtn.innerHTML = `<i data-lucide="user-plus" class="w-5 h-5"></i> <span>ยืนยันการลงทะเบียนกลุ่ม</span>`;
         lucide.createIcons();
     }
 
-    // บันทึกข้อมูลกลุ่ม
     const submitBtn = document.getElementById('submit-btn');
     submitBtn.addEventListener('click', async () => {
         if(!currentUser) { showToast('เซสชันหมดอายุ กรุณาล็อกอินใหม่', true); return; }
@@ -477,7 +571,7 @@
         if(members === 'invalid_id') { showToast('มีรหัสนิสิตไม่ถูกต้อง หรือระบุรหัสไม่ครบ 3 หลัก', true); return; }
 
         submitBtn.disabled = true;
-        submitBtn.innerHTML = `<div class="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div> กำลังบันทึกข้อมูล...`;
+        submitBtn.innerHTML = `<div class="animate-spin rounded-full h-5 w-5 border-2 border-white border-t-transparent"></div> <span>กำลังบันทึกข้อมูล...</span>`;
         
         const isUpdate = editingGroupNum !== null;
         
@@ -519,7 +613,7 @@
         }
     });
 
-    // แสดงการ์ดรายการกลุ่ม
+    // แสดงการ์ดกลุ่ม (ดีไซน์ใหม่)
     function renderGroups(data) {
         const list = document.getElementById('groups-list');
         const emptyMsg = document.getElementById('empty-msg');
@@ -535,7 +629,7 @@
 
         data.forEach(g => {
             const card = document.createElement('div');
-            card.className = "bg-white rounded-xl p-4 border border-orange-100 shadow-sm hover:shadow-md transition flex flex-col justify-between h-full";
+            card.className = "glass-card rounded-2xl p-4 sm:p-5 border border-white/90 shadow-md hover:shadow-xl hover:-translate-y-0.5 transition-all duration-200 flex flex-col justify-between h-full";
             
             const membersHtml = [
                 { id: g.member1_id, name: g.member1_name },
@@ -547,14 +641,14 @@
             .map(m => {
                 const count = getRegistrationCount(m.id);
                 const repeatBadge = count > 1 
-                    ? `<span class="text-[10px] bg-amber-100 text-amber-700 font-bold px-1.5 py-0.5 rounded-full shrink-0">ลงแล้ว ${count} ครั้ง</span>`
-                    : `<span class="text-[10px] bg-emerald-100 text-emerald-700 font-medium px-1.5 py-0.5 rounded-full shrink-0">ลง 1 ครั้ง</span>`;
+                    ? `<span class="text-[10px] bg-amber-100 text-amber-700 font-bold px-2 py-0.5 rounded-full shrink-0 border border-amber-200/80">ลงแล้ว ${count} ครั้ง</span>`
+                    : `<span class="text-[10px] bg-emerald-100 text-emerald-700 font-medium px-2 py-0.5 rounded-full shrink-0 border border-emerald-200/80">ลง 1 ครั้ง</span>`;
 
                 return `
-                <li class="flex items-center justify-between gap-2 text-gray-700 bg-orange-50/20 px-2.5 py-1.5 rounded-lg border border-orange-50/50">
+                <li class="flex items-center justify-between gap-2 text-gray-800 bg-white/60 hover:bg-white px-3 py-2 rounded-xl border border-orange-100/60 shadow-2xl transition">
                     <div class="flex items-center gap-2 truncate">
-                      <span class="text-xs bg-orange-500 text-white font-bold px-1.5 py-0.5 rounded shrink-0">${String(m.id).slice(-3)}</span>
-                      <span class="text-sm font-medium truncate">${m.name}</span>
+                      <span class="text-xs bg-gradient-to-r from-orange-500 to-amber-500 text-white font-bold px-2 py-0.5 rounded-lg shrink-0 shadow-sm shadow-orange-500/20">${String(m.id).slice(-3)}</span>
+                      <span class="text-xs sm:text-sm font-medium truncate">${m.name}</span>
                     </div>
                     ${repeatBadge}
                 </li>
@@ -563,8 +657,8 @@
 
             const isCreator = currentUser && currentUser.email.toLowerCase() === String(g.created_by_email).toLowerCase();
             const editBtnHtml = isCreator 
-                ? `<button onclick="editGroup(${g.group_number})" class="text-xs font-bold text-orange-600 hover:text-orange-800 bg-orange-50 hover:bg-orange-100 border border-orange-200 px-2.5 py-1 rounded-lg flex items-center gap-1 transition shrink-0">
-                    <i data-lucide="edit-3" class="w-3.5 h-3.5"></i> แก้ไขข้อมูล
+                ? `<button onclick="editGroup(${g.group_number})" class="text-xs font-semibold text-orange-600 hover:text-orange-700 bg-orange-50 hover:bg-orange-100 border border-orange-200/80 px-2.5 py-1 rounded-xl flex items-center gap-1 transition shrink-0 active:scale-95">
+                    <i data-lucide="edit-3" class="w-3.5 h-3.5"></i> แก้ไข
                    </button>`
                 : '';
 
@@ -572,18 +666,18 @@
 
             card.innerHTML = `
                 <div>
-                    <div class="flex justify-between items-center border-b border-orange-50 pb-2 mb-3">
-                        <span class="bg-orange-100 text-orange-700 text-xs font-bold px-2.5 py-1 rounded-full">กลุ่มที่ ${g.group_number}</span>
-                        <span class="text-xs font-bold text-amber-700 bg-amber-50 px-2.5 py-1 rounded-md border border-amber-200/60 flex items-center gap-1">
-                          <i data-lucide="tag" class="w-3 h-3 text-amber-500"></i> ${dateLabel}
+                    <div class="flex justify-between items-center border-b border-orange-100/80 pb-3 mb-3">
+                        <span class="bg-gradient-to-r from-orange-100 to-amber-100 text-orange-800 text-xs font-bold px-3 py-1 rounded-full border border-orange-200/60 font-display">กลุ่มที่ ${g.group_number}</span>
+                        <span class="text-xs font-bold text-amber-800 bg-amber-50/90 px-2.5 py-1 rounded-lg border border-amber-200/70 flex items-center gap-1">
+                          <i data-lucide="tag" class="w-3.5 h-3.5 text-amber-500"></i> ${dateLabel}
                         </span>
                     </div>
-                    <ul class="space-y-1.5">${membersHtml}</ul>
+                    <ul class="space-y-2">${membersHtml}</ul>
                 </div>
 
-                <div class="mt-3 pt-2 border-t border-dashed border-gray-100 flex items-center justify-between min-h-[28px]">
+                <div class="mt-4 pt-3 border-t border-dashed border-gray-200/80 flex items-center justify-between min-h-[30px]">
                     <span class="text-[11px] text-gray-400 flex items-center gap-1 truncate">
-                      <i data-lucide="user" class="w-3 h-3 shrink-0"></i> บันทึกโดย: ${g.created_by_name || 'ไม่ระบุ'}
+                      <i data-lucide="user" class="w-3 h-3 shrink-0 text-orange-400"></i> บันทึกโดย: ${g.created_by_name || 'ไม่ระบุ'}
                     </span>
                     ${editBtnHtml}
                 </div>
@@ -594,5 +688,5 @@
     }
   </script>
 
- </body>
+</body>
 </html>
