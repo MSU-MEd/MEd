@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="th">
- <head>
+<head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ระบบลงทะเบียนจัดกลุ่มสวัสดิการหลีด</title>
@@ -17,8 +17,8 @@
         .fade-in { animation: fadeIn 0.4s ease forwards; opacity: 0; }
         @keyframes fadeIn { to { opacity: 1; } }
   </style>
- </head>
- <body class="min-h-screen w-full bg-orange-50/30 text-gray-800">
+</head>
+<body class="min-h-screen w-full bg-orange-50/30 text-gray-800">
 
   <!-- 1. หน้าจอล็อกอิน (Login Screen) -->
   <div id="login-screen" class="min-h-screen w-full flex items-center justify-center p-6 bg-orange-50/20">
@@ -96,8 +96,8 @@
       </div>
 
       <div class="space-y-4">
-       <!-- ช่องเลือกเลขที่/วันที่สวัสดิการ -->
-       <div class="bg-orange-50/60 p-4 rounded-xl border border-orange-200/70">
+        <!-- ช่องเลือกเลขที่/วันที่สวัสดิการ -->
+        <div class="bg-orange-50/60 p-4 rounded-xl border border-orange-200/70">
         <div class="mb-2">
           <label class="block text-sm font-bold text-gray-700 flex items-center gap-1.5">
             <i data-lucide="calendar-check" class="w-4 h-4 text-orange-500"></i> เลือกวันที่ / เลขที่สวัสดิการ <span class="text-gray-400 text-xs font-normal">(ไม่เลือกก็ได้)</span>
@@ -110,8 +110,8 @@
         <p class="text-[11px] text-gray-500 mt-1.5">* สามารถเลือกลงทะเบียนกลุ่มโดยไม่ระบุวันที่ได้ทันที</p>
        </div>
 
-       <!-- ส่วนกรอกสมาชิก (ยืดหยุ่น เพิ่ม/ลบ ได้ไม่จำกัด) -->
-       <div class="space-y-3">
+        <!-- ส่วนกรอกสมาชิก (ยืดหยุ่น เพิ่ม/ลบ ได้ไม่จำกัด) -->
+        <div class="space-y-3">
          <div class="flex justify-between items-center">
            <label class="block text-sm font-bold text-gray-700">รายชื่อสมาชิกในกลุ่ม</label>
            <button type="button" onclick="addMemberSlot()" class="text-xs text-orange-600 hover:text-orange-700 font-bold bg-orange-50 hover:bg-orange-100 border border-orange-200 px-3 py-1.5 rounded-lg flex items-center gap-1 transition">
@@ -122,7 +122,7 @@
          <div id="member-slots" class="space-y-3">
            <!-- ช่องสมาชิกจะถูกสร้างที่นี่โดย JS -->
          </div>
-       </div>
+        </div>
 
       </div>
 
@@ -150,8 +150,13 @@
 
   <script>
     const CLIENT_ID = "257299402825-el5mheppr6fnd09mebi7vmgulilqg9ru.apps.googleusercontent.com";
-    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxwqKm_IHIjZWJbSJRmFQKrnK-mo8cp3ScUbz6lhUa4yvJjtFw3wj8JCWAmgf_gA9U/exec";
+    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxk5BsQpKaD7-WhCZp3Qr3nVWA73wPaok0dEpWyYyctC5bRF4z0puxhWHB72Wg_0OM/exec";
     
+    // รายชื่ออีเมลของเจ้าหน้าที่ (Admin) ที่มีสิทธิ์กดยืนยันการรับสวัสดิการ
+    const ADMIN_EMAILS = [
+        "punyaphat.e@msu.ac.th" // เพิ่มหรือแก้ไขอีเมลเจ้าหน้าที่ที่นี่
+    ];
+
     const PREFIX = "68010511";
     const ORG_DOMAIN = "msu.ac.th"; 
     
@@ -177,7 +182,6 @@
         { theme: "outline", size: "large", shape: "pill", width: "260" }
       );
       
-      // เริ่มต้นด้วย 4 ช่องเริ่มต้น
       resetMemberSlots(4);
       lucide.createIcons();
     };
@@ -218,23 +222,24 @@
       lucide.createIcons();
     }
 
-    // คำนวณจำนวนครั้งที่นิสิตเคยลงทะเบียนไว้ในระบบ
+    // คำนวณจำนวนครั้งที่นิสิตเคยลงทะเบียน (นับเฉพาะครั้งที่เจ้าหน้าที่กดยืนยันแล้วเท่านั้น)
     function getRegistrationCount(fullId) {
         if (!fullId) return 0;
         let count = 0;
         allGroups.forEach(g => {
-            Object.keys(g).forEach(key => {
-                if (key.startsWith('member') && key.endsWith('_id')) {
-                    if (String(g[key]).trim() === String(fullId).trim()) {
-                        count++;
+            if (g.is_completed) { // กรองนับเฉพาะที่เจ้าหน้าที่กดยืนยันแล้ว
+                Object.keys(g).forEach(key => {
+                    if (key.startsWith('member') && key.endsWith('_id')) {
+                        if (String(g[key]).trim() === String(fullId).trim()) {
+                            count++;
+                        }
                     }
-                }
-            });
+                });
+            }
         });
         return count;
     }
 
-    // เพิ่มช่องกรอกสมาชิก
     function addMemberSlot(val = '') {
         slotCount++;
         const container = document.getElementById('member-slots');
@@ -299,8 +304,8 @@
                     const fullId = PREFIX + v;
                     const count = getRegistrationCount(fullId);
                     const countText = count > 0 
-                        ? `<span class="ml-1 text-xs text-amber-600 bg-amber-100/80 px-2 py-0.5 rounded-full font-bold">ลงซ้ำไปแล้ว ${count} ครั้ง</span>`
-                        : `<span class="ml-1 text-xs text-green-600 bg-green-100/80 px-2 py-0.5 rounded-full font-semibold">ยังไม่เคยลงทะเบียน</span>`;
+                        ? `<span class="ml-1 text-xs text-amber-600 bg-amber-100/80 px-2 py-0.5 rounded-full font-bold">รับสวัสดิการแล้ว ${count} ครั้ง</span>`
+                        : `<span class="ml-1 text-xs text-green-600 bg-green-100/80 px-2 py-0.5 rounded-full font-semibold">ยังไม่เคยรับสวัสดิการ</span>`;
                         
                     nameEl.innerHTML = `${name} ${countText}`;
                     nameEl.className = 'member-name text-gray-800 font-semibold flex-1 text-sm truncate flex items-center flex-wrap gap-1';
@@ -333,7 +338,6 @@
         setTimeout(() => t.remove(), 3000);
     }
 
-    // ดึงรายชื่อสมาชิกในฟอร์ม (ลงกี่คนก็ได้ แต่ต้องมีอย่างน้อย 1 คนที่ไม่ว่าง)
     function getMembers() {
         const members = [];
         const inputs = document.querySelectorAll('#member-slots input');
@@ -357,7 +361,6 @@
         return members;
     }
 
-    // ดึงข้อมูลกลุ่มและรายการเลขที่
     async function fetchGroups() {
         try {
             document.getElementById('loading-state').classList.remove('hidden');
@@ -369,7 +372,6 @@
                 renderDateDropdown();
                 renderGroups(allGroups);
                 
-                // รีเฟรชสถานะจำนวนครั้งในฟอร์มปัจจุบัน
                 document.querySelectorAll('#member-slots input').forEach(input => {
                     if(input.value.length === 3) input.dispatchEvent(new Event('input'));
                 });
@@ -382,7 +384,6 @@
         }
     }
 
-    // แสดงตัวเลือกใน Dropdown
     function renderDateDropdown(currentSelectedDate = null) {
         const select = document.getElementById('selected-date');
         select.innerHTML = '';
@@ -465,7 +466,29 @@
         lucide.createIcons();
     }
 
-    // บันทึกข้อมูลกลุ่ม
+    // ฟังก์ชันส่งคำขอสลับสถานะยืนยันสำหรับเจ้าหน้าที่
+    async function toggleCompleteGroup(groupNum) {
+        if (!currentUser) return;
+        try {
+            const response = await fetch(GOOGLE_SCRIPT_URL, {
+                method: 'POST',
+                body: JSON.stringify({
+                    action: 'toggle_complete',
+                    group_number: groupNum
+                })
+            });
+            const res = await response.json();
+            if (res.isOk) {
+                showToast('อัปเดตสถานะการรับสวัสดิการเรียบร้อย', false);
+                await fetchGroups();
+            } else {
+                showToast(res.error || 'ไม่สามารถเปลี่ยนสถานะได้', true);
+            }
+        } catch (e) {
+            showToast('เกิดข้อผิดพลาดในการเชื่อมต่อ', true);
+        }
+    }
+
     const submitBtn = document.getElementById('submit-btn');
     submitBtn.addEventListener('click', async () => {
         if(!currentUser) { showToast('เซสชันหมดอายุ กรุณาล็อกอินใหม่', true); return; }
@@ -519,7 +542,6 @@
         }
     });
 
-    // แสดงการ์ดรายการกลุ่ม
     function renderGroups(data) {
         const list = document.getElementById('groups-list');
         const emptyMsg = document.getElementById('empty-msg');
@@ -533,9 +555,12 @@
         }
         emptyMsg.classList.add('hidden');
 
+        const isAdmin = currentUser && ADMIN_EMAILS.map(e => e.toLowerCase().trim()).includes(currentUser.email.toLowerCase().trim());
+
         data.forEach(g => {
             const card = document.createElement('div');
-            card.className = "bg-white rounded-xl p-4 border border-orange-100 shadow-sm hover:shadow-md transition flex flex-col justify-between h-full";
+            const isDone = g.is_completed;
+            card.className = `bg-white rounded-xl p-4 border ${isDone ? 'border-green-200 bg-green-50/10' : 'border-orange-100'} shadow-sm hover:shadow-md transition flex flex-col justify-between h-full relative overflow-hidden`;
             
             const membersHtml = [
                 { id: g.member1_id, name: g.member1_name },
@@ -546,9 +571,9 @@
             .filter(m => m.id)
             .map(m => {
                 const count = getRegistrationCount(m.id);
-                const repeatBadge = count > 1 
-                    ? `<span class="text-[10px] bg-amber-100 text-amber-700 font-bold px-1.5 py-0.5 rounded-full shrink-0">ลงแล้ว ${count} ครั้ง</span>`
-                    : `<span class="text-[10px] bg-emerald-100 text-emerald-700 font-medium px-1.5 py-0.5 rounded-full shrink-0">ลง 1 ครั้ง</span>`;
+                const repeatBadge = count > 0 
+                    ? `<span class="text-[10px] bg-amber-100 text-amber-700 font-bold px-1.5 py-0.5 rounded-full shrink-0">รับจริงแล้ว ${count} ครั้ง</span>`
+                    : `<span class="text-[10px] bg-gray-100 text-gray-600 font-medium px-1.5 py-0.5 rounded-full shrink-0">ยังไม่เคยรับสวัสดิการ</span>`;
 
                 return `
                 <li class="flex items-center justify-between gap-2 text-gray-700 bg-orange-50/20 px-2.5 py-1.5 rounded-lg border border-orange-50/50">
@@ -568,12 +593,29 @@
                    </button>`
                 : '';
 
+            let adminBtnHtml = '';
+            if (isAdmin) {
+                adminBtnHtml = isDone
+                    ? `<button onclick="toggleCompleteGroup(${g.group_number})" class="text-xs font-bold text-green-700 bg-green-100 hover:bg-green-200 border border-green-300 px-2.5 py-1 rounded-lg flex items-center gap-1 transition">
+                        <i data-lucide="check-circle-2" class="w-3.5 h-3.5"></i> รับสวัสดิการแล้ว (คลิกยกเลิก)
+                       </button>`
+                    : `<button onclick="toggleCompleteGroup(${g.group_number})" class="text-xs font-bold text-gray-600 bg-gray-100 hover:bg-orange-500 hover:text-white border border-gray-300 px-2.5 py-1 rounded-lg flex items-center gap-1 transition">
+                        <i data-lucide="clock" class="w-3.5 h-3.5"></i> ยืนยันการรับสวัสดิการ
+                       </button>`;
+            }
+
             const dateLabel = g.selected_date ? g.selected_date : 'ไม่ได้ระบุ';
+            const statusBadge = isDone 
+                ? `<span class="text-[11px] font-bold text-green-600 bg-green-100 px-2 py-0.5 rounded-full border border-green-200 flex items-center gap-1"><i data-lucide="check" class="w-3 h-3"></i> ดำเนินการเสร็จสิ้น</span>`
+                : `<span class="text-[11px] font-medium text-amber-600 bg-amber-50 px-2 py-0.5 rounded-full border border-amber-200">รอการยืนยัน</span>`;
 
             card.innerHTML = `
                 <div>
                     <div class="flex justify-between items-center border-b border-orange-50 pb-2 mb-3">
-                        <span class="bg-orange-100 text-orange-700 text-xs font-bold px-2.5 py-1 rounded-full">กลุ่มที่ ${g.group_number}</span>
+                        <div class="flex items-center gap-1.5">
+                            <span class="bg-orange-100 text-orange-700 text-xs font-bold px-2.5 py-1 rounded-full">กลุ่มที่ ${g.group_number}</span>
+                            ${statusBadge}
+                        </div>
                         <span class="text-xs font-bold text-amber-700 bg-amber-50 px-2.5 py-1 rounded-md border border-amber-200/60 flex items-center gap-1">
                           <i data-lucide="tag" class="w-3 h-3 text-amber-500"></i> ${dateLabel}
                         </span>
@@ -581,11 +623,14 @@
                     <ul class="space-y-1.5">${membersHtml}</ul>
                 </div>
 
-                <div class="mt-3 pt-2 border-t border-dashed border-gray-100 flex items-center justify-between min-h-[28px]">
-                    <span class="text-[11px] text-gray-400 flex items-center gap-1 truncate">
-                      <i data-lucide="user" class="w-3 h-3 shrink-0"></i> บันทึกโดย: ${g.created_by_name || 'ไม่ระบุ'}
-                    </span>
-                    ${editBtnHtml}
+                <div class="mt-3 pt-2 border-t border-dashed border-gray-100 flex flex-col gap-2">
+                    <div class="flex items-center justify-between min-h-[28px]">
+                        <span class="text-[11px] text-gray-400 flex items-center gap-1 truncate">
+                          <i data-lucide="user" class="w-3 h-3 shrink-0"></i> บันทึกโดย: ${g.created_by_name || 'ไม่ระบุ'}
+                        </span>
+                        ${editBtnHtml}
+                    </div>
+                    ${isAdmin ? `<div class="flex justify-end pt-1 border-t border-gray-100">${adminBtnHtml}</div>` : ''}
                 </div>
             `;
             list.appendChild(card);
@@ -594,5 +639,5 @@
     }
   </script>
 
- </body>
+</body>
 </html>
