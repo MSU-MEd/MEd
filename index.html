@@ -15,7 +15,7 @@
 
   <style>
     body {
-      font-family: 'Sarabun', sans-serif;
+      font-family: "Sarabun", sans-serif;
     }
 
     button, select, input {
@@ -28,11 +28,7 @@
     }
 
     section {
-      scroll-margin-top: 110px;
-    }
-
-    .fade-in {
-      animation: fadeIn .3s ease;
+      scroll-margin-top: 150px;
     }
 
     .toast {
@@ -77,10 +73,7 @@
 
       <div id="buttonDiv" class="flex justify-center"></div>
 
-      <p
-        id="login-error"
-        class="text-sm text-red-500 mt-4">
-      </p>
+      <p id="login-error" class="text-sm text-red-500 mt-4"></p>
     </div>
   </div>
 
@@ -126,7 +119,6 @@
         </div>
 
         <div class="flex items-center gap-2 ml-auto">
-
           <div class="flex items-center gap-2 rounded-full
                       bg-orange-50 px-3 py-1.5">
 
@@ -157,22 +149,127 @@
 
     <main class="max-w-4xl mx-auto px-4 py-5 space-y-5">
 
-      <!-- 1. รายชื่อกลุ่มที่ลงทะเบียน อยู่ด้านบน -->
+      <!-- 1. ฟอร์มลงทะเบียน อยู่บนสุด -->
+      <section
+        id="form-section"
+        class="bg-white rounded-2xl p-5 sm:p-6
+               border border-orange-100 shadow-sm">
+
+        <div class="flex flex-wrap justify-between items-center gap-3 mb-5">
+          <h2
+            id="form-title"
+            class="font-bold text-lg text-orange-700">
+            ลงทะเบียนกลุ่ม
+          </h2>
+
+          <button
+            type="button"
+            id="cancel-edit-btn"
+            onclick="cancelEdit()"
+            class="hidden text-xs font-bold text-red-600 bg-red-50
+                   border border-red-100 px-3 py-2 rounded-xl">
+            ยกเลิกการแก้ไข
+          </button>
+        </div>
+
+        <fieldset id="form-fields" class="space-y-4" disabled>
+
+          <div class="bg-orange-50/60 p-4 rounded-xl border border-orange-100">
+            <label
+              for="selected-date"
+              class="block text-sm font-bold mb-2">
+              เลือกวันที่ / เลขที่สวัสดิการ
+            </label>
+
+            <select
+              id="selected-date"
+              class="w-full p-3 border border-gray-200 rounded-xl
+                     bg-white text-sm outline-none
+                     focus:ring-2 focus:ring-orange-300">
+              <option value="">-- กำลังโหลดรายการ --</option>
+            </select>
+
+            <p class="text-xs text-gray-500 mt-2">
+              ยังไม่เลือกวันก็ลงทะเบียนได้
+            </p>
+          </div>
+
+          <div class="flex items-center justify-between gap-3">
+            <div>
+              <p class="text-sm font-bold">สมาชิกในกลุ่ม</p>
+              <p class="text-xs text-gray-400 mt-1">
+                รองรับ 1–4 คนต่อกลุ่ม
+              </p>
+            </div>
+
+            <button
+              type="button"
+              id="add-member-btn"
+              onclick="addMemberSlot()"
+              class="text-xs font-bold text-orange-600 bg-orange-50
+                     border border-orange-200 px-3 py-2 rounded-xl">
+              + เพิ่มสมาชิก
+            </button>
+          </div>
+
+          <div id="member-slots" class="space-y-3"></div>
+        </fieldset>
+
+        <button
+          type="button"
+          id="submit-btn"
+          onclick="submitGroup()"
+          class="mt-5 w-full py-3 bg-orange-500 text-white rounded-xl
+                 font-bold hover:bg-orange-600 transition"
+          disabled>
+          ยืนยันการลงทะเบียนกลุ่ม
+        </button>
+      </section>
+
+      <!-- 2. เวรวันนี้ อยู่ถัดจากฟอร์มลงทะเบียน -->
+      <section
+        id="today-section"
+        class="rounded-3xl bg-gradient-to-br from-orange-500
+               to-amber-500 p-5 sm:p-6 text-white shadow-sm">
+
+        <div class="flex items-start justify-between gap-3">
+          <div>
+            <p class="text-sm font-semibold text-orange-50">
+              เวรสวัสดิการวันนี้
+            </p>
+
+            <h2
+              id="today-date"
+              class="text-xl sm:text-2xl font-bold mt-1">
+            </h2>
+          </div>
+
+          <i
+            data-lucide="calendar-check"
+            class="w-8 h-8 shrink-0">
+          </i>
+        </div>
+
+        <div
+          id="today-content"
+          class="mt-4 space-y-3"
+          aria-live="polite">
+          กำลังโหลดข้อมูล…
+        </div>
+      </section>
+
+      <!-- 3. รายชื่อกลุ่ม อยู่ด้านล่าง -->
       <section
         id="groups-section"
         class="bg-white rounded-2xl border border-orange-100 p-4 sm:p-5">
 
         <div class="flex flex-wrap items-center justify-between gap-3">
-
           <div>
             <h2 class="text-lg font-bold text-gray-800">
               รายชื่อกลุ่มที่ลงทะเบียน
             </h2>
 
-            <p
-              id="total-summary"
-              class="text-xs text-gray-500 mt-1">
-            </p>
+            <p id="total-summary" class="text-xs text-gray-500 mt-1"></p>
           </div>
 
           <button
@@ -189,7 +286,6 @@
         </div>
 
         <div class="mt-4 flex flex-wrap gap-2">
-
           <button
             type="button"
             onclick="changeWeek(-1)"
@@ -235,10 +331,7 @@
           </select>
         </div>
 
-        <p
-          id="week-label"
-          class="font-bold text-orange-700 mt-4">
-        </p>
+        <p id="week-label" class="font-bold text-orange-700 mt-4"></p>
 
         <p
           id="visible-summary"
@@ -265,120 +358,6 @@
           id="empty-msg"
           class="hidden text-center py-10 text-gray-400">
         </p>
-      </section>
-
-      <!-- 2. เวรวันนี้ อยู่ด้านล่างรายชื่อกลุ่ม -->
-      <section
-        id="today-section"
-        class="rounded-3xl bg-gradient-to-br from-orange-500
-               to-amber-500 p-5 sm:p-6 text-white shadow-sm">
-
-        <div class="flex items-start justify-between gap-3">
-
-          <div>
-            <p class="text-sm font-semibold text-orange-50">
-              เวรสวัสดิการวันนี้
-            </p>
-
-            <h2
-              id="today-date"
-              class="text-xl sm:text-2xl font-bold mt-1">
-            </h2>
-          </div>
-
-          <i
-            data-lucide="calendar-check"
-            class="w-8 h-8 shrink-0">
-          </i>
-        </div>
-
-        <div
-          id="today-content"
-          class="mt-4 space-y-3"
-          aria-live="polite">
-          กำลังโหลดข้อมูล…
-        </div>
-      </section>
-
-      <!-- 3. ฟอร์มลงทะเบียน -->
-      <section
-        id="form-section"
-        class="bg-white rounded-2xl p-5 sm:p-6
-               border border-orange-100 shadow-sm">
-
-        <div class="flex flex-wrap justify-between items-center gap-3 mb-5">
-
-          <h2
-            id="form-title"
-            class="font-bold text-lg text-orange-700">
-            ลงทะเบียนกลุ่ม
-          </h2>
-
-          <button
-            type="button"
-            id="cancel-edit-btn"
-            onclick="cancelEdit()"
-            class="hidden text-xs font-bold text-red-600 bg-red-50
-                   border border-red-100 px-3 py-2 rounded-xl">
-            ยกเลิกการแก้ไข
-          </button>
-        </div>
-
-        <fieldset id="form-fields" class="space-y-4" disabled>
-
-          <div class="bg-orange-50/60 p-4 rounded-xl border border-orange-100">
-
-            <label
-              for="selected-date"
-              class="block text-sm font-bold mb-2">
-              เลือกวันที่ / เลขที่สวัสดิการ
-            </label>
-
-            <select
-              id="selected-date"
-              class="w-full p-3 border border-gray-200 rounded-xl
-                     bg-white text-sm outline-none
-                     focus:ring-2 focus:ring-orange-300">
-
-              <option value="">-- กำลังโหลดรายการ --</option>
-            </select>
-
-            <p class="text-xs text-gray-500 mt-2">
-              ยังไม่เลือกวันก็ลงทะเบียนได้
-            </p>
-          </div>
-
-          <div class="flex items-center justify-between gap-3">
-
-            <div>
-              <p class="text-sm font-bold">สมาชิกในกลุ่ม</p>
-              <p class="text-xs text-gray-400 mt-1">
-                รองรับ 1–4 คนต่อกลุ่ม
-              </p>
-            </div>
-
-            <button
-              type="button"
-              id="add-member-btn"
-              onclick="addMemberSlot()"
-              class="text-xs font-bold text-orange-600 bg-orange-50
-                     border border-orange-200 px-3 py-2 rounded-xl">
-              + เพิ่มสมาชิก
-            </button>
-          </div>
-
-          <div id="member-slots" class="space-y-3"></div>
-        </fieldset>
-
-        <button
-          type="button"
-          id="submit-btn"
-          onclick="submitGroup()"
-          class="mt-5 w-full py-3 bg-orange-500 text-white rounded-xl
-                 font-bold hover:bg-orange-600 transition"
-          disabled>
-          ยืนยันการลงทะเบียนกลุ่ม
-        </button>
       </section>
     </main>
   </div>
@@ -408,15 +387,15 @@ const ADMIN_EMAILS = [
 const ORG_DOMAIN = "msu.ac.th";
 const PREFIX = "68010511";
 
-// Apps Script เดิมบันทึกสมาชิกได้ 4 คน
+// Apps Script เดิมรองรับสมาชิก 4 คน
 const MAX_MEMBERS = 4;
 
-// วันที่เก่าที่ไม่มีปี ใช้ปี พ.ศ. 2569
+// วันที่เดิมที่ไม่มีปี ใช้ พ.ศ. 2569
 const LEGACY_YEAR = 2026;
 
-// ระบุเฉพาะวันที่ที่ยืนยันวันจริงแล้ว
-// ข้อความด้านซ้ายต้องตรงกับข้อมูลในชีต
-// วันที่ด้านขวาใช้ปี ค.ศ. รูปแบบ YYYY-MM-DD
+// เติมเฉพาะรายการที่ทราบวันจริงแล้ว
+// รูปแบบ: "ข้อความเดิมในชีต": "YYYY-MM-DD"
+// วันที่ด้านขวาใช้ปี ค.ศ.
 const DATE_OVERRIDES = {
   // "ข้อความเดิมในชีต": "2026-10-01"
 };
@@ -600,7 +579,6 @@ function showToast(message, isError = false) {
     (isError ? "bg-red-500" : "bg-orange-600");
 
   toast.textContent = message;
-
   $("toast-container").append(toast);
 
   setTimeout(
@@ -610,7 +588,7 @@ function showToast(message, isError = false) {
 }
 
 /* =========================
-   จัดการวันที่
+   วันที่และสัปดาห์
 ========================= */
 
 function validDate(year, month, day) {
@@ -650,11 +628,7 @@ function todayBangkok() {
   const get = type =>
     parts.find(part => part.type === type).value;
 
-  return validDate(
-    get("year"),
-    get("month"),
-    get("day")
-  );
+  return validDate(get("year"), get("month"), get("day"));
 }
 
 function startOfWeek(date) {
@@ -986,6 +960,7 @@ async function fetchGroups() {
     }
 
     dataState = "error";
+
     showToast(
       "ดึงข้อมูลไม่สำเร็จ กรุณากดรีเฟรช",
       true
@@ -1063,6 +1038,7 @@ function renderDashboard() {
     if (dataState === "error") {
       $("empty-msg").textContent =
         "โหลดรายชื่อไม่สำเร็จ กรุณากดปุ่มรีเฟรช";
+
       $("empty-msg").classList.remove("hidden");
     }
 
@@ -1717,7 +1693,6 @@ async function submitGroup() {
   }
 
   saving = true;
-
   updateControls();
   renderDashboard();
 
@@ -1747,10 +1722,12 @@ async function submitGroup() {
 
     await fetchGroups();
 
-    $("groups-section").scrollIntoView({
-      behavior: "smooth",
-      block: "start"
-    });
+    if (session === sessionVersion) {
+      $("groups-section").scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+      });
+    }
   } catch (error) {
     if (session === sessionVersion) {
       showToast(
