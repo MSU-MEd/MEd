@@ -149,7 +149,7 @@
 
     <main class="max-w-4xl mx-auto px-4 py-5 space-y-5">
 
-      <!-- 1. ฟอร์มลงทะเบียน -->
+      <!-- 1. ฟอร์มลงทะเบียน อยู่บนสุด -->
       <section
         id="form-section"
         class="bg-white rounded-2xl p-5 sm:p-6
@@ -174,28 +174,6 @@
 
         <fieldset id="form-fields" class="space-y-4" disabled>
 
-          <!-- 1.1 สมาชิกในกลุ่ม (ย้ายขึ้นมาไว้ด้านบน) -->
-          <div class="flex items-center justify-between gap-3">
-            <div>
-              <p class="text-sm font-bold">สมาชิกในกลุ่ม</p>
-              <p class="text-xs text-gray-400 mt-1">
-                รองรับ 1–4 คนต่อกลุ่ม
-              </p>
-            </div>
-
-            <button
-              type="button"
-              id="add-member-btn"
-              onclick="addMemberSlot()"
-              class="text-xs font-bold text-orange-600 bg-orange-50
-                     border border-orange-200 px-3 py-2 rounded-xl">
-              + เพิ่มสมาชิก
-            </button>
-          </div>
-
-          <div id="member-slots" class="space-y-3"></div>
-
-          <!-- 1.2 เลือกวันที่ / เลขที่สวัสดิการ (ย้ายลงมาด้านล่าง) -->
           <div class="bg-orange-50/60 p-4 rounded-xl border border-orange-100">
             <label
               for="selected-date"
@@ -216,6 +194,25 @@
             </p>
           </div>
 
+          <div class="flex items-center justify-between gap-3">
+            <div>
+              <p class="text-sm font-bold">สมาชิกในกลุ่ม</p>
+              <p class="text-xs text-gray-400 mt-1">
+                รองรับ 1–4 คนต่อกลุ่ม
+              </p>
+            </div>
+
+            <button
+              type="button"
+              id="add-member-btn"
+              onclick="addMemberSlot()"
+              class="text-xs font-bold text-orange-600 bg-orange-50
+                     border border-orange-200 px-3 py-2 rounded-xl">
+              + เพิ่มสมาชิก
+            </button>
+          </div>
+
+          <div id="member-slots" class="space-y-3"></div>
         </fieldset>
 
         <button
@@ -229,7 +226,7 @@
         </button>
       </section>
 
-      <!-- 2. เวรวันนี้ -->
+      <!-- 2. เวรวันนี้ อยู่ถัดจากฟอร์มลงทะเบียน -->
       <section
         id="today-section"
         class="rounded-3xl bg-gradient-to-br from-orange-500
@@ -261,7 +258,7 @@
         </div>
       </section>
 
-      <!-- 3. รายชื่อกลุ่ม -->
+      <!-- 3. รายชื่อกลุ่ม อยู่ด้านล่าง -->
       <section
         id="groups-section"
         class="bg-white rounded-2xl border border-orange-100 p-4 sm:p-5">
