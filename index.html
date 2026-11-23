@@ -3,382 +3,1287 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>ระบบลงทะเบียนจัดกลุ่มสวัสดิการหลีด</title>
+  <title>ระบบลงทะเบียนจัดกลุ่มสวัสดิการหลีด — MSU Math</title>
 
   <script src="https://cdn.tailwindcss.com/3.4.17"></script>
   <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
   <script src="https://accounts.google.com/gsi/client" async defer></script>
 
-  <link
-    href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap"
-    rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Gilda+Display&family=Sarabun:wght@300;400;500;600;700&family=Urbanist:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
   <style>
+    :root {
+      --bg-peach: #f7d9c6;
+      --bg-peach-mid: #fbe7da;
+      --bg-peach-light: #fdf0e7;
+      --ink: #1d1a1c;
+      --muted-ink: #5c5156;
+      --light-muted: #8a7f83;
+      --accent-orange: #f39419;
+      --accent-star: #f7c325;
+      --accent-heart: #ff4d5e;
+      --ease: cubic-bezier(.65, 0, .35, 1);
+      --out: cubic-bezier(.16, 1, .3, 1);
+    }
+
+    html {
+      background-color: var(--bg-peach);
+      scroll-behavior: smooth;
+    }
+
     body {
-      font-family: "Sarabun", sans-serif;
+      font-family: "Urbanist", "Sarabun", sans-serif;
+      color: var(--ink);
+      background: linear-gradient(
+        180deg,
+        #f7d9c6 0%,
+        #f7d9c6 115vh,
+        #fbe7da 175vh,
+        #fdf0e7 100%
+      );
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+      margin: 0;
+    }
+
+    /* Custom Dot Cursor (Desktop Pointer) */
+    @media (hover: hover) and (pointer: fine) {
+      * {
+        cursor: none !important;
+      }
+      #custom-cursor {
+        display: block;
+      }
+    }
+
+    @media (hover: none), (pointer: coarse) {
+      #custom-cursor {
+        display: none !important;
+      }
+    }
+
+    #custom-cursor {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 26px;
+      height: 26px;
+      margin-left: -13px;
+      margin-top: -13px;
+      border-radius: 50%;
+      background-color: rgba(72, 62, 68, 0.55);
+      pointer-events: none;
+      z-index: 9999;
+      transition:
+        width 0.25s var(--out),
+        height 0.25s var(--out),
+        margin 0.25s var(--out),
+        background-color 0.25s var(--out),
+        border 0.25s var(--out);
+      will-change: transform;
+    }
+
+    #custom-cursor.is-hover {
+      width: 38px;
+      height: 38px;
+      margin-left: -19px;
+      margin-top: -19px;
+      background-color: rgba(72, 62, 68, 0.35);
+    }
+
+    #custom-cursor.is-down {
+      width: 44px;
+      height: 44px;
+      margin-left: -22px;
+      margin-top: -22px;
+      background-color: transparent;
+      border: 5px solid rgba(20, 16, 18, 0.9);
+    }
+
+    .font-gilda {
+      font-family: "Gilda Display", "Sarabun", serif;
+    }
+
+    .font-urbanist {
+      font-family: "Urbanist", "Sarabun", sans-serif;
     }
 
     button, select, input {
       font: inherit;
     }
 
-    button:disabled {
-      opacity: .5;
-      cursor: not-allowed;
+    button:disabled, select:disabled, input:disabled {
+      opacity: 0.5;
+      pointer-events: none;
     }
 
     section {
-      scroll-margin-top: 150px;
+      scroll-margin-top: 100px;
     }
 
+    /* Navigation Bar */
+    #top-nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 74px;
+      padding: 0 clamp(20px, 7.5vw, 140px);
+      z-index: 40;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: rgba(255, 255, 255, 0.94);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.28);
+      transition:
+        background-color 0.5s var(--ease),
+        color 0.5s var(--ease),
+        border-color 0.5s var(--ease),
+        backdrop-filter 0.5s var(--ease);
+    }
+
+    #top-nav.is-solid {
+      background-color: rgba(247, 217, 198, 0.88);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      color: var(--ink);
+      border-bottom: 1px solid rgba(29, 26, 28, 0.08);
+    }
+
+    .nav-link {
+      position: relative;
+      font-size: 14.5px;
+      font-weight: 500;
+      padding: 4px 0;
+    }
+
+    .nav-link::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      width: 100%;
+      height: 1.5px;
+      background-color: currentColor;
+      transform: scaleX(0);
+      transform-origin: right;
+      transition: transform 0.35s var(--ease);
+    }
+
+    .nav-link:hover::after {
+      transform: scaleX(1);
+      transform-origin: left;
+    }
+
+    /* Hero & Misty Wipe */
+    #hero-section {
+      position: relative;
+      width: 100%;
+      height: 100vh;
+      min-height: 680px;
+      overflow: hidden;
+      background: #3d2c35;
+    }
+
+    .hero-slide {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .hero-slide.is-active {
+      pointer-events: auto;
+    }
+
+    .hero-photo {
+      position: absolute;
+      inset: -3%;
+      background-size: cover;
+      transform: scale(1.04);
+      will-change: transform;
+    }
+
+    .hero-top-tint {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        180deg,
+        rgba(84, 64, 74, 0.48) 0%,
+        rgba(84, 64, 74, 0.14) 28%,
+        transparent 52%
+      );
+      pointer-events: none;
+    }
+
+    .hero-title-wrap {
+      position: absolute;
+      z-index: 3;
+      pointer-events: none;
+    }
+
+    .word-mask {
+      display: inline-block;
+      overflow: hidden;
+      vertical-align: bottom;
+      padding-bottom: 0.08em;
+    }
+
+    .word-inner {
+      display: inline-block;
+      font-family: "Urbanist", sans-serif;
+      font-weight: 700;
+      text-transform: uppercase;
+      line-height: 0.92;
+      white-space: nowrap;
+      background: linear-gradient(
+        180deg,
+        rgba(255, 255, 255, 0.97) 0%,
+        rgba(255, 255, 255, 0.86) 36%,
+        rgba(255, 255, 255, 0.16) 100%
+      );
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      transform: translateY(105%);
+      transition: transform 1.15s var(--out);
+    }
+
+    .hero-loaded .word-inner {
+      transform: translateY(0%);
+    }
+
+    /* Mist Band during wipe */
+    #mist-band {
+      position: absolute;
+      top: -10%;
+      bottom: -10%;
+      width: 34vw;
+      background: radial-gradient(
+        ellipse at center,
+        rgba(255, 236, 226, 0.78) 0%,
+        rgba(255, 236, 226, 0.35) 45%,
+        transparent 75%
+      );
+      filter: blur(12px);
+      pointer-events: none;
+      opacity: 0;
+      z-index: 6;
+      will-change: left, opacity;
+    }
+
+    /* Volumetric Clouds */
+    #bottom-clouds {
+      position: absolute;
+      left: -4%;
+      right: -4%;
+      bottom: -6%;
+      height: 78%;
+      z-index: 7;
+      pointer-events: none;
+      will-change: transform;
+    }
+
+    .cloud-copy {
+      position: absolute;
+      inset: 0;
+      background-image: url("https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20261115_005635_6590354a-216c-40a2-9f84-93abe97dc7b1.png&w=2400&q=85");
+      background-size: cover;
+      background-position: center bottom;
+      mix-blend-mode: screen;
+      -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 38%);
+      mask-image: linear-gradient(180deg, transparent 0%, #000 38%);
+    }
+
+    .cloud-front {
+      animation: cloudDriftFront 26s ease-in-out infinite alternate;
+    }
+
+    .cloud-back {
+      opacity: 0.85;
+      transform: scaleX(-1);
+      animation: cloudDriftBack 34s ease-in-out infinite alternate;
+    }
+
+    @keyframes cloudDriftFront {
+      0% { transform: translateX(-2.5%); }
+      100% { transform: translateX(2.5%); }
+    }
+
+    @keyframes cloudDriftBack {
+      0% { transform: scaleX(-1) translate(-3%, 0%); }
+      100% { transform: scaleX(-1) translate(3%, -4%); }
+    }
+
+    #top-cloud {
+      position: absolute;
+      left: -4%;
+      right: -4%;
+      top: -30%;
+      height: 80%;
+      z-index: 7;
+      opacity: 0;
+      pointer-events: none;
+      background-image: url("https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20261115_005635_6590354a-216c-40a2-9f84-93abe97dc7b1.png&w=2400&q=85");
+      background-size: cover;
+      background-position: center top;
+      transform: scaleY(-1);
+      mix-blend-mode: screen;
+      -webkit-mask-image: linear-gradient(0deg, transparent 0%, #000 40%);
+      mask-image: linear-gradient(0deg, transparent 0%, #000 40%);
+    }
+
+    #hero-bottom-fade {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 46%;
+      z-index: 8;
+      pointer-events: none;
+      background: linear-gradient(
+        180deg,
+        rgba(247, 217, 198, 0) 0%,
+        rgba(247, 217, 198, 0.45) 45%,
+        rgba(247, 217, 198, 0.92) 82%,
+        #f7d9c6 100%
+      );
+    }
+
+    /* Right Rail & Concentric Rings */
+    #hero-rail {
+      position: absolute;
+      inset: 0;
+      z-index: 9;
+      pointer-events: none;
+    }
+
+    .rail-ring {
+      position: absolute;
+      border-radius: 50%;
+      border: 1.6px solid rgba(255, 255, 255, 0.5);
+      transform: translate(-50%, -50%);
+      transition:
+        top 0.9s var(--ease),
+        left 0.9s var(--ease),
+        width 0.9s var(--ease),
+        height 0.9s var(--ease),
+        opacity 0.9s var(--out);
+      opacity: 0;
+    }
+
+    .hero-loaded .rail-ring {
+      opacity: 1;
+    }
+
+    .rail-thumb {
+      position: absolute;
+      border-radius: 50%;
+      border: 3px solid rgba(255, 255, 255, 0.92);
+      box-shadow: 0 10px 26px rgba(60, 30, 30, 0.28);
+      background-size: cover;
+      background-position: center;
+      transform: translate(-50%, -50%) scale(0);
+      pointer-events: auto;
+      transition:
+        top 0.9s var(--ease),
+        left 0.9s var(--ease),
+        width 0.9s var(--ease),
+        height 0.9s var(--ease),
+        transform 0.5s var(--out),
+        box-shadow 0.35s var(--out);
+    }
+
+    .hero-loaded .rail-thumb {
+      transform: translate(-50%, -50%) scale(1);
+    }
+
+    .rail-thumb:hover {
+      transform: translate(-50%, -50%) scale(1.07);
+      box-shadow: 0 14px 34px rgba(45, 20, 20, 0.38);
+    }
+
+    .rail-thumb.is-lit::after {
+      content: "";
+      position: absolute;
+      inset: -12px;
+      border-radius: 50%;
+      border: 1.5px solid rgba(255, 255, 255, 0.55);
+      pointer-events: none;
+    }
+
+    #rail-connector {
+      position: absolute;
+      height: 3px;
+      border-radius: 99px;
+      background: #fff;
+      transform-origin: right center;
+      transition:
+        top 0.9s var(--ease),
+        left 0.9s var(--ease),
+        width 0.9s var(--ease),
+        transform 0.55s var(--ease);
+    }
+
+    #rail-caption {
+      position: absolute;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      color: #fff;
+      transform: translate(-100%, -50%);
+      transition: top 0.9s var(--ease), left 0.9s var(--ease);
+    }
+
+    #rail-bar {
+      width: 3px;
+      height: clamp(84px, 6.5vw, 110px);
+      background: #fff;
+      border-radius: 99px;
+      transform-origin: top center;
+      transition: transform 0.6s var(--ease);
+    }
+
+    #rail-text-box {
+      clip-path: inset(0 100% 0 0);
+      transition: clip-path 0.9s var(--ease);
+    }
+
+    #rail-caption.is-shown #rail-text-box {
+      clip-path: inset(0 0% 0 0);
+    }
+
+    /* Floating Glass Bar (Login / Quick Filter) */
+    #hero-floating-bar {
+      position: absolute;
+      left: 50%;
+      bottom: 18vh;
+      transform: translate(-50%, 30px);
+      width: min(940px, calc(100% - 32px));
+      min-height: 90px;
+      border-radius: 26px;
+      background: rgba(255, 255, 255, 0.94);
+      backdrop-filter: blur(16px);
+      box-shadow: 0 18px 60px rgba(120, 70, 60, 0.18);
+      z-index: 12;
+      opacity: 0;
+      transition:
+        transform 1s var(--out),
+        opacity 1s var(--out);
+    }
+
+    .hero-loaded #hero-floating-bar {
+      transform: translate(-50%, 0);
+      opacity: 1;
+    }
+
+    .search-tile {
+      border-radius: 14px;
+      padding: 10px 14px;
+      transition:
+        background-color 0.25s var(--out),
+        box-shadow 0.25s var(--out),
+        transform 0.25s var(--out);
+    }
+
+    .search-tile:hover,
+    .search-tile.is-raised {
+      background: #fff;
+      box-shadow: 0 8px 24px rgba(120, 80, 70, 0.14);
+    }
+
+    /* Group Cards (Aspect 203:268 + Staggered Reveal) */
+    .stay-card {
+      position: relative;
+      aspect-ratio: 203 / 268;
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: 0 12px 30px rgba(110, 60, 50, 0.16);
+      background: #2b2226;
+      opacity: 0;
+      transform: translateY(40px);
+      transition:
+        opacity 0.7s var(--out),
+        transform 0.7s var(--out),
+        box-shadow 0.45s var(--out);
+    }
+
+    .stay-card.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .stay-card.is-visible:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 22px 46px rgba(110, 60, 50, 0.26);
+    }
+
+    .stay-card-bg {
+      position: absolute;
+      inset: 0;
+      background-size: cover;
+      background-position: center;
+      transition: transform 1.2s var(--out);
+    }
+
+    .stay-card:hover .stay-card-bg {
+      transform: scale(1.07);
+    }
+
+    .stay-card-gradient {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        180deg,
+        rgba(20, 14, 18, 0.18) 0%,
+        rgba(20, 14, 18, 0.12) 42%,
+        rgba(20, 14, 18, 0.88) 100%
+      );
+    }
+
+    /* Heart Pop */
+    @keyframes heartPop {
+      0% { transform: scale(1); }
+      45% { transform: scale(1.35); }
+      100% { transform: scale(1); }
+    }
+
+    .heart-pop {
+      animation: heartPop 0.35s var(--out);
+    }
+
+    /* Detail Overlay (Shared-element landing) */
+    #detail-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 35;
+      background: #fff;
+      overflow-y: auto;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.55s var(--ease);
+    }
+
+    #detail-overlay.is-open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .detail-peach-band {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 290px;
+      background: #f7d9c6;
+      z-index: 0;
+    }
+
+    .detail-stagger {
+      opacity: 0;
+      transform: translateY(26px);
+      transition:
+        opacity 0.6s var(--out),
+        transform 0.6s var(--out);
+    }
+
+    #detail-overlay.is-open .detail-stagger {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Toast */
     .toast {
-      animation: fadeIn .2s ease;
+      animation: fadeIn 0.25s var(--out);
     }
 
     @keyframes fadeIn {
-      from {
-        opacity: 0;
-        transform: translateY(5px);
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Responsive Adjustments */
+    @media (max-width: 1000px) {
+      .desktop-nav-links {
+        display: none !important;
       }
-      to {
-        opacity: 1;
-        transform: translateY(0);
+    }
+
+    @media (max-width: 640px) {
+      #rail-caption,
+      #rail-connector {
+        display: none !important;
+      }
+      #hero-floating-bar {
+        bottom: 13vh;
+        border-radius: 22px;
+      }
+      #main-content-wrapper {
+        margin-top: -8vh !important;
       }
     }
   </style>
 </head>
 
-<body class="min-h-screen bg-orange-50/40 text-gray-800">
+<body>
+  <!-- Custom Dot Cursor -->
+  <div id="custom-cursor"></div>
 
-  <!-- หน้าล็อกอิน -->
-  <div
-    id="login-screen"
-    class="min-h-screen flex items-center justify-center p-5">
+  <!-- Fixed Glass Navigation Bar -->
+  <nav id="top-nav">
+    <div class="flex items-center">
+      <button
+        type="button"
+        onclick="returnHome()"
+        class="clickable font-urbanist font-light text-[24px] sm:text-[26px] tracking-tight text-left">
+        MSU Lead Welfare
+      </button>
 
-    <div class="w-full max-w-md rounded-3xl bg-white p-8 text-center
-                border border-orange-100 shadow-sm">
-
-      <div class="w-20 h-20 mx-auto rounded-2xl bg-orange-500
-                  flex items-center justify-center text-white mb-6">
-        <i data-lucide="users" class="w-10 h-10"></i>
+      <div class="desktop-nav-links hidden md:flex items-center">
+        <span class="w-[1px] h-[42px] bg-current opacity-40 mx-[24px]"></span>
+        <span class="text-[12.5px] opacity-85 flex items-center gap-1">
+          สาขาวิชาคณิตศาสตร์
+          <i data-lucide="chevron-down" class="w-3.5 h-3.5"></i>
+        </span>
       </div>
-
-      <h1 class="text-2xl font-bold text-orange-600">
-        ระบบลงทะเบียนจัดกลุ่มสวัสดิการหลีด
-      </h1>
-
-      <p class="text-sm text-gray-500 mt-3 mb-6">
-        เข้าสู่ระบบด้วยอีเมลมหาวิทยาลัย @msu.ac.th
-      </p>
-
-      <div id="buttonDiv" class="flex justify-center"></div>
-
-      <p id="login-error" class="text-sm text-red-500 mt-4"></p>
     </div>
-  </div>
 
-  <!-- หน้าแอป -->
-  <div id="main-app" class="hidden">
+    <!-- Center Links -->
+    <div class="desktop-nav-links hidden lg:flex items-center gap-[40px]">
+      <a href="#today-section" onclick="closeDetail()" class="clickable nav-link">เวรวันนี้</a>
+      <a href="#register-section" onclick="closeDetail()" class="clickable nav-link">ลงทะเบียนกลุ่ม</a>
+      <a href="#groups-section" onclick="closeDetail()" class="clickable nav-link">รายชื่อกลุ่ม</a>
+    </div>
 
-    <header class="sticky top-0 z-20 bg-white/95 border-b
-                   border-orange-100 backdrop-blur">
+    <!-- Right Controls -->
+    <div class="flex items-center gap-3 sm:gap-4">
+      <button
+        type="button"
+        id="nav-admin-btn"
+        onclick="openAdminDateModal()"
+        class="clickable hidden text-[13.5px] font-medium px-3 py-1.5 rounded-full border border-current/30 hover:bg-white/20 transition">
+        จัดการวันเวร
+      </button>
 
-      <div class="max-w-4xl mx-auto px-4 py-3 flex flex-wrap
-                  items-center justify-between gap-3">
+      <i data-lucide="globe" class="w-4 h-4 opacity-80 hidden sm:block"></i>
 
-        <div class="flex items-center gap-3 min-w-0">
-
-          <div class="flex gap-1.5 shrink-0">
-            <img
-              src="https://cdn.phototourl.com/free/2026-07-26-03d91194-60e5-4fff-990a-50c0ba65d268.jpg"
-              alt="ตราหน่วยงาน 1"
-              class="w-10 h-10 rounded-full border border-orange-200 object-cover"
-              onerror="this.style.display='none'">
-
-            <img
-              src="https://cdn.phototourl.com/free/2026-07-21-2f1e7db8-94b7-4683-800a-2d2934552f3d.jpg"
-              alt="ตราหน่วยงาน 2"
-              class="w-10 h-10 rounded-full border-2 border-orange-400 object-cover"
-              onerror="this.style.display='none'">
-
-            <img
-              src="https://cdn.phototourl.com/free/2026-07-26-bd5a4b55-5c3b-4a10-b673-8241fd597c4f.jpg"
-              alt="ตราหน่วยงาน 3"
-              class="w-10 h-10 rounded-full border border-orange-200 object-cover"
-              onerror="this.style.display='none'">
-          </div>
-
-          <div>
-            <h1 class="font-bold text-orange-600 leading-tight">
-              สวัสดิการหลีด
-            </h1>
-            <p class="text-xs text-gray-500 mt-1">
-              ลงทะเบียนกลุ่มและตรวจสอบเวร
-            </p>
-          </div>
+      <!-- User Pill -->
+      <div
+        id="nav-user-pill"
+        class="flex items-center gap-2.5 border-[1.5px] border-current/45 rounded-[9px] px-2.5 py-1.5">
+        <i data-lucide="menu" class="w-4 h-4"></i>
+        <span id="user-name-display" class="text-xs font-semibold max-w-[110px] truncate">
+          กรุณาเข้าสู่ระบบ
+        </span>
+        <div class="w-[22px] h-[22px] rounded-full bg-current/20 overflow-hidden flex items-center justify-center shrink-0">
+          <img id="user-avatar" alt="" class="w-full h-full object-cover hidden">
+          <i id="user-default-icon" data-lucide="user" class="w-3.5 h-3.5"></i>
         </div>
+        <button
+          type="button"
+          id="logout-btn"
+          onclick="handleLogout()"
+          title="ออกจากระบบ"
+          class="clickable hidden ml-1 text-red-400 hover:text-red-500">
+          <i data-lucide="log-out" class="w-3.5 h-3.5"></i>
+        </button>
+      </div>
+    </div>
+  </nav>
 
-        <div class="flex items-center gap-2 ml-auto">
-          <div class="flex items-center gap-2 rounded-full
-                      bg-orange-50 px-3 py-1.5">
-
-            <img
-              id="user-avatar"
-              alt=""
-              class="w-7 h-7 rounded-full object-cover hidden">
-
-            <span
-              id="user-name-display"
-              class="text-xs text-orange-700 font-semibold
-                     max-w-[120px] truncate">
-            </span>
+  <!-- Cinematic Three-Slide Hero -->
+  <header id="hero-section">
+    <!-- Slide Stack -->
+    <div id="slide-stack" class="absolute inset-0">
+      <!-- Slide 1 -->
+      <div class="hero-slide is-active" data-slide="0" style="z-index: 2;">
+        <div
+          class="hero-photo"
+          style="background-image: url('https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20261115_005348_d02f5076-330a-4062-960b-b000a310d6e4.png&w=2400&q=85'); background-position: center 62%;">
+        </div>
+        <div class="hero-top-tint"></div>
+        <div class="hero-title-wrap" style="left: 2.6vw; top: calc(74px + 3.2vh);">
+          <div class="text-[11vw] sm:text-[7.6vw] tracking-tight">
+            <span class="word-mask"><span class="word-inner" style="transition-delay: 250ms;">LEAD</span></span>
+            <span class="word-mask"><span class="word-inner" style="transition-delay: 340ms;">WELFARE</span></span>
+            <span class="word-mask"><span class="word-inner" style="transition-delay: 430ms;">MSU</span></span>
           </div>
-
-          <button
-            type="button"
-            onclick="handleLogout()"
-            aria-label="ออกจากระบบ"
-            class="p-2 rounded-xl text-gray-400 hover:bg-red-50
-                   hover:text-red-500">
-
-            <i data-lucide="log-out" class="w-5 h-5"></i>
-          </button>
         </div>
       </div>
-    </header>
 
-    <main class="max-w-4xl mx-auto px-4 py-5 space-y-5">
-
-      <!-- 1. ฟอร์มลงทะเบียน อยู่บนสุด -->
-      <section
-        id="form-section"
-        class="bg-white rounded-2xl p-5 sm:p-6
-               border border-orange-100 shadow-sm">
-
-        <div class="flex flex-wrap justify-between items-center gap-3 mb-5">
-          <h2
-            id="form-title"
-            class="font-bold text-lg text-orange-700">
-            ลงทะเบียนกลุ่ม
-          </h2>
-
-          <button
-            type="button"
-            id="cancel-edit-btn"
-            onclick="cancelEdit()"
-            class="hidden text-xs font-bold text-red-600 bg-red-50
-                   border border-red-100 px-3 py-2 rounded-xl">
-            ยกเลิกการแก้ไข
-          </button>
+      <!-- Slide 2 -->
+      <div class="hero-slide" data-slide="1" style="z-index: 1; opacity: 0;">
+        <div
+          class="hero-photo"
+          style="background-image: url('https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20261115_005347_2a7781a6-ffd1-48f1-bb19-051b67063047.png&w=2400&q=85'); background-position: center 55%;">
         </div>
+        <div class="hero-top-tint"></div>
+        <div class="hero-title-wrap" style="left: 2.6vw; top: calc(74px + 3.2vh);">
+          <div class="text-[11vw] sm:text-[7.6vw] tracking-tight">
+            <span class="word-mask"><span class="word-inner">TEAM</span></span>
+            <span class="word-mask"><span class="word-inner">DUTY</span></span>
+            <span class="word-mask"><span class="word-inner">ROSTER</span></span>
+          </div>
+        </div>
+      </div>
 
-        <fieldset id="form-fields" class="space-y-4" disabled>
+      <!-- Slide 3 -->
+      <div class="hero-slide" data-slide="2" style="z-index: 1; opacity: 0;">
+        <div
+          class="hero-photo"
+          style="background-image: url('https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20261115_005347_73725010-6ca6-46d8-a732-fc33275a02e0.png&w=2400&q=85'); background-position: center 40%;">
+        </div>
+        <div class="hero-top-tint"></div>
+        <div class="hero-title-wrap" style="left: 6.5vw; top: calc(74px + 4.5vh);">
+          <div class="text-[12vw] sm:text-[8.8vw] leading-[0.94] tracking-tight">
+            <div><span class="word-mask"><span class="word-inner">MATH</span></span></div>
+            <div><span class="word-mask"><span class="word-inner">SUPPORT</span></span></div>
+          </div>
+        </div>
+      </div>
+    </div>
 
-          <div class="bg-orange-50/60 p-4 rounded-xl border border-orange-100">
-            <label
-              for="selected-date"
-              class="block text-sm font-bold mb-2">
-              เลือกวันที่ / เลขที่สวัสดิการ
-            </label>
+    <!-- Mist Wipe Haze -->
+    <div id="mist-band"></div>
 
-            <select
-              id="selected-date"
-              class="w-full p-3 border border-gray-200 rounded-xl
-                     bg-white text-sm outline-none
-                     focus:ring-2 focus:ring-orange-300">
-              <option value="">-- กำลังโหลดรายการ --</option>
-            </select>
+    <!-- Volumetric Drifting Clouds -->
+    <div id="bottom-clouds">
+      <div class="cloud-copy cloud-front"></div>
+      <div class="cloud-copy cloud-back"></div>
+    </div>
+    <div id="top-cloud"></div>
+    <div id="hero-bottom-fade"></div>
 
-            <p class="text-xs text-gray-500 mt-2">
-              ยังไม่เลือกวันก็ลงทะเบียนได้
+    <!-- Right Rail: Concentric Rings & Thumbnails -->
+    <div id="hero-rail">
+      <div id="ring-outer" class="rail-ring"></div>
+      <div id="ring-inner" class="rail-ring"></div>
+
+      <div id="rail-connector"></div>
+      <div id="rail-caption">
+        <div id="rail-bar"></div>
+        <div id="rail-text-box" class="max-w-[240px]">
+          <h2 id="rail-heading" class="font-urbanist font-light text-[clamp(24px,2.5vw,38px)] leading-tight drop-shadow">
+            ระบบจัดกลุ่มสวัสดิการ
+          </h2>
+          <p id="rail-desc" class="text-[clamp(12px,1vw,14px)] text-white/90 mt-1.5 leading-relaxed">
+            ลงทะเบียนกลุ่มสวัสดิการหลีด 1–4 คน และตรวจสอบตารางเวรประจำสัปดาห์
+          </p>
+        </div>
+      </div>
+
+      <!-- Top Thumb (Slide 3) -->
+      <button
+        type="button"
+        class="clickable rail-thumb"
+        data-target="2"
+        aria-label="สไลด์ที่ 3"
+        style="background-image: url('https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20261115_005347_2697af01-b81b-4c9e-bb4f-7200cb1aa1e8.png&w=400&q=85'); transition-delay: 630ms;">
+      </button>
+
+      <!-- Middle Thumb (Slide 2) -->
+      <button
+        type="button"
+        class="clickable rail-thumb"
+        data-target="1"
+        aria-label="สไลด์ที่ 2"
+        style="background-image: url('https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20261115_005347_e2768ec3-714b-47bc-b03e-4fc6794d5dd9.png&w=400&q=85'); transition-delay: 490ms;">
+      </button>
+
+      <!-- Bottom Thumb (Slide 1 - Active initial) -->
+      <button
+        type="button"
+        class="clickable rail-thumb is-lit"
+        data-target="0"
+        aria-label="สไลด์ที่ 1"
+        style="background-image: url('https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20261115_005347_c5667173-fd6e-4dcb-9547-6c4518e19388.png&w=400&q=85'); transition-delay: 350ms;">
+      </button>
+    </div>
+
+    <!-- Floating Search / Login Bar -->
+    <div id="hero-floating-bar" class="p-3 sm:px-5 sm:py-3 flex flex-col justify-center">
+      <!-- State 1: Not Logged In -->
+      <div id="floating-login-box" class="flex flex-col sm:flex-row items-center justify-between gap-4 px-2 py-1">
+        <div class="flex items-center gap-3.5 text-center sm:text-left">
+          <div class="w-11 h-11 rounded-2xl bg-[#f39419]/15 text-[#f39419] flex items-center justify-center shrink-0">
+            <i data-lucide="shield-check" class="w-6 h-6"></i>
+          </div>
+          <div>
+            <p class="font-bold text-[16px] text-[#1d1a1c]">
+              เข้าสู่ระบบสวัสดิการหลีด สาขาวิชาคณิตศาสตร์
+            </p>
+            <p class="text-[12.5px] text-[#5c5156]">
+              กรุณาลงชื่อเข้าใช้ด้วยอีเมลมหาวิทยาลัย <span class="font-semibold">@msu.ac.th</span> เพื่อลงทะเบียนและดูเวร
             </p>
           </div>
+        </div>
 
-          <div class="flex items-center justify-between gap-3">
+        <div class="flex flex-col items-center shrink-0">
+          <div id="buttonDiv"></div>
+          <p id="login-error" class="text-xs text-red-500 mt-1"></p>
+        </div>
+      </div>
+
+      <!-- State 2: Logged In Quick Search / Jump Bar -->
+      <div id="floating-search-box" class="hidden grid grid-cols-2 sm:flex items-center justify-between gap-2">
+        <div
+          onclick="scrollToSection('today-section')"
+          class="clickable search-tile flex-[1.3] flex items-center gap-3">
+          <i data-lucide="calendar-check" class="w-4 h-4 text-[#5c5156] shrink-0"></i>
+          <div class="min-w-0">
+            <p class="text-[16px] sm:text-[18px] font-medium text-[#1d1a1c] leading-tight truncate">
+              เวรวันนี้
+            </p>
+            <p id="bar-today-label" class="text-[12px] text-[#8a7f83] truncate">
+              กำลังโหลด...
+            </p>
+          </div>
+        </div>
+
+        <div
+          onclick="scrollToSection('register-section')"
+          class="clickable search-tile is-raised flex-1 flex items-center gap-3">
+          <i data-lucide="user-plus" class="w-4 h-4 text-[#f39419] shrink-0"></i>
+          <div class="min-w-0">
+            <p class="text-[16px] sm:text-[18px] font-medium text-[#1d1a1c] leading-tight truncate">
+              ลงทะเบียน
+            </p>
+            <p class="text-[12px] text-[#8a7f83] truncate">
+              จัดกลุ่ม 1–4 คน
+            </p>
+          </div>
+        </div>
+
+        <div
+          onclick="scrollToSection('groups-section')"
+          class="clickable search-tile flex-1 flex items-center gap-3">
+          <i data-lucide="users" class="w-4 h-4 text-[#5c5156] shrink-0"></i>
+          <div class="min-w-0">
+            <p class="text-[16px] sm:text-[18px] font-medium text-[#1d1a1c] leading-tight truncate">
+              กลุ่มทั้งหมด
+            </p>
+            <p id="bar-total-groups" class="text-[12px] text-[#8a7f83] truncate">
+              0 กลุ่มในระบบ
+            </p>
+          </div>
+        </div>
+
+        <div
+          onclick="fetchGroups()"
+          class="clickable search-tile flex-1 flex items-center gap-3">
+          <i data-lucide="refresh-cw" class="w-4 h-4 text-[#5c5156] shrink-0"></i>
+          <div class="min-w-0">
+            <p class="text-[16px] sm:text-[18px] font-medium text-[#1d1a1c] leading-tight truncate">
+              อัปเดตข้อมูล
+            </p>
+            <p class="text-[12px] text-[#8a7f83] truncate">
+              ซิงก์จากชีต
+            </p>
+          </div>
+        </div>
+
+        <button
+          type="button"
+          onclick="scrollToSection('groups-section')"
+          aria-label="ไปยังรายชื่อกลุ่ม"
+          class="clickable col-span-2 sm:w-[44px] h-[44px] rounded-[12px] bg-[#1d1a1c] text-white flex items-center justify-center shrink-0 hover:scale-110 hover:-rotate-6 transition-transform">
+          <i data-lucide="send" class="w-4 h-4"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content (Pulled into Hero fade by -14vh) -->
+  <main
+    id="main-content-wrapper"
+    class="relative z-10 -mt-[14vh] px-[clamp(20px,7.5vw,140px)] pb-24">
+
+    <!-- Locked Notice when not logged in -->
+    <div
+      id="locked-notice"
+      class="max-w-2xl mx-auto rounded-3xl bg-white/85 backdrop-blur-md p-8 text-center shadow-[0_18px_50px_rgba(120,70,60,0.12)] border border-white">
+      <div class="w-14 h-14 mx-auto rounded-2xl bg-[#f7d9c6] text-[#1d1a1c] flex items-center justify-center mb-4">
+        <i data-lucide="lock" class="w-6 h-6"></i>
+      </div>
+      <h2 class="font-gilda text-2xl text-[#1d1a1c]">
+        กรุณาเข้าสู่ระบบเพื่อใช้งาน
+      </h2>
+      <p class="text-sm text-[#5c5156] mt-2">
+        กดปุ่ม <strong>Sign in with Google</strong> ด้านบนด้วยบัญชี <code>@msu.ac.th</code> เพื่อลงทะเบียนจัดกลุ่มและตรวจสอบรายชื่อเวรสวัสดิการ
+      </p>
+    </div>
+
+    <!-- Authenticated App Workspace -->
+    <div id="authenticated-workspace" class="hidden space-y-12">
+
+      <!-- Top Row: Today's Duty + Registration Form -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+
+        <!-- 1. Today's Welfare Duty Card (5 cols) -->
+        <section
+          id="today-section"
+          class="lg:col-span-5 rounded-[24px] bg-white/92 backdrop-blur-md p-6 sm:p-7 shadow-[0_18px_50px_rgba(120,70,60,0.14)] border border-white">
+          <div class="flex items-start justify-between gap-3 border-b border-[#1d1a1c]/10 pb-4">
             <div>
-              <p class="text-sm font-bold">สมาชิกในกลุ่ม</p>
-              <p class="text-xs text-gray-400 mt-1">
-                รองรับ 1–4 คนต่อกลุ่ม
-              </p>
+              <span class="inline-block text-[11px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full bg-[#f39419]/15 text-[#f39419]">
+                Today's Welfare Duty
+              </span>
+              <h2 class="font-gilda text-[26px] text-[#1d1a1c] mt-2 leading-tight">
+                เวรสวัสดิการวันนี้
+              </h2>
+              <p id="today-date" class="text-sm font-medium text-[#5c5156] mt-1"></p>
+            </div>
+            <div class="w-11 h-11 rounded-2xl bg-[#f7d9c6] flex items-center justify-center text-[#1d1a1c] shrink-0">
+              <i data-lucide="calendar-heart" class="w-5 h-5"></i>
+            </div>
+          </div>
+
+          <div id="today-content" class="mt-5 space-y-3" aria-live="polite">
+            กำลังโหลดข้อมูล…
+          </div>
+        </section>
+
+        <!-- 2. Group Registration Form (7 cols) -->
+        <section
+          id="register-section"
+          class="lg:col-span-7 rounded-[24px] bg-white/95 backdrop-blur-md p-6 sm:p-7 shadow-[0_18px_50px_rgba(120,70,60,0.14)] border border-white">
+          <div class="flex flex-wrap items-center justify-between gap-3 border-b border-[#1d1a1c]/10 pb-4">
+            <div>
+              <span class="inline-block text-[11px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full bg-[#1d1a1c]/10 text-[#1d1a1c]">
+                Group Registration
+              </span>
+              <h2 id="form-title" class="font-gilda text-[26px] text-[#1d1a1c] mt-2 leading-tight">
+                ลงทะเบียนจัดกลุ่มสวัสดิการ
+              </h2>
             </div>
 
             <button
               type="button"
-              id="add-member-btn"
-              onclick="addMemberSlot()"
-              class="text-xs font-bold text-orange-600 bg-orange-50
-                     border border-orange-200 px-3 py-2 rounded-xl">
-              + เพิ่มสมาชิก
+              id="cancel-edit-btn"
+              onclick="cancelEdit()"
+              class="clickable hidden text-xs font-bold text-[#ff4d5e] bg-[#ff4d5e]/10 px-3.5 py-2 rounded-full">
+              ยกเลิกการแก้ไข
             </button>
           </div>
 
-          <div id="member-slots" class="space-y-3"></div>
-        </fieldset>
+          <fieldset id="form-fields" class="mt-5 space-y-5" disabled>
+            <!-- Date Selector -->
+            <div class="rounded-2xl bg-[#fdf0e7] p-4 border border-[#f7d9c6]">
+              <label for="selected-date" class="block text-sm font-bold text-[#1d1a1c] mb-2">
+                เลือกวันที่ / เลขที่สวัสดิการ
+              </label>
+              <select
+                id="selected-date"
+                class="clickable w-full p-3 rounded-xl border border-[#1d1a1c]/15 bg-white text-sm text-[#1d1a1c] outline-none focus:ring-2 focus:ring-[#f39419]">
+                <option value="">-- กำลังโหลดรายการ --</option>
+              </select>
+              <p class="text-xs text-[#5c5156] mt-2">
+                * หากยังไม่ทราบวันเวร สามารถเว้นว่างไว้เพื่อลงทะเบียนกลุ่มก่อนได้
+              </p>
+            </div>
 
-        <button
-          type="button"
-          id="submit-btn"
-          onclick="submitGroup()"
-          class="mt-5 w-full py-3 bg-orange-500 text-white rounded-xl
-                 font-bold hover:bg-orange-600 transition"
-          disabled>
-          ยืนยันการลงทะเบียนกลุ่ม
-        </button>
-      </section>
+            <!-- Member Slots Header -->
+            <div class="flex items-center justify-between gap-3">
+              <div>
+                <p class="text-sm font-bold text-[#1d1a1c]">สมาชิกในกลุ่ม (1–4 คน)</p>
+                <p class="text-xs text-[#8a7f83]">กรอกรหัสนิสิต 3 ตัวท้าย (68010511xxx)</p>
+              </div>
+              <button
+                type="button"
+                id="add-member-btn"
+                onclick="addMemberSlot()"
+                class="clickable text-xs font-bold text-[#1d1a1c] bg-[#f7d9c6] hover:bg-[#f39419] hover:text-white px-3.5 py-2 rounded-full transition">
+                + เพิ่มสมาชิก
+              </button>
+            </div>
 
-      <!-- 2. เวรวันนี้ อยู่ถัดจากฟอร์มลงทะเบียน -->
-      <section
-        id="today-section"
-        class="rounded-3xl bg-gradient-to-br from-orange-500
-               to-amber-500 p-5 sm:p-6 text-white shadow-sm">
+            <!-- Member Inputs Grid -->
+            <div id="member-slots" class="grid grid-cols-1 sm:grid-cols-2 gap-3"></div>
+          </fieldset>
 
-        <div class="flex items-start justify-between gap-3">
+          <button
+            type="button"
+            id="submit-btn"
+            onclick="submitGroup()"
+            class="clickable mt-6 w-full py-3.5 rounded-full bg-[#f39419] hover:bg-[#e0830d] text-white font-bold text-sm shadow-lg shadow-[#f39419]/30 transition"
+            disabled>
+            ยืนยันการลงทะเบียนกลุ่ม
+          </button>
+        </section>
+      </div>
+
+      <!-- 3. Registered Groups Grid (Krung Travel Card Showcase Style) -->
+      <section id="groups-section" class="pt-4">
+        <div class="flex flex-wrap items-end justify-between gap-4 mb-6">
           <div>
-            <p class="text-sm font-semibold text-orange-50">
-              เวรสวัสดิการวันนี้
-            </p>
-
-            <h2
-              id="today-date"
-              class="text-xl sm:text-2xl font-bold mt-1">
+            <h2 class="font-gilda text-[clamp(26px,2.6vw,38px)] text-[#1d1a1c] leading-tight">
+              Registered Welfare Groups
             </h2>
+            <p id="total-summary" class="text-sm text-[#5c5156] mt-1"></p>
           </div>
 
-          <i
-            data-lucide="calendar-check"
-            class="w-8 h-8 shrink-0">
-          </i>
+          <div class="flex flex-wrap items-center gap-2.5">
+            <button
+              type="button"
+              onclick="changeWeek(-1)"
+              class="clickable px-3.5 py-2 rounded-full border-[1.4px] border-[#1d1a1c] text-xs font-semibold hover:bg-[#1d1a1c] hover:text-white transition">
+              ‹ สัปดาห์ก่อน
+            </button>
+            <button
+              type="button"
+              onclick="goToday()"
+              class="clickable px-4 py-2 rounded-full bg-[#1d1a1c] text-white text-xs font-semibold hover:opacity-90 transition">
+              สัปดาห์นี้
+            </button>
+            <button
+              type="button"
+              onclick="changeWeek(1)"
+              class="clickable px-3.5 py-2 rounded-full border-[1.4px] border-[#1d1a1c] text-xs font-semibold hover:bg-[#1d1a1c] hover:text-white transition">
+              สัปดาห์ถัดไป ›
+            </button>
+          </div>
         </div>
 
-        <div
-          id="today-content"
-          class="mt-4 space-y-3"
-          aria-live="polite">
-          กำลังโหลดข้อมูล…
-        </div>
-      </section>
-
-      <!-- 3. รายชื่อกลุ่ม อยู่ด้านล่าง -->
-      <section
-        id="groups-section"
-        class="bg-white rounded-2xl border border-orange-100 p-4 sm:p-5">
-
-        <div class="flex flex-wrap items-center justify-between gap-3">
+        <!-- Filter & Week Label Bar -->
+        <div class="flex flex-wrap items-center justify-between gap-3 bg-white/75 backdrop-blur-sm rounded-2xl px-4 py-3 mb-6 border border-white">
           <div>
-            <h2 class="text-lg font-bold text-gray-800">
-              รายชื่อกลุ่มที่ลงทะเบียน
-            </h2>
-
-            <p id="total-summary" class="text-xs text-gray-500 mt-1"></p>
+            <p id="week-label" class="font-bold text-sm text-[#1d1a1c]"></p>
+            <p id="visible-summary" class="text-xs text-[#5c5156]"></p>
           </div>
 
-          <button
-            type="button"
-            id="refresh-btn"
-            onclick="fetchGroups()"
-            class="flex items-center gap-1.5 text-sm text-orange-700
-                   bg-orange-50 border border-orange-100
-                   px-3 py-2 rounded-xl">
+          <div class="flex items-center gap-2">
+            <select
+              id="view-mode"
+              onchange="changeView(this.value)"
+              class="clickable rounded-full border border-[#1d1a1c]/20 bg-white px-4 py-1.5 text-xs font-semibold text-[#1d1a1c] outline-none">
+              <option value="week">ดูรายสัปดาห์</option>
+              <option value="unknown">วันที่ต้องตรวจสอบ / ยังไม่เลือกวัน</option>
+              <option value="all">ดูทั้งหมด</option>
+            </select>
 
-            <i data-lucide="refresh-cw" class="w-4 h-4"></i>
-            รีเฟรช
-          </button>
-        </div>
-
-        <div class="mt-4 flex flex-wrap gap-2">
-          <button
-            type="button"
-            onclick="changeWeek(-1)"
-            class="border border-orange-200 rounded-xl px-3 py-2
-                   text-sm text-orange-700">
-            ‹ สัปดาห์ก่อน
-          </button>
-
-          <button
-            type="button"
-            onclick="goToday()"
-            class="bg-orange-500 text-white rounded-xl px-3 py-2
-                   text-sm font-semibold">
-            สัปดาห์นี้
-          </button>
-
-          <button
-            type="button"
-            onclick="changeWeek(1)"
-            class="border border-orange-200 rounded-xl px-3 py-2
-                   text-sm text-orange-700">
-            สัปดาห์ถัดไป ›
-          </button>
-        </div>
-
-        <div class="mt-3">
-          <label for="view-mode" class="sr-only">
-            เลือกรูปแบบการแสดงผล
-          </label>
-
-          <select
-            id="view-mode"
-            onchange="changeView(this.value)"
-            class="w-full sm:w-auto border border-gray-200 rounded-xl
-                   bg-white px-3 py-2 text-sm outline-none
-                   focus:ring-2 focus:ring-orange-300">
-
-            <option value="week">ดูรายสัปดาห์</option>
-            <option value="unknown">
-              วันที่ต้องตรวจสอบ / ยังไม่เลือกวัน
-            </option>
-            <option value="all">ดูทั้งหมด</option>
-          </select>
-        </div>
-
-        <p id="week-label" class="font-bold text-orange-700 mt-4"></p>
-
-        <p
-          id="visible-summary"
-          class="text-xs text-gray-500 mt-1 mb-4">
-        </p>
-
-        <div
-          id="loading-state"
-          class="hidden text-center py-10 text-gray-400">
-
-          <div class="animate-spin rounded-full h-8 w-8
-                      border-b-2 border-orange-500 mx-auto mb-3">
+            <button
+              type="button"
+              id="refresh-btn"
+              onclick="fetchGroups()"
+              class="clickable flex items-center gap-1.5 rounded-full border-[1.4px] border-[#1d1a1c] px-4 py-1.5 text-xs font-semibold hover:bg-[#1d1a1c] hover:text-white transition">
+              <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i>
+              รีเฟรช
+            </button>
           </div>
-
-          กำลังโหลดข้อมูล…
         </div>
 
+        <!-- Loading Spinner -->
+        <div id="loading-state" class="hidden text-center py-14 text-[#5c5156]">
+          <div class="animate-spin rounded-full h-9 w-9 border-b-2 border-[#1d1a1c] mx-auto mb-3"></div>
+          <p class="text-sm font-medium">กำลังโหลดข้อมูลกลุ่มสวัสดิการ…</p>
+        </div>
+
+        <!-- 4-Column Responsive Card Grid -->
         <div
           id="groups-list"
-          class="grid grid-cols-1 md:grid-cols-2 gap-3">
+          class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-[clamp(16px,2.2vw,28px)]">
         </div>
 
-        <p
-          id="empty-msg"
-          class="hidden text-center py-10 text-gray-400">
-        </p>
+        <p id="empty-msg" class="hidden text-center py-12 text-[#5c5156] font-medium"></p>
       </section>
-    </main>
+    </div>
+  </main>
+
+  <!-- Shared-Element Fullscreen Group Detail Overlay -->
+  <div id="detail-overlay">
+    <div class="detail-peach-band"></div>
+
+    <div class="relative z-10 pt-[96px] pb-20 px-[clamp(20px,7.5vw,140px)]">
+      <!-- Breadcrumb -->
+      <nav class="detail-stagger text-[12.5px] text-[#1d1a1c] flex flex-wrap items-center gap-2 mb-6" style="transition-delay: 250ms;">
+        <button type="button" onclick="closeDetail()" class="clickable font-semibold hover:underline">
+          หน้าหลัก
+        </button>
+        <span>›</span>
+        <span>กลุ่มสวัสดิการหลีด</span>
+        <span>›</span>
+        <span id="detail-crumb-name" class="text-[#8a7f83]">รายละเอียดกลุ่ม</span>
+      </nav>
+
+      <!-- 2-Column Detail Layout -->
+      <div class="grid grid-cols-1 lg:grid-cols-[1.1fr_1fr] gap-8 lg:gap-12 items-start">
+        <!-- Left Column: Hero Photo + Thumbnails -->
+        <div>
+          <div
+            id="detail-main-photo-box"
+            class="relative w-full aspect-[512/445] rounded-[12px] overflow-hidden bg-[#2b2226] shadow-xl">
+            <img
+              id="detail-main-img"
+              alt=""
+              class="w-full h-full object-cover opacity-0 transition-opacity duration-300">
+            <button
+              type="button"
+              id="detail-heart-btn"
+              class="clickable absolute top-4 right-4 w-9 h-9 rounded-full bg-white/90 flex items-center justify-center shadow">
+              <i data-lucide="heart" class="w-4 h-4"></i>
+            </button>
+          </div>
+
+          <!-- 3 Interior Thumbnails -->
+          <div class="detail-stagger grid grid-cols-3 gap-4 mt-4" style="transition-delay: 320ms;">
+            <div class="aspect-square rounded-[10px] overflow-hidden shadow hover:-translate-y-1 transition-transform">
+              <img
+                src="https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20261115_005420_531ca3bc-da2a-48a8-9506-30b46f6725a5.png&w=500&q=85"
+                alt=""
+                class="w-full h-full object-cover">
+            </div>
+            <div class="aspect-square rounded-[10px] overflow-hidden shadow hover:-translate-y-1 transition-transform">
+              <img
+                src="https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20261115_005422_3d48e291-6d44-46fa-a18e-ab2f7c791839.png&w=500&q=85"
+                alt=""
+                class="w-full h-full object-cover">
+            </div>
+            <div class="relative aspect-square rounded-[10px] overflow-hidden shadow hover:-translate-y-1 transition-transform">
+              <img
+                src="https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20261115_005426_0b8053b2-b0af-4629-85b1-5800d8f100d0.png&w=500&q=85"
+                alt=""
+                class="w-full h-full object-cover">
+              <div class="absolute inset-0 bg-black/55 flex items-center justify-center text-white font-bold text-lg">
+                +4
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Column: Group Info, Members & Actions -->
+        <div class="space-y-6">
+          <div class="detail-stagger" style="transition-delay: 320ms;">
+            <h1 id="detail-title" class="font-gilda text-[34px] sm:text-[40px] text-[#1d1a1c] leading-tight">
+              กลุ่มที่ 1
+            </h1>
+            <div class="flex items-center gap-2.5 mt-2 text-sm text-[#5c5156]">
+              <span>บันทึกโดย</span>
+              <img
+                src="https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20261115_005635_2bc44540-0fec-4b94-9f47-722c00c851dd.png&w=120&q=85"
+                alt=""
+                class="w-5 h-5 rounded-full object-cover">
+              <span id="detail-creator" class="font-semibold text-[#1d1a1c]">-</span>
+            </div>
+          </div>
+
+          <div class="detail-stagger" style="transition-delay: 390ms;">
+            <h2 class="font-gilda text-xl text-[#1d1a1c] mb-2">
+              รายชื่อสมาชิกในกลุ่ม
+            </h2>
+            <ul id="detail-members-list" class="space-y-2.5"></ul>
+          </div>
+
+          <!-- Booking-style Action Card -->
+          <div
+            class="detail-stagger rounded-[18px] bg-white p-5 sm:p-6 shadow-[0_16px_45px_rgba(110,60,50,0.14)] border border-[#1d1a1c]/8 space-y-4"
+            style="transition-delay: 460ms;">
+            <div class="flex items-baseline justify-between">
+              <div>
+                <span id="detail-status-badge" class="text-lg font-bold text-[#1d1a1c]">รอการยืนยัน</span>
+                <span class="text-xs text-[#8a7f83] ml-1">/ สถานะสวัสดิการ</span>
+              </div>
+              <span id="detail-member-count" class="text-xs font-semibold px-2.5 py-1 rounded-full bg-[#fdf0e7] text-[#1d1a1c]">
+                4 สมาชิก
+              </span>
+            </div>
+
+            <div class="rounded-xl bg-[#f8f6f7] p-3.5 grid grid-cols-2 gap-3 text-xs">
+              <div>
+                <p class="text-[#8a7f83] font-semibold">วันที่ปฏิบัติหน้าที่</p>
+                <p id="detail-date-text" class="text-[#1d1a1c] font-bold mt-0.5">-</p>
+              </div>
+              <div>
+                <p class="text-[#8a7f83] font-semibold">เวลาที่ลงทะเบียน</p>
+                <p id="detail-created-at" class="text-[#1d1a1c] font-bold mt-0.5">-</p>
+              </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div id="detail-action-buttons" class="flex flex-col sm:flex-row gap-2.5 pt-1"></div>
+          </div>
+
+          <!-- Rating / Reviewer Avatars Row -->
+          <div
+            class="detail-stagger flex items-center justify-between border-y border-[#1d1a1c]/10 py-3.5"
+            style="transition-delay: 530ms;">
+            <div class="flex items-center gap-2 text-xs">
+              <span class="font-bold text-sm">5.0</span>
+              <span class="text-[#8a7f83]">(สวัสดิการหลีด)</span>
+              <div class="flex text-[#ff4d5e]">
+                <i data-lucide="star" class="w-3.5 h-3.5 fill-current"></i>
+                <i data-lucide="star" class="w-3.5 h-3.5 fill-current"></i>
+                <i data-lucide="star" class="w-3.5 h-3.5 fill-current"></i>
+                <i data-lucide="star" class="w-3.5 h-3.5 fill-current"></i>
+                <i data-lucide="star" class="w-3.5 h-3.5 fill-current"></i>
+              </div>
+            </div>
+
+            <div class="flex items-center -space-x-2.5">
+              <img
+                src="https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20261115_005635_2bc44540-0fec-4b94-9f47-722c00c851dd.png&w=120&q=85"
+                alt=""
+                class="w-8 h-8 rounded-full border-2 border-white object-cover">
+              <img
+                src="https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20261115_005635_fee8e948-a5dc-4e86-9ecc-dc8dbce6b660.png&w=120&q=85"
+                alt=""
+                class="w-8 h-8 rounded-full border-2 border-white object-cover">
+              <img
+                src="https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20261115_005635_ce259660-2765-42ee-a5b0-3afee70b11aa.png&w=120&q=85"
+                alt=""
+                class="w-8 h-8 rounded-full border-2 border-white object-cover">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 
+  <!-- Admin Date Management Modal -->
+  <div
+    id="admin-date-modal"
+    class="fixed inset-0 z-50 hidden items-center justify-center bg-black/50 backdrop-blur-sm p-4">
+    <div class="w-full max-w-md rounded-3xl bg-white p-6 shadow-2xl space-y-4">
+      <div class="flex items-center justify-between border-b pb-3">
+        <h3 class="font-gilda text-xl text-[#1d1a1c]">จัดการวันที่ / เลขที่สวัสดิการ</h3>
+        <button type="button" onclick="closeAdminDateModal()" class="clickable p-1.5 rounded-full hover:bg-gray-100">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <div class="flex gap-2">
+        <input
+          type="text"
+          id="new-date-input"
+          placeholder="เช่น 2026-11-25 หรือ วันที่ 4"
+          class="flex-1 px-3.5 py-2.5 rounded-xl border border-gray-200 text-sm outline-none focus:ring-2 focus:ring-[#f39419]">
+        <button
+          type="button"
+          id="add-date-submit"
+          onclick="handleAddDate()"
+          class="clickable px-4 py-2.5 rounded-xl bg-[#f39419] text-white text-sm font-bold hover:bg-[#e0830d]">
+          เพิ่ม
+        </button>
+      </div>
+
+      <div class="max-h-60 overflow-y-auto space-y-2 pr-1" id="admin-dates-list"></div>
+    </div>
+  </div>
+
+  <!-- Toast Container -->
   <div
     id="toast-container"
-    class="fixed top-4 right-4 left-4 sm:left-auto z-50 space-y-2
-           pointer-events-none"
+    class="fixed top-20 right-4 left-4 sm:left-auto z-50 space-y-2 pointer-events-none"
     aria-live="polite">
   </div>
 
 <script>
 /* =========================
-   ตั้งค่าระบบ
+   1. ตั้งค่าระบบ & ข้อมูลนิสิต
 ========================= */
-
-const CLIENT_ID =
-  "257299402825-el5mheppr6fnd09mebi7vmgulilqg9ru.apps.googleusercontent.com";
-
-const GOOGLE_SCRIPT_URL =
-  "https://script.google.com/macros/s/AKfycbxk5BsQpKaD7-WhCZp3Qr3nVWA73wPaok0dEpWyYyctC5bRF4z0puxhWHB72Wg_0OM/exec";
+const CLIENT_ID = "257299402825-el5mheppr6fnd09mebi7vmgulilqg9ru.apps.googleusercontent.com";
+const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyUnXOhcBZX4hwc-JExpuiFl5AM7s2LNLfeGGJRad8nN1OdpDEt8b7ytdEsgrlkhqA/exec";
 
 const ADMIN_EMAILS = [
   "punyaphat.e@msu.ac.th"
@@ -386,19 +1291,35 @@ const ADMIN_EMAILS = [
 
 const ORG_DOMAIN = "msu.ac.th";
 const PREFIX = "68010511";
-
-// Apps Script เดิมรองรับสมาชิก 4 คน
 const MAX_MEMBERS = 4;
-
-// วันที่เดิมที่ไม่มีปี ใช้ พ.ศ. 2569
 const LEGACY_YEAR = 2026;
+const DATE_OVERRIDES = {};
 
-// เติมเฉพาะรายการที่ทราบวันจริงแล้ว
-// รูปแบบ: "ข้อความเดิมในชีต": "YYYY-MM-DD"
-// วันที่ด้านขวาใช้ปี ค.ศ.
-const DATE_OVERRIDES = {
-  // "ข้อความเดิมในชีต": "2026-10-01"
-};
+const CARD_PHOTOS = [
+  "https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20261115_005347_d7535a9a-29c3-4714-9c2a-4b8934ed1df2.png&w=700&q=85",
+  "https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20261115_005405_6867b7fa-e6ec-4c5c-a810-aea29a94cce4.png&w=700&q=85",
+  "https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20261115_005408_78f07613-5823-4ef1-94a9-cbf8977e5c38.png&w=700&q=85",
+  "https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20261115_005408_816e6775-3733-4270-8e1f-bbf270fe3fff.png&w=700&q=85",
+  "https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20261115_005408_bf9bfa74-cb9c-4055-a632-b725670fdc9d.png&w=700&q=85",
+  "https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20261115_005413_84e12590-d5b2-4676-9600-c31c6cd0b0f4.png&w=700&q=85",
+  "https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20261115_005414_da006178-018e-4ed8-b340-f6a70f18f1bc.png&w=700&q=85",
+  "https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20261115_005417_3c7632ad-341c-4e40-b370-db3c3aaf479e.png&w=700&q=85"
+];
+
+const SLIDE_CAPTIONS = [
+  {
+    title: "ระบบจัดกลุ่มสวัสดิการ",
+    desc: "ลงทะเบียนกลุ่มสวัสดิการหลีด 1–4 คน และตรวจสอบตารางเวรประจำสัปดาห์"
+  },
+  {
+    title: "ตารางเวรประจำวัน",
+    desc: "ติดตามรายชื่อกลุ่มที่ปฏิบัติหน้าที่ในแต่ละวันแบบเรียลไทม์"
+  },
+  {
+    title: "สาขาวิชาคณิตศาสตร์",
+    desc: "คณะศึกษาศาสตร์ มหาวิทยาลัยมหาสารคาม ร่วมแรงร่วมใจดูแลสวัสดิการ"
+  }
+];
 
 const ROSTER = {
   "001":"นางสาวจิรัชญา หล่าโคตร์",
@@ -493,6 +1414,7 @@ const $ = id => document.getElementById(id);
 
 let allGroups = [];
 let availableDates = [];
+let favoriteGroups = new Set();
 let currentUser = null;
 let editingGroupNum = null;
 let selectedWeek = startOfWeek(todayBangkok());
@@ -502,13 +1424,233 @@ let saving = false;
 let requestVersion = 0;
 let sessionVersion = 0;
 let lastToday = +todayBangkok();
-
 const pendingGroups = new Set();
 
 /* =========================
-   ฟังก์ชันทั่วไป
+   2. Custom Dot Cursor
 ========================= */
+function initCursor() {
+  const cursor = $("custom-cursor");
+  if (!cursor) return;
 
+  window.addEventListener("pointermove", e => {
+    cursor.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0)`;
+    const clickable = e.target.closest("button, a, select, input, .clickable");
+    cursor.classList.toggle("is-hover", !!clickable);
+  });
+
+  window.addEventListener("pointerdown", () => cursor.classList.add("is-down"));
+  window.addEventListener("pointerup", () => cursor.classList.remove("is-down"));
+}
+
+/* =========================
+   3. Hero Slider, Misty Wipe & Rail Choreography
+========================= */
+let activeSlide = 0;
+let isWiping = false;
+let autoSlideTimer = null;
+let pointerOffset = { x: 0, y: 0 };
+let slideStartTime = performance.now();
+
+function layoutRail() {
+  const vw = window.innerWidth;
+  const vh = Math.max(window.innerHeight, 680);
+  const railX = vw * 0.855;
+  const startY = 74 + vh * 0.085;
+
+  const activeSize = Math.min(Math.max(vw * 0.113, 96), 190);
+  const inactiveSize = Math.min(Math.max(vw * 0.054, 46), 92);
+  const gap = Math.max(vw * 0.009, 8);
+
+  // Order: Top = Slide 2 (index 0 in DOM), Middle = Slide 1 (index 1), Bottom = Slide 0 (index 2)
+  const thumbs = [...document.querySelectorAll(".rail-thumb")];
+  const targetSlides = [2, 1, 0];
+
+  let currentY = startY;
+  let litCenterY = startY + activeSize / 2;
+
+  thumbs.forEach((thumb, idx) => {
+    const slideIdx = targetSlides[idx];
+    const isLit = slideIdx === activeSlide;
+    const size = isLit ? activeSize : inactiveSize;
+    const centerY = currentY + size / 2;
+
+    thumb.style.left = `${railX}px`;
+    thumb.style.top = `${centerY}px`;
+    thumb.style.width = `${size}px`;
+    thumb.style.height = `${size}px`;
+    thumb.classList.toggle("is-lit", isLit);
+
+    if (isLit) {
+      litCenterY = centerY;
+    }
+    currentY += size + gap;
+  });
+
+  const innerDiam = (activeSize / 2 + vw * 0.05) * 2;
+  const outerDiam = (activeSize / 2 + vw * 0.108) * 2;
+
+  const ringInner = $("ring-inner");
+  const ringOuter = $("ring-outer");
+
+  ringInner.style.left = `${railX}px`;
+  ringInner.style.top = `${litCenterY}px`;
+  ringInner.style.width = `${innerDiam}px`;
+  ringInner.style.height = `${innerDiam}px`;
+
+  ringOuter.style.left = `${railX}px`;
+  ringOuter.style.top = `${litCenterY}px`;
+  ringOuter.style.width = `${outerDiam}px`;
+  ringOuter.style.height = `${outerDiam}px`;
+
+  const connWidth = Math.max(vw * 0.047, 40);
+  const connLeft = railX - activeSize / 2 - vw * 0.008 - connWidth;
+
+  const connector = $("rail-connector");
+  connector.style.left = `${connLeft}px`;
+  connector.style.top = `${litCenterY}px`;
+  connector.style.width = `${connWidth}px`;
+
+  const caption = $("rail-caption");
+  caption.style.left = `${connLeft - 16}px`;
+  caption.style.top = `${litCenterY}px`;
+}
+
+function easeInOutCubic(t) {
+  return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+}
+
+function goToSlide(nextIdx) {
+  if (isWiping || nextIdx === activeSlide) return;
+  isWiping = true;
+
+  const slides = [...document.querySelectorAll(".hero-slide")];
+  const outgoing = slides[activeSlide];
+  const incoming = slides[nextIdx];
+  const outPhoto = outgoing.querySelector(".hero-photo");
+  const inPhoto = incoming.querySelector(".hero-photo");
+
+  activeSlide = nextIdx;
+  layoutRail();
+
+  // Hide connector & caption during wipe
+  $("rail-connector").style.transform = "scaleX(0)";
+  $("rail-bar").style.transform = "scaleY(0)";
+  $("rail-caption").classList.remove("is-shown");
+
+  incoming.style.zIndex = "4";
+  outgoing.style.zIndex = "2";
+  incoming.style.opacity = "1";
+  incoming.classList.add("is-active");
+  outgoing.classList.remove("is-active");
+
+  const mist = $("mist-band");
+  const duration = 1250;
+  const start = performance.now();
+
+  setTimeout(() => {
+    $("rail-heading").textContent = SLIDE_CAPTIONS[nextIdx].title;
+    $("rail-desc").textContent = SLIDE_CAPTIONS[nextIdx].desc;
+    $("rail-connector").style.transform = "scaleX(1)";
+    $("rail-bar").style.transform = "scaleY(1)";
+    $("rail-caption").classList.add("is-shown");
+  }, 650);
+
+  function frame(now) {
+    const rawT = Math.min((now - start) / duration, 1);
+    const p = easeInOutCubic(rawT);
+
+    const opaqueStop = p * 135 - 35;
+    const midStop = p * 135 - 17.5;
+    const clearStop = p * 135;
+
+    const maskGrad = `linear-gradient(270deg, #000 ${opaqueStop}%, rgba(0,0,0,0.6) ${midStop}%, transparent ${clearStop}%)`;
+    incoming.style.webkitMaskImage = maskGrad;
+    incoming.style.maskImage = maskGrad;
+
+    // Photo settle & push
+    const inScale = 1.12 - 0.08 * p;
+    const inX = 2 * (1 - p);
+    inPhoto.style.transform = `scale(${inScale}) translateX(${inX}%)`;
+
+    const outScale = 1.04 + 0.05 * p;
+    const outX = -2 * p;
+    outPhoto.style.transform = `scale(${outScale}) translateX(${outX}%)`;
+
+    // Mist band rides wipe edge
+    const edgePercent = 100 - p * 115;
+    mist.style.left = `calc(${edgePercent}vw - 17vw)`;
+    mist.style.opacity = String(Math.sin(Math.PI * rawT) * 0.92);
+
+    if (rawT < 1) {
+      requestAnimationFrame(frame);
+    } else {
+      incoming.style.webkitMaskImage = "none";
+      incoming.style.maskImage = "none";
+      incoming.style.zIndex = "2";
+      outgoing.style.zIndex = "1";
+      outgoing.style.opacity = "0";
+      outPhoto.style.transform = "scale(1.04)";
+      mist.style.opacity = "0";
+      isWiping = false;
+      slideStartTime = performance.now();
+    }
+  }
+
+  requestAnimationFrame(frame);
+  resetAutoSlide();
+}
+
+function resetAutoSlide() {
+  clearInterval(autoSlideTimer);
+  autoSlideTimer = setInterval(() => {
+    goToSlide((activeSlide + 1) % 3);
+  }, 5200);
+}
+
+function startKenBurnsLoop() {
+  function tick(now) {
+    if (!isWiping) {
+      const slides = document.querySelectorAll(".hero-slide");
+      const currentPhoto = slides[activeSlide]?.querySelector(".hero-photo");
+      if (currentPhoto) {
+        const elapsed = Math.min((now - slideStartTime) / 1000, 12);
+        const kbScale = 1.04 + elapsed * 0.0035;
+        currentPhoto.style.transform = `scale(${kbScale}) translate(${pointerOffset.x}%, ${pointerOffset.y}%)`;
+      }
+    }
+    requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+}
+
+/* =========================
+   4. Scroll Choreography
+========================= */
+function handleScroll() {
+  const sy = window.scrollY;
+  const vh = window.innerHeight;
+
+  // Solid Nav after 30% vh
+  $("top-nav").classList.toggle("is-solid", sy > vh * 0.3 || $("detail-overlay").classList.contains("is-open"));
+
+  // Parallax layers
+  $("slide-stack").style.transform = `translate3d(0, ${sy * 0.42}px, 0)`;
+
+  const cloudScale = 1 + (0.35 * sy) / vh;
+  $("bottom-clouds").style.transform = `translate3d(0, ${-sy * 0.38}px, 0) scale(${cloudScale})`;
+
+  const topCloudOpacity = Math.min(Math.max(sy / (0.45 * vh), 0), 1);
+  $("top-cloud").style.opacity = String(topCloudOpacity);
+
+  const railOpacity = Math.max(1 - sy / (0.5 * vh), 0);
+  $("hero-rail").style.transform = `translate3d(0, ${sy * 0.2}px, 0)`;
+  $("hero-rail").style.opacity = String(railOpacity);
+}
+
+/* =========================
+   5. Utility & Core App Functions
+========================= */
 function icons() {
   if (window.lucide) {
     lucide.createIcons();
@@ -516,13 +1658,13 @@ function icons() {
 }
 
 function escapeHtml(value) {
-  return String(value ?? "").replace(/[&<>"']/g, character => ({
+  return String(value ?? "").replace(/[&<>"']/g, c => ({
     "&": "&amp;",
     "<": "&lt;",
     ">": "&gt;",
     '"': "&quot;",
     "'": "&#39;"
-  }[character]));
+  }[c]));
 }
 
 function emailKey(value) {
@@ -530,28 +1672,21 @@ function emailKey(value) {
 }
 
 function isAdmin() {
-  return !!currentUser &&
-    ADMIN_EMAILS.some(email =>
-      emailKey(email) === emailKey(currentUser.email)
-    );
+  return !!currentUser && ADMIN_EMAILS.some(email => emailKey(email) === emailKey(currentUser.email));
 }
 
 function isCreator(group) {
-  return !!currentUser &&
-    emailKey(group.created_by_email) === emailKey(currentUser.email);
+  return !!currentUser && emailKey(group.created_by_email) === emailKey(currentUser.email);
 }
 
 function isCompleted(group) {
-  return group.is_completed === true ||
-    String(group.is_completed).trim().toLowerCase() === "true";
+  return group.is_completed === true || String(group.is_completed).trim().toLowerCase() === "true";
 }
 
 function membersOf(group) {
   const members = [];
-
   for (let i = 1; i <= MAX_MEMBERS; i++) {
     const id = String(group[`member${i}_id`] || "").trim();
-
     if (id) {
       members.push({
         id,
@@ -559,53 +1694,47 @@ function membersOf(group) {
       });
     }
   }
-
   return members;
 }
 
 function getRegistrationCount(fullId) {
   return allGroups.filter(group =>
-    isCompleted(group) &&
-    membersOf(group).some(member => member.id === String(fullId))
+    isCompleted(group) && membersOf(group).some(member => member.id === String(fullId))
   ).length;
 }
 
 function showToast(message, isError = false) {
   const toast = document.createElement("div");
-
   toast.className =
-    "toast rounded-xl shadow-lg px-4 py-3 text-sm text-white " +
-    "sm:max-w-md " +
-    (isError ? "bg-red-500" : "bg-orange-600");
-
+    "toast rounded-2xl shadow-xl px-4 py-3 text-sm text-white sm:max-w-md " +
+    (isError ? "bg-[#ff4d5e]" : "bg-[#1d1a1c]");
   toast.textContent = message;
   $("toast-container").append(toast);
+  setTimeout(() => toast.remove(), isError ? 6000 : 3500);
+}
 
-  setTimeout(
-    () => toast.remove(),
-    isError ? 6500 : 3500
-  );
+function scrollToSection(id) {
+  closeDetail();
+  const el = $(id);
+  if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+function returnHome() {
+  closeDetail();
+  window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
 /* =========================
-   วันที่และสัปดาห์
+   6. Date & Week Parsing
 ========================= */
-
 function validDate(year, month, day) {
   year = Number(year);
   month = Number(month);
   day = Number(day);
-
-  if (year >= 2400) {
-    year -= 543;
-  }
-
-  if (year < 1900 || year > 2200) {
-    return null;
-  }
+  if (year >= 2400) year -= 543;
+  if (year < 1900 || year > 2200) return null;
 
   const date = new Date(Date.UTC(year, month - 1, day));
-
   if (
     date.getUTCFullYear() !== year ||
     date.getUTCMonth() !== month - 1 ||
@@ -613,7 +1742,6 @@ function validDate(year, month, day) {
   ) {
     return null;
   }
-
   return date;
 }
 
@@ -625,202 +1753,72 @@ function todayBangkok() {
     day: "2-digit"
   }).formatToParts(new Date());
 
-  const get = type =>
-    parts.find(part => part.type === type).value;
-
+  const get = type => parts.find(part => part.type === type).value;
   return validDate(get("year"), get("month"), get("day"));
 }
 
 function startOfWeek(date) {
-  return new Date(
-    +date - ((date.getUTCDay() + 6) % 7) * DAY
-  );
+  return new Date(+date - ((date.getUTCDay() + 6) % 7) * DAY);
 }
 
 function formatDate(date, full = false) {
   const options = full
-    ? {
-        dateStyle: "full",
-        timeZone: "UTC"
-      }
-    : {
-        day: "numeric",
-        month: "short",
-        year: "numeric",
-        timeZone: "UTC"
-      };
-
+    ? { dateStyle: "full", timeZone: "UTC" }
+    : { day: "numeric", month: "short", year: "numeric", timeZone: "UTC" };
   return new Intl.DateTimeFormat("th-TH", options).format(date);
 }
 
 function parseDutyDate(value) {
   let text = String(value ?? "").trim();
-
   if (Object.prototype.hasOwnProperty.call(DATE_OVERRIDES, text)) {
-    const match = String(DATE_OVERRIDES[text])
-      .match(/^(\d{4})-(\d{2})-(\d{2})$/);
-
-    return match
-      ? validDate(match[1], match[2], match[3])
-      : null;
+    const match = String(DATE_OVERRIDES[text]).match(/^(\d{4})-(\d{2})-(\d{2})$/);
+    return match ? validDate(match[1], match[2], match[3]) : null;
   }
 
-  text = text.replace(
-    /[๐-๙]/g,
-    number => "๐๑๒๓๔๕๖๗๘๙".indexOf(number)
-  );
+  text = text.replace(/[๐-๙]/g, num => "๐๑๒๓๔๕๖๗๘๙".indexOf(num));
 
   let match = text.match(/^(\d{4})-(\d{2})-(\d{2})$/);
-
-  if (match) {
-    return validDate(match[1], match[2], match[3]);
-  }
+  if (match) return validDate(match[1], match[2], match[3]);
 
   match = text.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
-
-  if (match) {
-    return validDate(match[3], match[2], match[1]);
-  }
+  if (match) return validDate(match[3], match[2], match[1]);
 
   const monthNames = [
-    ["มกราคม", "มค"],
-    ["กุมภาพันธ์", "กพ"],
-    ["มีนาคม", "มีค"],
-    ["เมษายน", "เมย"],
-    ["พฤษภาคม", "พค"],
-    ["มิถุนายน", "มิย"],
-    ["กรกฎาคม", "กค"],
-    ["สิงหาคม", "สค"],
-    ["กันยายน", "กย"],
-    ["ตุลาคม", "ตุลา", "ตค"],
-    ["พฤศจิกายน", "พย"],
-    ["ธันวาคม", "ธค"]
+    ["มกราคม", "มค"], ["กุมภาพันธ์", "กพ"], ["มีนาคม", "มีค"],
+    ["เมษายน", "เมย"], ["พฤษภาคม", "พค"], ["มิถุนายน", "มิย"],
+    ["กรกฎาคม", "กค"], ["สิงหาคม", "สค"], ["กันยายน", "กย"],
+    ["ตุลาคม", "ตุลา", "ตค"], ["พฤศจิกายน", "พย"], ["ธันวาคม", "ธค"]
   ];
 
   const compact = text.replace(/[.\s]/g, "");
-
   const months = monthNames
-    .map((names, index) =>
-      names.some(name => compact.includes(name))
-        ? index + 1
-        : 0
-    )
+    .map((names, idx) => (names.some(name => compact.includes(name)) ? idx + 1 : 0))
     .filter(Boolean);
 
-  if (months.length !== 1) {
-    return null;
-  }
+  if (months.length !== 1) return null;
 
   const numbers = text.match(/\d+/g) || [];
+  if (numbers.length < 1 || numbers.length > 2) return null;
+  if (numbers[0].length > 2) return null;
+  if (numbers.length === 2 && numbers[1].length !== 4) return null;
 
-  if (numbers.length < 1 || numbers.length > 2) {
-    return null;
-  }
-
-  if (numbers[0].length > 2) {
-    return null;
-  }
-
-  if (numbers.length === 2 && numbers[1].length !== 4) {
-    return null;
-  }
-
-  const date = validDate(
-    numbers[1] || LEGACY_YEAR,
-    months[0],
-    numbers[0]
-  );
-
-  if (!date) {
-    return null;
-  }
-
-  const weekdayNames = [
-    "อาทิตย์",
-    "จันทร์",
-    "อังคาร",
-    "พุธ",
-    "พฤหัสบดี",
-    "ศุกร์",
-    "เสาร์"
-  ];
-
-  const weekdays = weekdayNames
-    .map((name, index) =>
-      text.includes(name) ||
-      (index === 4 && text.includes("พฤหัส"))
-        ? index
-        : -1
-    )
-    .filter(index => index >= 0);
-
-  if (weekdays.length > 1) {
-    return null;
-  }
-
-  if (
-    weekdays.length === 1 &&
-    date.getUTCDay() !== weekdays[0]
-  ) {
-    return null;
-  }
-
-  return date;
+  return validDate(numbers[1] || LEGACY_YEAR, months[0], numbers[0]);
 }
 
 function dateKey(value) {
   const date = parseDutyDate(value);
-
-  return date
-    ? date.toISOString().slice(0, 10)
-    : String(value || "").trim();
+  return date ? date.toISOString().slice(0, 10) : String(value || "").trim();
 }
 
 /* =========================
-   ล็อกอิน
+   7. Google Authentication
 ========================= */
-
 function parseJwt(token) {
-  let base64 = token
-    .split(".")[1]
-    .replace(/-/g, "+")
-    .replace(/_/g, "/");
-
+  let base64 = token.split(".")[1].replace(/-/g, "+").replace(/_/g, "/");
   base64 += "=".repeat((4 - base64.length % 4) % 4);
-
-  const bytes = Uint8Array.from(
-    atob(base64),
-    character => character.charCodeAt(0)
-  );
-
+  const bytes = Uint8Array.from(atob(base64), c => c.charCodeAt(0));
   return JSON.parse(new TextDecoder().decode(bytes));
 }
-
-window.addEventListener("load", () => {
-  resetMemberSlots();
-  renderDashboard();
-  updateControls();
-  icons();
-
-  if (!window.google?.accounts?.id) {
-    $("login-error").textContent =
-      "โหลดระบบ Google ไม่สำเร็จ กรุณารีเฟรชหน้าเว็บ";
-    return;
-  }
-
-  google.accounts.id.initialize({
-    client_id: CLIENT_ID,
-    callback: handleCredentialResponse,
-    hd: ORG_DOMAIN
-  });
-
-  google.accounts.id.renderButton($("buttonDiv"), {
-    theme: "outline",
-    size: "large",
-    shape: "pill",
-    width: 260
-  });
-});
 
 async function handleCredentialResponse(response) {
   try {
@@ -834,15 +1832,11 @@ async function handleCredentialResponse(response) {
       !data.exp ||
       data.exp * 1000 <= Date.now()
     ) {
-      showToast(
-        "กรุณาใช้อีเมลมหาวิทยาลัย @" + ORG_DOMAIN,
-        true
-      );
+      showToast("กรุณาใช้อีเมลมหาวิทยาลัย @" + ORG_DOMAIN, true);
       return;
     }
 
     sessionVersion++;
-
     currentUser = {
       name: data.name || data.email,
       email,
@@ -850,21 +1844,33 @@ async function handleCredentialResponse(response) {
     };
 
     $("user-name-display").textContent = currentUser.name;
+    $("logout-btn").classList.remove("hidden");
 
     const avatar = $("user-avatar");
+    const defIcon = $("user-default-icon");
     avatar.classList.add("hidden");
+    defIcon.classList.remove("hidden");
 
     try {
       const url = new URL(currentUser.picture);
-
       if (url.protocol === "https:") {
         avatar.src = url.href;
         avatar.classList.remove("hidden");
+        defIcon.classList.add("hidden");
       }
     } catch (_) {}
 
-    $("login-screen").classList.add("hidden");
-    $("main-app").classList.remove("hidden");
+    if (isAdmin()) {
+      $("nav-admin-btn").classList.remove("hidden");
+    } else {
+      $("nav-admin-btn").classList.add("hidden");
+    }
+
+    // Switch Floating Bar & Workspace State
+    $("floating-login-box").classList.add("hidden");
+    $("floating-search-box").classList.remove("hidden");
+    $("locked-notice").classList.add("hidden");
+    $("authenticated-workspace").classList.remove("hidden");
 
     goToday();
     await fetchGroups();
@@ -877,32 +1883,36 @@ function handleLogout() {
   currentUser = null;
   sessionVersion++;
   requestVersion++;
-
   allGroups = [];
   availableDates = [];
   pendingGroups.clear();
-
   saving = false;
   dataState = "idle";
   editingGroupNum = null;
 
   window.google?.accounts?.id?.disableAutoSelect();
 
-  $("main-app").classList.add("hidden");
-  $("login-screen").classList.remove("hidden");
+  $("user-name-display").textContent = "กรุณาเข้าสู่ระบบ";
+  $("user-avatar").classList.add("hidden");
+  $("user-default-icon").classList.remove("hidden");
+  $("logout-btn").classList.add("hidden");
+  $("nav-admin-btn").classList.add("hidden");
 
+  $("floating-login-box").classList.remove("hidden");
+  $("floating-search-box").classList.add("hidden");
+  $("locked-notice").classList.remove("hidden");
+  $("authenticated-workspace").classList.add("hidden");
+
+  closeDetail();
   cancelEdit();
   renderDashboard();
 }
 
 /* =========================
-   โหลดข้อมูล
+   8. Fetch & Sync Data
 ========================= */
-
 async function fetchGroups() {
-  if (!currentUser || saving) {
-    return;
-  }
+  if (!currentUser || saving) return;
 
   const request = ++requestVersion;
   const session = sessionVersion;
@@ -913,63 +1923,31 @@ async function fetchGroups() {
   updateControls();
 
   try {
-    const response = await fetch(GOOGLE_SCRIPT_URL, {
-      cache: "no-store"
-    });
-
-    if (!response.ok) {
-      throw new Error("โหลดข้อมูลไม่สำเร็จ");
-    }
+    const response = await fetch(GOOGLE_SCRIPT_URL, { cache: "no-store" });
+    if (!response.ok) throw new Error("โหลดข้อมูลไม่สำเร็จ");
 
     const result = await response.json();
-
     if (!result.isOk || !Array.isArray(result.data)) {
-      throw new Error(
-        result.error || "รูปแบบข้อมูลไม่ถูกต้อง"
-      );
+      throw new Error(result.error || "รูปแบบข้อมูลไม่ถูกต้อง");
     }
 
-    if (
-      request !== requestVersion ||
-      session !== sessionVersion
-    ) {
-      return;
-    }
+    if (request !== requestVersion || session !== sessionVersion) return;
 
     allGroups = result.data;
-
     availableDates = Array.isArray(result.dates)
-      ? [...new Set(
-          result.dates
-            .map(String)
-            .map(value => value.trim())
-            .filter(Boolean)
-        )]
+      ? [...new Set(result.dates.map(String).map(v => v.trim()).filter(Boolean))]
       : [];
 
     dataState = "ready";
-
     renderDateDropdown(selected);
     refreshMemberNames();
+    renderAdminDatesList();
   } catch (error) {
-    if (
-      request !== requestVersion ||
-      session !== sessionVersion
-    ) {
-      return;
-    }
-
+    if (request !== requestVersion || session !== sessionVersion) return;
     dataState = "error";
-
-    showToast(
-      "ดึงข้อมูลไม่สำเร็จ กรุณากดรีเฟรช",
-      true
-    );
+    showToast("ดึงข้อมูลไม่สำเร็จ กรุณากดรีเฟรช", true);
   } finally {
-    if (
-      request === requestVersion &&
-      session === sessionVersion
-    ) {
+    if (request === requestVersion && session === sessionVersion) {
       renderDashboard();
       updateControls();
     }
@@ -977,14 +1955,10 @@ async function fetchGroups() {
 }
 
 /* =========================
-   ตัวกรองสัปดาห์
+   9. Dashboard & Cards Rendering
 ========================= */
-
 function changeWeek(offset) {
-  selectedWeek = new Date(
-    +selectedWeek + offset * 7 * DAY
-  );
-
+  selectedWeek = new Date(+selectedWeek + offset * 7 * DAY);
   viewMode = "week";
   renderDashboard();
 }
@@ -1000,30 +1974,20 @@ function changeView(value) {
   renderDashboard();
 }
 
-/* =========================
-   แสดงหน้าแรก
-========================= */
-
 function renderDashboard() {
   const today = todayBangkok();
-
   $("today-date").textContent = formatDate(today, true);
+  $("bar-today-label").textContent = formatDate(today, false);
   $("view-mode").value = viewMode;
 
   $("week-label").textContent =
     viewMode === "week"
-      ? `${formatDate(selectedWeek)} – ${
-          formatDate(new Date(+selectedWeek + 6 * DAY))
-        }`
+      ? `${formatDate(selectedWeek)} – ${formatDate(new Date(+selectedWeek + 6 * DAY))}`
       : viewMode === "unknown"
         ? "วันที่ต้องตรวจสอบ / ยังไม่เลือกวัน"
-        : "รายชื่อกลุ่มทั้งหมด";
+        : "รายชื่อกลุ่มทั้งหมดในระบบ";
 
-  $("loading-state").classList.toggle(
-    "hidden",
-    dataState !== "loading"
-  );
-
+  $("loading-state").classList.toggle("hidden", dataState !== "loading");
   $("groups-list").replaceChildren();
   $("empty-msg").classList.add("hidden");
   $("total-summary").textContent = "";
@@ -1034,14 +1998,6 @@ function renderDashboard() {
       dataState === "error"
         ? "โหลดข้อมูลเวรไม่สำเร็จ กรุณากดรีเฟรช"
         : "กำลังโหลดข้อมูลเวรวันนี้…";
-
-    if (dataState === "error") {
-      $("empty-msg").textContent =
-        "โหลดรายชื่อไม่สำเร็จ กรุณากดปุ่มรีเฟรช";
-
-      $("empty-msg").classList.remove("hidden");
-    }
-
     return;
   }
 
@@ -1051,52 +2007,36 @@ function renderDashboard() {
   }));
 
   const unknown = entries.filter(entry => !entry.date);
-
-  const dueToday = entries.filter(entry =>
-    entry.date && +entry.date === +today
-  );
+  const dueToday = entries.filter(entry => entry.date && +entry.date === +today);
 
   renderToday(dueToday, unknown, today);
 
-  $("total-summary").textContent =
-    `ทั้งหมด ${allGroups.length} กลุ่ม · ` +
-    `ยังจัดวันไม่ได้ ${unknown.length} กลุ่ม`;
+  $("bar-total-groups").textContent = `${allGroups.length} กลุ่มในระบบ`;
+  $("total-summary").textContent = `ทั้งหมด ${allGroups.length} กลุ่ม · ยังจัดวันไม่ได้ ${unknown.length} กลุ่ม`;
 
   const visible = entries
     .filter(entry => {
-      if (viewMode === "all") {
-        return true;
-      }
-
-      if (viewMode === "unknown") {
-        return !entry.date;
-      }
-
-      return entry.date &&
-        +entry.date >= +selectedWeek &&
-        +entry.date < +selectedWeek + 7 * DAY;
+      if (viewMode === "all") return true;
+      if (viewMode === "unknown") return !entry.date;
+      return entry.date && +entry.date >= +selectedWeek && +entry.date < +selectedWeek + 7 * DAY;
     })
     .sort((a, b) =>
-      (a.date ? +a.date : Infinity) -
-      (b.date ? +b.date : Infinity) ||
-      Number(a.group.group_number) -
-      Number(b.group.group_number)
+      (a.date ? +a.date : Infinity) - (b.date ? +b.date : Infinity) ||
+      Number(a.group.group_number) - Number(b.group.group_number)
     );
 
-  $("visible-summary").textContent =
-    `แสดง ${visible.length} กลุ่ม`;
+  $("visible-summary").textContent = `แสดง ${visible.length} กลุ่ม`;
 
   if (!visible.length) {
     $("empty-msg").textContent =
       viewMode === "week"
         ? "ยังไม่มีกลุ่มที่ระบุวันเวรในสัปดาห์นี้"
         : "ไม่มีรายการในมุมมองนี้";
-
     $("empty-msg").classList.remove("hidden");
   }
 
-  visible.forEach(({ group, date }) => {
-    renderGroupCard(group, date);
+  visible.forEach(({ group, date }, index) => {
+    renderGroupCard(group, date, index);
   });
 
   icons();
@@ -1107,37 +2047,25 @@ function renderToday(dueToday, unknown, today) {
 
   if (dueToday.length) {
     html = dueToday.map(({ group }) => `
-      <div class="rounded-2xl bg-white p-4 text-gray-800">
-
+      <div class="rounded-2xl bg-[#fdf0e7] p-4 border border-[#f7d9c6]">
         <div class="flex flex-wrap items-center justify-between gap-2">
-          <h3 class="text-lg font-bold text-orange-700">
+          <h3 class="text-base font-bold text-[#1d1a1c]">
             กลุ่มที่ ${escapeHtml(group.group_number)}
           </h3>
-
-          <span class="text-xs font-semibold ${
-            isCompleted(group)
-              ? "text-green-600"
-              : "text-amber-600"
+          <span class="text-xs font-bold px-2.5 py-0.5 rounded-full ${
+            isCompleted(group) ? "bg-green-100 text-green-700" : "bg-[#f39419]/20 text-[#f39419]"
           }">
-            ${
-              isCompleted(group)
-                ? "✓ รับสวัสดิการแล้ว"
-                : "รอการยืนยัน"
-            }
+            ${isCompleted(group) ? "✓ รับสวัสดิการแล้ว" : "รอการยืนยัน"}
           </span>
         </div>
 
-        <ul class="mt-3 space-y-2">
+        <ul class="mt-3 space-y-1.5">
           ${membersOf(group).map(member => `
-            <li class="flex items-start gap-2 text-sm">
-              <span class="rounded bg-orange-100 text-orange-700
-                           px-2 py-0.5 font-bold shrink-0">
+            <li class="flex items-center gap-2 text-sm text-[#1d1a1c]">
+              <span class="rounded-md bg-[#1d1a1c] text-white px-2 py-0.5 text-xs font-bold shrink-0">
                 ${escapeHtml(member.id.slice(-3))}
               </span>
-
-              <span class="break-words">
-                ${escapeHtml(member.name)}
-              </span>
+              <span class="truncate">${escapeHtml(member.name)}</span>
             </li>
           `).join("")}
         </ul>
@@ -1145,17 +2073,13 @@ function renderToday(dueToday, unknown, today) {
     `).join("");
   } else {
     const openToday = availableDates.some(value => {
-      const date = parseDutyDate(value);
-      return date && +date === +today;
+      const d = parseDutyDate(value);
+      return d && +d === +today;
     });
 
     html = `
-      <div class="rounded-xl bg-white/15 p-4 font-semibold">
-        ${
-          openToday
-            ? "วันนี้มีวันเวรเปิดไว้ แต่ยังไม่มีกลุ่มลงทะเบียน"
-            : "ไม่พบกลุ่มที่ระบุเวรตรงกับวันนี้"
-        }
+      <div class="rounded-2xl bg-[#fdf0e7] p-4 text-sm font-semibold text-[#5c5156]">
+        ${openToday ? "วันนี้มีวันเวรเปิดไว้ แต่ยังไม่มีกลุ่มลงทะเบียน" : "ไม่พบกลุ่มที่ระบุเวรตรงกับวันนี้"}
       </div>
     `;
   }
@@ -1165,201 +2089,277 @@ function renderToday(dueToday, unknown, today) {
       <button
         type="button"
         data-show-unknown
-        class="text-left text-xs underline underline-offset-4">
+        class="clickable mt-2 text-left text-xs font-semibold text-[#f39419] underline underline-offset-4">
         อีก ${unknown.length} กลุ่มยังจัดวันไม่ได้ — กดตรวจสอบ
       </button>
     `;
   }
 
   $("today-content").innerHTML = html;
-
-  $("today-content")
-    .querySelector("[data-show-unknown]")
-    ?.addEventListener("click", () => {
-      changeView("unknown");
-
-      $("groups-section").scrollIntoView({
-        behavior: "smooth",
-        block: "start"
-      });
-    });
+  $("today-content").querySelector("[data-show-unknown]")?.addEventListener("click", () => {
+    changeView("unknown");
+    scrollToSection("groups-section");
+  });
 }
 
-function renderGroupCard(group, date) {
+function renderGroupCard(group, date, index) {
   const done = isCompleted(group);
-  const card = document.createElement("article");
-
-  card.className =
-    "rounded-2xl p-4 border flex flex-col gap-3 " +
-    (
-      done
-        ? "border-green-200 bg-green-50/30"
-        : "border-orange-100 bg-white"
-    );
+  const gNum = String(group.group_number);
+  const photoUrl = CARD_PHOTOS[(Number(group.group_number) - 1) % CARD_PHOTOS.length];
+  const members = membersOf(group);
+  const isFav = favoriteGroups.has(gNum);
 
   const dateText = date
-    ? formatDate(date, true)
+    ? formatDate(date, false)
     : String(group.selected_date || "ยังไม่เลือกวัน");
 
-  card.innerHTML = `
-    <div class="flex flex-wrap justify-between items-center gap-2">
+  const card = document.createElement("article");
+  card.className = "clickable stay-card group";
+  card.style.transitionDelay = `${(index % 4) * 90}ms`;
 
-      <h3 class="font-bold text-orange-700">
-        กลุ่มที่ ${escapeHtml(group.group_number)}
+  card.innerHTML = `
+    <div class="stay-card-bg" style="background-image: url('${photoUrl}');"></div>
+    <div class="stay-card-gradient"></div>
+
+    <!-- Top-Left Status Pill -->
+    <div class="absolute top-3.5 left-3.5 px-2.5 py-1 rounded-[6px] bg-white/85 backdrop-blur-[6px] text-[11.5px] font-bold text-[#1d1a1c]">
+      ${done ? "✓ ยืนยันแล้ว" : "รอการยืนยัน"}
+      <span class="opacity-60 font-normal">/${members.length}คน</span>
+    </div>
+
+    <!-- Top-Right Heart Button -->
+    <button
+      type="button"
+      data-heart-btn
+      aria-label="ถูกใจกลุ่ม"
+      class="clickable absolute top-3.5 right-3.5 w-[30px] h-[30px] rounded-full bg-white flex items-center justify-center shadow text-[#1d1a1c] z-10">
+      <i data-lucide="heart" class="w-4 h-4 ${isFav ? "fill-[#ff4d5e] text-[#ff4d5e]" : ""}"></i>
+    </button>
+
+    <!-- Bottom-Left Text -->
+    <div class="absolute bottom-4 left-4 right-4 text-white">
+      <h3 class="font-urbanist font-semibold text-[16px] leading-snug">
+        กลุ่มที่ ${escapeHtml(gNum)}
       </h3>
 
-      <span class="text-xs rounded-full px-2 py-1 ${
-        done
-          ? "bg-green-100 text-green-700"
-          : "bg-amber-50 text-amber-700"
-      }">
-        ${done ? "✓ รับสวัสดิการแล้ว" : "รอการยืนยัน"}
-      </span>
+      <p class="text-[12px] text-white/85 flex items-center gap-1 mt-0.5 truncate">
+        <i data-lucide="map-pin" class="w-3 h-3 shrink-0"></i>
+        <span class="truncate">${escapeHtml(dateText)}</span>
+      </p>
+
+      <div class="flex items-center justify-between mt-2">
+        <div class="flex items-center gap-0.5 text-[#f7c325]">
+          <i data-lucide="star" class="w-3 h-3 fill-current"></i>
+          <i data-lucide="star" class="w-3 h-3 fill-current"></i>
+          <i data-lucide="star" class="w-3 h-3 fill-current"></i>
+          <i data-lucide="star" class="w-3 h-3 fill-current"></i>
+          <i data-lucide="star" class="w-3 h-3 fill-current"></i>
+          <span class="text-white text-[11.5px] font-semibold ml-1">${members.length}.0</span>
+        </div>
+
+        <span class="text-[11px] text-white/75 truncate max-w-[90px]">
+          ${members.map(m => m.id.slice(-3)).join(", ")}
+        </span>
+      </div>
     </div>
-
-    <div class="text-sm font-semibold ${
-      date ? "text-gray-600" : "text-amber-700"
-    }">
-      ${escapeHtml(dateText)}
-
-      ${
-        !date && group.selected_date
-          ? `<p class="mt-1 text-xs font-normal">
-               วันที่ยังไม่ครบ หรือวันไม่ตรงปฏิทิน
-             </p>`
-          : ""
-      }
-    </div>
-
-    <ul class="space-y-2">
-      ${membersOf(group).map(member => {
-        const count = getRegistrationCount(member.id);
-
-        return `
-          <li class="rounded-xl bg-white/80 border border-gray-100 p-2.5">
-
-            <div class="flex items-start gap-2">
-              <span class="bg-orange-500 text-white rounded px-1.5
-                           py-0.5 text-xs font-bold shrink-0">
-                ${escapeHtml(member.id.slice(-3))}
-              </span>
-
-              <span class="text-sm break-words">
-                ${escapeHtml(member.name)}
-              </span>
-            </div>
-
-            <p class="text-xs text-gray-500 mt-1.5">
-              ${
-                count
-                  ? `รับสวัสดิการแล้ว ${count} ครั้ง`
-                  : "ยังไม่เคยรับสวัสดิการ"
-              }
-            </p>
-          </li>
-        `;
-      }).join("")}
-    </ul>
-
-    <p class="text-xs text-gray-400 break-words mt-auto">
-      บันทึกโดย: ${escapeHtml(group.created_by_name || "ไม่ระบุ")}
-    </p>
   `;
 
-  const actions = document.createElement("div");
-  actions.className = "flex flex-wrap gap-2";
+  // Heart toggle
+  const heartBtn = card.querySelector("[data-heart-btn]");
+  heartBtn.addEventListener("click", e => {
+    e.stopPropagation();
+    if (favoriteGroups.has(gNum)) {
+      favoriteGroups.delete(gNum);
+    } else {
+      favoriteGroups.add(gNum);
+    }
+    const icon = heartBtn.querySelector("svg, i");
+    if (icon) {
+      icon.classList.toggle("fill-[#ff4d5e]", favoriteGroups.has(gNum));
+      icon.classList.toggle("text-[#ff4d5e]", favoriteGroups.has(gNum));
+      icon.classList.remove("heart-pop");
+      void icon.offsetWidth;
+      icon.classList.add("heart-pop");
+    }
+  });
 
-  if (isCreator(group)) {
-    const editButton = document.createElement("button");
+  // Shared-element flight to Detail Page
+  card.addEventListener("click", () => {
+    openGroupDetail(group, date, photoUrl, card.getBoundingClientRect());
+  });
 
-    editButton.type = "button";
-    editButton.textContent = "แก้ไขข้อมูล";
-
-    editButton.className =
-      "text-xs font-bold rounded-lg px-3 py-2 " +
-      "bg-orange-50 text-orange-700";
-
-    editButton.disabled = saving;
-
-    editButton.addEventListener("click", () => {
-      editGroup(group.group_number);
-    });
-
-    actions.append(editButton);
-  }
-
-  if (isAdmin()) {
-    const completeButton = document.createElement("button");
-
-    completeButton.type = "button";
-
-    completeButton.textContent =
-      pendingGroups.has(String(group.group_number))
-        ? "กำลังบันทึก…"
-        : done
-          ? "ยกเลิกการยืนยัน"
-          : "ยืนยันการรับสวัสดิการ";
-
-    completeButton.className =
-      "text-xs font-bold rounded-lg px-3 py-2 " +
-      (
-        done
-          ? "bg-green-100 text-green-700"
-          : "bg-gray-100 text-gray-700"
-      );
-
-    completeButton.disabled =
-      saving ||
-      pendingGroups.has(String(group.group_number));
-
-    completeButton.addEventListener("click", () => {
-      toggleCompleteGroup(group.group_number);
-    });
-
-    actions.append(completeButton);
-  }
-
-  card.append(actions);
   $("groups-list").append(card);
+
+  // Trigger reveal
+  requestAnimationFrame(() => {
+    card.classList.add("is-visible");
+  });
 }
 
 /* =========================
-   ฟอร์มสมาชิก
+   10. Shared-Element Detail Flight
 ========================= */
+function openGroupDetail(group, date, photoUrl, startRect) {
+  const overlay = $("detail-overlay");
+  const mainImg = $("detail-main-img");
+  const targetBox = $("detail-main-photo-box");
 
-function addMemberSlot(value = "") {
-  if ($("member-slots").children.length >= MAX_MEMBERS) {
-    return;
+  // Populate detail content
+  const gNum = String(group.group_number);
+  const done = isCompleted(group);
+  const members = membersOf(group);
+  const dateText = date ? formatDate(date, true) : String(group.selected_date || "ยังไม่เลือกวัน");
+
+  $("detail-crumb-name").textContent = `กลุ่มที่ ${gNum}`;
+  $("detail-title").textContent = `กลุ่มที่ ${gNum}`;
+  $("detail-creator").textContent = group.created_by_name || "ไม่ระบุ";
+  $("detail-status-badge").textContent = done ? "✓ รับสวัสดิการแล้ว" : "รอการยืนยัน";
+  $("detail-status-badge").className = `text-lg font-bold ${done ? "text-green-600" : "text-[#f39419]"}`;
+  $("detail-member-count").textContent = `${members.length} สมาชิก`;
+  $("detail-date-text").textContent = dateText;
+  $("detail-created-at").textContent = group.created_at || "-";
+
+  $("detail-members-list").innerHTML = members.map(member => {
+    const count = getRegistrationCount(member.id);
+    return `
+      <li class="flex items-center justify-between rounded-xl bg-[#fdf0e7] px-3.5 py-2.5 border border-[#f7d9c6]">
+        <div class="flex items-center gap-2.5">
+          <span class="rounded-lg bg-[#1d1a1c] text-white px-2 py-0.5 text-xs font-bold">
+            ${escapeHtml(member.id.slice(-3))}
+          </span>
+          <span class="text-sm font-semibold text-[#1d1a1c]">
+            ${escapeHtml(member.name)}
+          </span>
+        </div>
+        <span class="text-xs text-[#5c5156]">
+          ${count ? `รับแล้ว ${count} ครั้ง` : "ยังไม่เคยรับ"}
+        </span>
+      </li>
+    `;
+  }).join("");
+
+  // Action buttons inside detail page
+  const actionsWrap = $("detail-action-buttons");
+  actionsWrap.replaceChildren();
+
+  if (isCreator(group) || isAdmin()) {
+    const editBtn = document.createElement("button");
+    editBtn.type = "button";
+    editBtn.className = "clickable flex-1 py-3 rounded-full border-[1.5px] border-[#1d1a1c] text-sm font-bold text-[#1d1a1c] hover:bg-[#1d1a1c] hover:text-white transition";
+    editBtn.textContent = "แก้ไขข้อมูลกลุ่มนี้";
+    editBtn.onclick = () => {
+      closeDetail();
+      editGroup(group.group_number);
+    };
+    actionsWrap.append(editBtn);
   }
 
+  if (isAdmin()) {
+    const confirmBtn = document.createElement("button");
+    confirmBtn.type = "button";
+    confirmBtn.className = `clickable flex-1 py-3 rounded-full text-sm font-bold text-white transition ${
+      done ? "bg-green-600 hover:bg-green-700" : "bg-[#f39419] hover:bg-[#e0830d]"
+    }`;
+    confirmBtn.textContent = done ? "ยืนยันแล้ว ✓ (กดเพื่อยกเลิก)" : "ยืนยันการรับสวัสดิการ";
+    confirmBtn.onclick = async () => {
+      await toggleCompleteGroup(group.group_number);
+      const updated = allGroups.find(g => String(g.group_number) === gNum);
+      if (updated) {
+        openGroupDetail(updated, parseDutyDate(updated.selected_date), photoUrl, null);
+      }
+    };
+    actionsWrap.append(confirmBtn);
+  }
+
+  // Open overlay & make nav solid
+  mainImg.style.opacity = "0";
+  mainImg.src = photoUrl;
+  overlay.classList.add("is-open");
+  $("top-nav").classList.add("is-solid");
+  document.body.style.overflow = "hidden";
+  icons();
+
+  // Shared-element floating clone flight
+  if (startRect) {
+    const destRect = targetBox.getBoundingClientRect();
+    const flyer = document.createElement("div");
+    flyer.style.position = "fixed";
+    flyer.style.left = `${startRect.left}px`;
+    flyer.style.top = `${startRect.top}px`;
+    flyer.style.width = `${startRect.width}px`;
+    flyer.style.height = `${startRect.height}px`;
+    flyer.style.borderRadius = "14px";
+    flyer.style.backgroundImage = `url('${photoUrl}')`;
+    flyer.style.backgroundSize = "cover";
+    flyer.style.backgroundPosition = "center";
+    flyer.style.zIndex = "50";
+    flyer.style.pointerEvents = "none";
+    flyer.style.boxShadow = "0 20px 50px rgba(60,30,30,0.28)";
+    document.body.append(flyer);
+
+    const flightDuration = 900;
+    const flightStart = performance.now();
+
+    function flyFrame(now) {
+      const rawT = Math.min((now - flightStart) / flightDuration, 1);
+      const p = easeInOutCubic(rawT);
+
+      const curL = startRect.left + (destRect.left - startRect.left) * p;
+      const curT = startRect.top + (destRect.top - startRect.top) * p;
+      const curW = startRect.width + (destRect.width - startRect.width) * p;
+      const curH = startRect.height + (destRect.height - startRect.height) * p;
+      const curR = 14 - 2 * p;
+
+      flyer.style.left = `${curL}px`;
+      flyer.style.top = `${curT}px`;
+      flyer.style.width = `${curW}px`;
+      flyer.style.height = `${curH}px`;
+      flyer.style.borderRadius = `${curR}px`;
+
+      if (rawT < 1) {
+        requestAnimationFrame(flyFrame);
+      } else {
+        mainImg.style.opacity = "1";
+        flyer.remove();
+      }
+    }
+    requestAnimationFrame(flyFrame);
+  } else {
+    mainImg.style.opacity = "1";
+  }
+}
+
+function closeDetail() {
+  const overlay = $("detail-overlay");
+  if (!overlay.classList.contains("is-open")) return;
+  overlay.classList.remove("is-open");
+  document.body.style.overflow = "";
+  handleScroll();
+}
+
+/* =========================
+   11. Form & Member Slots
+========================= */
+function addMemberSlot(value = "") {
+  if ($("member-slots").children.length >= MAX_MEMBERS) return;
+
   const slot = document.createElement("div");
-
-  slot.className =
-    "member-slot bg-orange-50/40 border border-orange-100 " +
-    "p-3 rounded-xl";
-
+  slot.className = "member-slot rounded-2xl bg-[#fdf0e7]/80 border border-[#f7d9c6] p-3.5";
   slot.innerHTML = `
     <div class="flex justify-between items-center mb-2">
-      <label class="member-label text-xs font-semibold text-gray-500"></label>
-
-      <button
-        type="button"
-        class="remove-member text-xs text-red-500">
+      <label class="member-label text-xs font-bold text-[#5c5156]"></label>
+      <button type="button" class="clickable remove-member text-xs font-semibold text-[#ff4d5e]">
         ลบ
       </button>
     </div>
-
-    <div class="flex flex-col sm:flex-row gap-2 sm:items-center">
+    <div class="flex items-center gap-2.5">
       <input
         type="text"
         inputmode="numeric"
         maxlength="3"
-        placeholder="เช่น 001"
-        class="w-28 px-3 py-2 border border-gray-200 rounded-lg
-               text-center font-bold tracking-widest bg-white
-               outline-none focus:ring-2 focus:ring-orange-300">
-
-      <div class="member-name text-sm break-words"></div>
+        placeholder="001"
+        class="clickable w-20 px-2.5 py-2 rounded-xl border border-[#1d1a1c]/15 bg-white text-center font-bold tracking-widest text-sm outline-none focus:ring-2 focus:ring-[#f39419]">
+      <div class="member-name text-xs break-words flex-1"></div>
     </div>
   `;
 
@@ -1367,10 +2367,7 @@ function addMemberSlot(value = "") {
   input.value = value;
 
   input.addEventListener("input", () => {
-    input.value = input.value
-      .replace(/\D/g, "")
-      .slice(0, 3);
-
+    input.value = input.value.replace(/\D/g, "").slice(0, 3);
     updateMemberName(slot);
   });
 
@@ -1379,29 +2376,24 @@ function addMemberSlot(value = "") {
       showToast("ต้องมีสมาชิกอย่างน้อย 1 คน", true);
       return;
     }
-
     slot.remove();
     updateSlotLabels();
   });
 
   $("member-slots").append(slot);
-
   updateMemberName(slot);
   updateSlotLabels();
 }
 
 function updateSlotLabels() {
-  document.querySelectorAll(".member-slot").forEach((slot, index) => {
+  document.querySelectorAll(".member-slot").forEach((slot, idx) => {
     const input = slot.querySelector("input");
     const label = slot.querySelector(".member-label");
-
-    input.id = `member-input-${index + 1}`;
-    label.textContent = `สมาชิกคนที่ ${index + 1}`;
+    input.id = `member-input-${idx + 1}`;
+    label.textContent = `สมาชิกคนที่ ${idx + 1}`;
     label.htmlFor = input.id;
   });
-
-  $("add-member-btn").disabled =
-    $("member-slots").children.length >= MAX_MEMBERS;
+  $("add-member-btn").disabled = $("member-slots").children.length >= MAX_MEMBERS;
 }
 
 function updateMemberName(slot) {
@@ -1409,120 +2401,80 @@ function updateMemberName(slot) {
   const output = slot.querySelector(".member-name");
 
   if (value.length !== 3) {
-    output.textContent = "พิมพ์รหัสนิสิต 3 ตัวท้าย";
-    output.className = "member-name text-sm text-gray-400";
+    output.textContent = "รหัส 3 ตัวท้าย";
+    output.className = "member-name text-xs text-[#8a7f83] flex-1";
     return;
   }
 
   if (!ROSTER[value]) {
-    output.textContent = "ไม่พบรหัสนิสิตนี้";
-    output.className = "member-name text-sm text-red-500";
+    output.textContent = "ไม่พบรหัสนิสิต";
+    output.className = "member-name text-xs font-semibold text-[#ff4d5e] flex-1";
     return;
   }
 
   const count = getRegistrationCount(PREFIX + value);
-
-  output.className = "member-name text-sm text-gray-800";
-
+  output.className = "member-name text-xs text-[#1d1a1c] flex-1";
   output.innerHTML = `
-    <span class="font-semibold">
-      ${escapeHtml(ROSTER[value])}
-    </span>
-
-    <p class="text-xs text-gray-500 mt-1">
-      ${
-        count
-          ? `รับสวัสดิการแล้ว ${count} ครั้ง`
-          : "ยังไม่เคยรับสวัสดิการ"
-      }
+    <p class="font-bold leading-snug">${escapeHtml(ROSTER[value])}</p>
+    <p class="text-[11px] text-[#5c5156] mt-0.5">
+      ${count ? `รับแล้ว ${count} ครั้ง` : "ยังไม่เคยรับสวัสดิการ"}
     </p>
   `;
 }
 
 function refreshMemberNames() {
-  document
-    .querySelectorAll(".member-slot")
-    .forEach(updateMemberName);
+  document.querySelectorAll(".member-slot").forEach(updateMemberName);
 }
 
 function resetMemberSlots() {
   $("member-slots").replaceChildren();
-
   for (let i = 0; i < MAX_MEMBERS; i++) {
     addMemberSlot();
   }
 }
 
-/* =========================
-   ตัวเลือกวันลงทะเบียน
-========================= */
-
 function renderDateDropdown(selected = $("selected-date").value) {
   const select = $("selected-date");
-
-  select.replaceChildren(
-    new Option("-- ไม่เลือก / ระบุภายหลัง --", "")
-  );
+  select.replaceChildren(new Option("-- ไม่เลือก / ระบุภายหลัง --", ""));
 
   const taken = new Set(
     allGroups
-      .filter(group =>
-        String(group.group_number) !== String(editingGroupNum)
-      )
-      .map(group => group.selected_date)
+      .filter(g => String(g.group_number) !== String(editingGroupNum))
+      .map(g => g.selected_date)
       .filter(Boolean)
       .map(dateKey)
   );
 
   const options = [...availableDates];
-
   if (selected && !options.includes(selected)) {
     options.push(selected);
   }
 
   options.sort((a, b) => {
-    const dateA = parseDutyDate(a);
-    const dateB = parseDutyDate(b);
-
-    return (dateA ? +dateA : Infinity) -
-      (dateB ? +dateB : Infinity);
+    const da = parseDutyDate(a);
+    const db = parseDutyDate(b);
+    return (da ? +da : Infinity) - (db ? +db : Infinity);
   });
 
   options.forEach(value => {
     const date = parseDutyDate(value);
     const unavailable = taken.has(dateKey(value));
-
     const text =
-      (
-        date
-          ? formatDate(date, true)
-          : `${value} · ตรวจสอบวันที่`
-      ) +
+      (date ? formatDate(date, true) : `${value}`) +
       (unavailable ? " (มีกลุ่มเลือกแล้ว)" : "");
 
-    const option = new Option(text, value);
-    option.disabled = unavailable;
-
-    select.append(option);
+    const opt = new Option(text, value);
+    opt.disabled = unavailable;
+    select.append(opt);
   });
 
   select.value = selected || "";
 }
 
-/* =========================
-   แก้ไขกลุ่ม
-========================= */
-
 function editGroup(groupNum) {
-  if (saving || dataState !== "ready") {
-    return;
-  }
-
-  const group = allGroups.find(item =>
-    String(item.group_number) === String(groupNum)
-  );
-
-  if (!group || !isCreator(group)) {
+  if (saving || dataState !== "ready") return;
+  const group = allGroups.find(item => String(item.group_number) === String(groupNum));
+  if (!group || (!isCreator(group) && !isAdmin())) {
     showToast("แก้ไขได้เฉพาะกลุ่มที่ตนเองบันทึก", true);
     return;
   }
@@ -1531,99 +2483,61 @@ function editGroup(groupNum) {
   $("member-slots").replaceChildren();
 
   const members = membersOf(group);
-
   if (members.length) {
-    members.forEach(member => {
-      addMemberSlot(member.id.slice(-3));
-    });
+    members.forEach(m => addMemberSlot(m.id.slice(-3)));
   } else {
     addMemberSlot();
   }
 
   renderDateDropdown(String(group.selected_date || ""));
-
-  $("form-title").textContent =
-    `แก้ไขกลุ่มที่ ${group.group_number}`;
-
+  $("form-title").textContent = `แก้ไขกลุ่มที่ ${group.group_number}`;
   $("cancel-edit-btn").classList.remove("hidden");
-
   updateControls();
-
-  $("form-section").scrollIntoView({
-    behavior: "smooth",
-    block: "start"
-  });
+  scrollToSection("register-section");
 }
 
 function cancelEdit() {
-  if (saving) {
-    return;
-  }
-
+  if (saving) return;
   editingGroupNum = null;
-
   resetMemberSlots();
   renderDateDropdown("");
-
-  $("form-title").textContent = "ลงทะเบียนกลุ่ม";
+  $("form-title").textContent = "ลงทะเบียนจัดกลุ่มสวัสดิการ";
   $("cancel-edit-btn").classList.add("hidden");
-
   updateControls();
 }
 
 function updateControls() {
-  $("form-fields").disabled =
-    saving || dataState !== "ready";
-
-  $("submit-btn").disabled =
-    saving || dataState !== "ready";
-
+  $("form-fields").disabled = saving || dataState !== "ready";
+  $("submit-btn").disabled = saving || dataState !== "ready";
   $("cancel-edit-btn").disabled = saving;
+  $("refresh-btn").disabled = saving || dataState === "loading";
 
-  $("refresh-btn").disabled =
-    saving || dataState === "loading";
-
-  $("submit-btn").textContent =
-    saving
-      ? "กำลังบันทึกข้อมูล…"
-      : editingGroupNum !== null
-        ? `บันทึกการแก้ไขกลุ่มที่ ${editingGroupNum}`
-        : "ยืนยันการลงทะเบียนกลุ่ม";
+  $("submit-btn").textContent = saving
+    ? "กำลังบันทึกข้อมูล…"
+    : editingGroupNum !== null
+      ? `บันทึกการแก้ไขกลุ่มที่ ${editingGroupNum}`
+      : "ยืนยันการลงทะเบียนกลุ่ม";
 }
 
 /* =========================
-   บันทึกข้อมูล
+   12. Submit & Admin Actions
 ========================= */
-
 async function postRecord(record) {
   const response = await fetch(GOOGLE_SCRIPT_URL, {
     method: "POST",
     body: JSON.stringify(record)
   });
 
-  if (!response.ok) {
-    throw new Error("เชื่อมต่อเซิร์ฟเวอร์ไม่สำเร็จ");
-  }
-
+  if (!response.ok) throw new Error("เชื่อมต่อเซิร์ฟเวอร์ไม่สำเร็จ");
   const result = await response.json();
-
-  if (!result.isOk) {
-    throw new Error(
-      result.error || "บันทึกข้อมูลไม่สำเร็จ"
-    );
-  }
-
+  if (!result.isOk) throw new Error(result.error || "บันทึกข้อมูลไม่สำเร็จ");
   return result;
 }
 
 async function submitGroup() {
-  if (!currentUser || saving || dataState !== "ready") {
-    return;
-  }
+  if (!currentUser || saving || dataState !== "ready") return;
 
-  const values = [
-    ...document.querySelectorAll("#member-slots input")
-  ]
+  const values = [...document.querySelectorAll("#member-slots input")]
     .map(input => input.value.trim())
     .filter(Boolean);
 
@@ -1632,39 +2546,25 @@ async function submitGroup() {
     return;
   }
 
-  if (
-    values.some(value =>
-      !/^\d{3}$/.test(value) || !ROSTER[value]
-    )
-  ) {
-    showToast(
-      "กรุณาตรวจสอบรหัสนิสิตให้ครบ 3 หลัก",
-      true
-    );
+  if (values.some(val => !/^\d{3}$/.test(val) || !ROSTER[val])) {
+    showToast("กรุณาตรวจสอบรหัสนิสิตให้ครบ 3 หลัก", true);
     return;
   }
 
   if (new Set(values).size !== values.length) {
-    showToast(
-      "มีสมาชิกซ้ำในกลุ่ม กรุณาตรวจสอบ",
-      true
-    );
+    showToast("มีสมาชิกซ้ำในกลุ่ม กรุณาตรวจสอบ", true);
     return;
   }
 
   const selectedDate = $("selected-date").value;
-
-  const taken = selectedDate && allGroups.some(group =>
-    String(group.group_number) !== String(editingGroupNum) &&
-    group.selected_date &&
-    dateKey(group.selected_date) === dateKey(selectedDate)
+  const taken = selectedDate && allGroups.some(g =>
+    String(g.group_number) !== String(editingGroupNum) &&
+    g.selected_date &&
+    dateKey(g.selected_date) === dateKey(selectedDate)
   );
 
   if (taken) {
-    showToast(
-      "วันที่นี้มีกลุ่มเลือกแล้ว กรุณาเลือกวันอื่น",
-      true
-    );
+    showToast("วันที่นี้มีกลุ่มเลือกแล้ว กรุณาเลือกวันอื่น", true);
     return;
   }
 
@@ -1675,21 +2575,15 @@ async function submitGroup() {
     action: isUpdate ? "update" : "create",
     group_number: editingGroupNum,
     selected_date: selectedDate,
-    created_at: new Date().toLocaleString("th-TH", {
-      timeZone: "Asia/Bangkok"
-    }),
+    created_at: new Date().toLocaleString("th-TH", { timeZone: "Asia/Bangkok" }),
     created_by_name: currentUser.name,
     created_by_email: currentUser.email
   };
 
   for (let i = 1; i <= MAX_MEMBERS; i++) {
-    const value = values[i - 1];
-
-    record[`member${i}_id`] =
-      value ? PREFIX + value : "";
-
-    record[`member${i}_name`] =
-      value ? ROSTER[value] : "";
+    const val = values[i - 1];
+    record[`member${i}_id`] = val ? PREFIX + val : "";
+    record[`member${i}_name`] = val ? ROSTER[val] : "";
   }
 
   saving = true;
@@ -1698,43 +2592,28 @@ async function submitGroup() {
 
   try {
     const result = await postRecord(record);
-
-    if (session !== sessionVersion) {
-      return;
-    }
+    if (session !== sessionVersion) return;
 
     saving = false;
     cancelEdit();
 
-    const date = parseDutyDate(selectedDate);
-
-    if (date) {
-      selectedWeek = startOfWeek(date);
+    const parsed = parseDutyDate(selectedDate);
+    if (parsed) {
+      selectedWeek = startOfWeek(parsed);
       viewMode = "week";
     } else {
       viewMode = "unknown";
     }
 
-    showToast(
-      `${isUpdate ? "แก้ไข" : "ลงทะเบียน"}กลุ่มที่ ` +
-      `${result.group_number} สำเร็จ`
-    );
-
+    showToast(`${isUpdate ? "แก้ไข" : "ลงทะเบียน"}กลุ่มที่ ${result.group_number} สำเร็จ`);
     await fetchGroups();
 
     if (session === sessionVersion) {
-      $("groups-section").scrollIntoView({
-        behavior: "smooth",
-        block: "start"
-      });
+      scrollToSection("groups-section");
     }
   } catch (error) {
     if (session === sessionVersion) {
-      showToast(
-        error.message +
-        " หากไม่แน่ใจว่าบันทึกแล้วหรือไม่ ให้รีเฟรชก่อนส่งซ้ำ",
-        true
-      );
+      showToast(error.message, true);
     }
   } finally {
     if (session === sessionVersion) {
@@ -1745,45 +2624,28 @@ async function submitGroup() {
   }
 }
 
-/* =========================
-   ยืนยันรับสวัสดิการ
-========================= */
-
 async function toggleCompleteGroup(groupNum) {
-  if (!isAdmin() || saving || dataState !== "ready") {
-    return;
-  }
-
+  if (!isAdmin() || saving || dataState !== "ready") return;
   const key = String(groupNum);
-
-  if (pendingGroups.has(key)) {
-    return;
-  }
+  if (pendingGroups.has(key)) return;
 
   const session = sessionVersion;
-
   pendingGroups.add(key);
   renderDashboard();
 
   try {
     await postRecord({
       action: "toggle_complete",
-      group_number: groupNum
+      group_number: groupNum,
+      actor_email: currentUser.email
     });
 
-    if (session !== sessionVersion) {
-      return;
-    }
-
+    if (session !== sessionVersion) return;
     showToast("อัปเดตสถานะเรียบร้อย");
     await fetchGroups();
   } catch (error) {
     if (session === sessionVersion) {
-      showToast(
-        "ไม่สามารถยืนยันผลการเปลี่ยนสถานะได้ กำลังโหลดสถานะล่าสุด",
-        true
-      );
-
+      showToast(error.message || "อัปเดตสถานะไม่สำเร็จ", true);
       await fetchGroups();
     }
   } finally {
@@ -1794,41 +2656,156 @@ async function toggleCompleteGroup(groupNum) {
   }
 }
 
-/* =========================
-   อัปเดตวันเมื่อข้ามเที่ยงคืน
-========================= */
+/* Admin Date Management Modal */
+function openAdminDateModal() {
+  if (!isAdmin()) return;
+  renderAdminDatesList();
+  $("admin-date-modal").classList.remove("hidden");
+  $("admin-date-modal").classList.add("flex");
+}
 
-function checkNewDay() {
-  const today = todayBangkok();
+function closeAdminDateModal() {
+  $("admin-date-modal").classList.add("hidden");
+  $("admin-date-modal").classList.remove("flex");
+}
 
-  if (+today === lastToday) {
+function renderAdminDatesList() {
+  const list = $("admin-dates-list");
+  if (!list) return;
+  list.replaceChildren();
+
+  if (!availableDates.length) {
+    list.innerHTML = `<p class="text-xs text-center text-gray-400 py-4">ยังไม่มีรายการวันเวรในระบบ</p>`;
     return;
   }
 
-  const wasCurrentWeek =
-    +selectedWeek === +startOfWeek(new Date(lastToday));
+  availableDates.forEach(d => {
+    const parsed = parseDutyDate(d);
+    const row = document.createElement("div");
+    row.className = "flex items-center justify-between rounded-xl bg-gray-50 px-3.5 py-2.5 text-sm";
+    row.innerHTML = `
+      <div>
+        <p class="font-semibold text-[#1d1a1c]">${escapeHtml(parsed ? formatDate(parsed, true) : d)}</p>
+        <p class="text-[11px] text-gray-400">${escapeHtml(d)}</p>
+      </div>
+      <button type="button" class="clickable text-xs font-bold text-[#ff4d5e] hover:underline">
+        ลบ
+      </button>
+    `;
+    row.querySelector("button").onclick = () => handleDeleteDate(d);
+    list.append(row);
+  });
+}
 
-  lastToday = +today;
+async function handleAddDate() {
+  if (!isAdmin()) return;
+  const input = $("new-date-input");
+  const val = input.value.trim();
+  if (!val) return;
 
-  if (wasCurrentWeek) {
-    selectedWeek = startOfWeek(today);
-  }
-
-  renderDashboard();
-
-  if (currentUser && !saving) {
-    fetchGroups();
+  $("add-date-submit").disabled = true;
+  try {
+    await postRecord({
+      action: "add_date",
+      new_date: val,
+      actor_email: currentUser.email
+    });
+    input.value = "";
+    showToast("เพิ่มวันที่เรียบร้อยแล้ว");
+    await fetchGroups();
+  } catch (err) {
+    showToast(err.message, true);
+  } finally {
+    $("add-date-submit").disabled = false;
   }
 }
 
-setInterval(checkNewDay, 30000);
-
-document.addEventListener("visibilitychange", () => {
-  if (!document.hidden) {
-    checkNewDay();
+async function handleDeleteDate(delDate) {
+  if (!isAdmin()) return;
+  try {
+    await postRecord({
+      action: "delete_date",
+      del_date: delDate,
+      actor_email: currentUser.email
+    });
+    showToast("ลบวันที่เรียบร้อยแล้ว");
+    await fetchGroups();
+  } catch (err) {
+    showToast(err.message, true);
   }
-});
-</script>
+}
 
+/* =========================
+   13. Initialization
+========================= */
+window.addEventListener("load", () => {
+  initCursor();
+  layoutRail();
+  resetMemberSlots();
+  renderDashboard();
+  updateControls();
+  icons();
+
+  // Trigger Hero Intro Animations
+  requestAnimationFrame(() => {
+    document.body.classList.add("hero-loaded");
+    setTimeout(() => {
+      $("rail-caption").classList.add("is-shown");
+    }, 900);
+  });
+
+  // Rail thumbnail click handlers
+  document.querySelectorAll(".rail-thumb").forEach(btn => {
+    btn.addEventListener("click", () => {
+      goToSlide(Number(btn.dataset.target));
+    });
+  });
+
+  // Subtle Pointer Parallax on Hero
+  window.addEventListener("pointermove", e => {
+    const nx = (e.clientX / window.innerWidth - 0.5) * 2;
+    const ny = (e.clientY / window.innerHeight - 0.5) * 2;
+    pointerOffset.x = -nx * 0.6;
+    pointerOffset.y = -ny * 0.5;
+  });
+
+  window.addEventListener("resize", layoutRail);
+  window.addEventListener("scroll", handleScroll, { passive: true });
+
+  resetAutoSlide();
+  startKenBurnsLoop();
+
+  // Initialize Google Identity Services
+  if (!window.google?.accounts?.id) {
+    $("login-error").textContent = "โหลดระบบ Google ไม่สำเร็จ กรุณารีเฟรชหน้าเว็บ";
+    return;
+  }
+
+  google.accounts.id.initialize({
+    client_id: CLIENT_ID,
+    callback: handleCredentialResponse,
+    hd: ORG_DOMAIN
+  });
+
+  google.accounts.id.renderButton($("buttonDiv"), {
+    theme: "outline",
+    size: "large",
+    shape: "pill",
+    width: 250
+  });
+});
+
+// Midnight auto-refresh check
+setInterval(() => {
+  const today = todayBangkok();
+  if (+today !== lastToday) {
+    const wasCurrentWeek = +selectedWeek === +startOfWeek(new Date(lastToday));
+    lastToday = +today;
+    if (wasCurrentWeek) selectedWeek = startOfWeek(today);
+    renderDashboard();
+    if (currentUser && !saving) fetchGroups();
+  }
+}, 30000);
+</script>
 </body>
 </html>
